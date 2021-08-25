@@ -12,6 +12,7 @@ firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com'  
 })
+ 
 
 class App extends Component {
   state = { isSignedIn: false }
