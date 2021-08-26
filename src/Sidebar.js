@@ -15,7 +15,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ListAlt from '@material-ui/icons/ListAlt';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
-import Alert from '@material-ui/lab/Alert';
 import './SidebarOption.css';
 import App from './App';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib

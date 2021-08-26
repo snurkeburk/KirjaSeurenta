@@ -17,11 +17,17 @@ body,html {
 }
 
 .welcome-container {
-  margin-top: 15%;
-  text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
-             0px 8px 13px rgba(0,0,0,0.1),
-             0px 18px 23px rgba(0,0,0,0.1);
+  max-height: 100vh;
+  min-height: 100vh;
+  background-color: #455064;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  
+  text-shadow: 0px 2px 5px #000000;
 }
+
+
 
 .welcomeMessege,
 .welcomeUnder,
@@ -30,25 +36,24 @@ body,html {
   font-weight: 100;
   color: white;
   text-align: center;
-  
 }
 
 .welcomeMessege{
   font-size: 30px;
   color: rgba(255, 255, 255, 0.705);
-
+  
 }
 
 .welcomeName {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  width: 50%;
-  margin: auto;
+
   letter-spacing: 20px;
   color: var(--second-highlight-color);
   font-family: 'Cinzel Decorative', cursive;
   font-size: 80px;
+  
   
 }
 
@@ -60,6 +65,10 @@ body,html {
 .welcomeUnder{
   font-size: 20px;
   color: rgba(255, 255, 255, 0.705);
+}
+
+.firebaseui-card-content{
+  margin-top: 2rem;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');

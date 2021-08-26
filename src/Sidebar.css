@@ -29,6 +29,12 @@
     align-items: center;
     min-width: 400px;
     font-family: 'Cinzel Decorative', cursive;
+    border-bottom-style: double;
+    border-width: 0.1px;
+    border-color: var(--second-highlight-color);
+    border-bottom-left-radius: 2rem;
+    padding-left: 2rem;
+
 }
 
 .name {

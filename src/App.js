@@ -5,7 +5,6 @@ import './App.css';
 import Sidebar from './Sidebar';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Search from "./Search";
-import useFetch from "./useFetch";
 import Login from "./Login";
 
 firebase.initializeApp({
@@ -18,6 +17,7 @@ class App extends Component {
   state = { isSignedIn: false }
   uiConfig = {
     signInFlow: "popup",
+    redirectUrl: 'search',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID
     ],
@@ -32,38 +32,57 @@ class App extends Component {
       console.log("user", user)
     })
   }
+
+getContent () {
+  if (this.state.isSignedIn){
+    return (
+      <Router>
+      <span>
+
+      <Switch>
+        <Route exact path="/">
+          <Sidebar />
+        </Route>
+      
+        <Route path="/search">
+          <Search />
+        </Route>
+
+
+
+      </Switch>
+
+      </span>
+      </Router>
+
+    )
+    
+  } else {
+    return (
+      
+      <div className="big-welcome-container">
+        <div className="welcome-container" >
+        <h2 className="welcomeMessege">Välkommen till</h2> <h2 class="welcomeName"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
+        <p className="welcomeUnder">För dig som har en jävla massa böcker att hålla koll på</p>
+        
+      <StyledFirebaseAuth
+      uiConfig={this.uiConfig}
+      firebaseAuth={firebase.auth()}
+      />
+      </div>
+      </div>
+    );
+  }
+}
+
   render(){
   return (
-    <Router>
     <div className="app">
-
-      {this.state.isSignedIn ? (
-        <span>
-
-          <Switch>
-            <Route exact path="/">
-              <Sidebar />
-          
-
-            </Route>
-
-            <Route path="/search">
-              <Search />
-            </Route>
-
-          </Switch>
+        {this.getContent()}
     
-          </span>
-        ) : (
-          <StyledFirebaseAuth
-          uiConfig={this.uiConfig}
-          firebaseAuth={firebase.auth()}
-          />
-          )
-  
-          }
+      
+          
     </div>
-    </Router>
   );
         }
 }
