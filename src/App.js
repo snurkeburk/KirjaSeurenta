@@ -8,17 +8,14 @@ import Search from "./Search";
 import Login from "./Login";
 import { func } from "prop-types";
 import { Class } from "@material-ui/icons";
-import { getBooks } from './AddBook'
+import { add, update, remove, read } from './Crud'
 
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com',
   projectId: 'kirjanseuranta'
 })
-
 export const db = firebase.firestore();
-
-//getBooks() //prints books to console
 
 class App extends Component {
   state = { isSignedIn: false }
