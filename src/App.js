@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Search from "./Search";
 import Login from "./Login";
 import { func } from "prop-types";
+import { Class } from "@material-ui/icons";
+import { getBooks } from './AddBook'
 
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
@@ -14,30 +16,9 @@ firebase.initializeApp({
   projectId: 'kirjanseuranta'
 })
 
+export const db = firebase.firestore();
 
-const db = firebase.firestore();
-
-//Set value in database
-/* const testStringDocument = db.collection('books').doc('testStingDoc');
-async function addTestString() {
-  await testStringDocument.set({
-    testString2: 'Hej Isak'
-  });
-}
-addTestString();
-*/
-
-
-//Gets value from database
-/*
-db.collection('books')
-.doc('testStringDoc2')
-.get()
-.then(querySnapshot => {
-  const data = querySnapshot.docs.map(doc => doc.data());
-  console.log(data);
-})
-*/
+//getBooks() //prints books to console
 
 class App extends Component {
   state = { isSignedIn: false }
