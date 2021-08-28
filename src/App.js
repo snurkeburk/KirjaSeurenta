@@ -8,7 +8,9 @@ import Search from "./Search";
 import Login from "./Login";
 import { func } from "prop-types";
 import { Class } from "@material-ui/icons";
-import { add, update, remove, read } from './Crud'
+//import { add, update, remove, read } from './Crud' //! Remove later
+import { Book } from './Book';
+import { User } from './User';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
@@ -16,6 +18,7 @@ firebase.initializeApp({
   projectId: 'kirjanseuranta'
 })
 export const db = firebase.firestore();
+
 
 class App extends Component {
   state = { isSignedIn: false }
@@ -34,6 +37,9 @@ class App extends Component {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
       console.log("user", user)
+      if (user !== null) { //adds user to database if logged in 
+        const userObject = new User(user.displayName, user.uid, user.email);
+      }
     })
   }
 
