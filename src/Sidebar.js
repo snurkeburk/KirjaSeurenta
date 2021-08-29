@@ -38,9 +38,9 @@ function Sidebar() {
 
             <div className="sidebar__mid">
                 <Link className="Link" to="/">Hem</Link> 
-                <Link className="Link">Klasser</Link> 
-                <Link className="Link" to="/search">Sök </Link>
-                <Link className="Link">Lägg till </Link>
+                <Link className="Link" to="/klasser">Klasser</Link> 
+                <Link className="Link" to="/sök">Sök </Link>
+                <Link className="Link" to="/add">Lägg till </Link>
             </div>
              <div className="sidebar__right">
                 <img className="profilePic"
@@ -62,7 +62,7 @@ function Sidebar() {
 
             </div>
             
-           { /* <Button variant="outlined" className="sidebar__tweet" fullWidth>Tweet</Button> */} 
+           
             
         </div>
         
