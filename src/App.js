@@ -6,7 +6,8 @@ import Sidebar from './Sidebar';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Search from "./Search";
 import Login from "./Login";
-
+import { motion } from "framer-motion"
+import Home from './Home'
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com'  
@@ -36,17 +37,23 @@ class App extends Component {
 getContent () {
   if (this.state.isSignedIn){
     return (
+      <motion.div
+      initial={{ opacity: "0%" }}
+      animate={{ opacity: "100%" }}
+      >
       <Router>
       <span>
 
       <Switch>
         <Route exact path="/">
-          <Sidebar />
+              <Home />
         </Route>
       
         <Route path="/search">
-          <Search />
+               <Search />
         </Route>
+
+        
 
 
 
@@ -54,13 +61,15 @@ getContent () {
 
       </span>
       </Router>
-
+      </motion.div>
     )
     
   } else {
     return (
       
-      <div className="big-welcome-container">
+      <motion.div className="big-welcome-container"
+
+      >
         <div className="welcome-container" >
         <h2 className="welcomeMessege">Välkommen till</h2> <h2 class="welcomeName"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
         <p className="welcomeUnder">För dig som har en jävla massa böcker att hålla koll på</p>
@@ -70,7 +79,7 @@ getContent () {
       firebaseAuth={firebase.auth()}
       />
       </div>
-      </div>
+      </motion.div>
     );
   }
 }

@@ -1,0 +1,10 @@
+.home-container {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    position: absolute;
+    width: 100vw;
+    margin-top: 3rem;
+}
+
+
