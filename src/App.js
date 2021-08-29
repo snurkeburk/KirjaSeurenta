@@ -6,12 +6,19 @@ import Sidebar from './Sidebar';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Search from "./Search";
 import Login from "./Login";
+import { func } from "prop-types";
+import { Class } from "@material-ui/icons";
+//import { add, update, remove, read } from './Crud' //! Remove later
+import { Book } from './Book';
+import { User } from './User';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
-  authDomain: 'kirjanseuranta.firebaseapp.com'  
+  authDomain: 'kirjanseuranta.firebaseapp.com',
+  projectId: 'kirjanseuranta'
 })
- 
+export const db = firebase.firestore();
+
 
 class App extends Component {
   state = { isSignedIn: false }
@@ -29,7 +36,13 @@ class App extends Component {
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-      console.log("user", user)
+      //console.log("user", user)
+      if (user !== null) { //adds user to database if logged in 
+        const userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
+        //userObject.addBookToUser('ergofysik2', '123abc');
+
+        //console.table(userObject.getBooks());
+      }
     })
   }
 
