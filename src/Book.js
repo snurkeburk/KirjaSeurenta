@@ -12,18 +12,21 @@ export class Book {
        console.log("Book: ", this.title, this.coverImg);
     }
 
+    
     addBook() {
         add(
             'books',
             this.id,
             {
                 title: this.title,
-                cover: this.coverImg
+                cover: this.coverImg,
+                isbn: this.isbn
             }
         )
     }
     
-    static async getBooks() {
+    
+    static async getAllBooks() {
         return read('books').then(function(res) {
             return res;
         })

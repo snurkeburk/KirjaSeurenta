@@ -36,9 +36,12 @@ class App extends Component {
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-      console.log("user", user)
+      //console.log("user", user)
       if (user !== null) { //adds user to database if logged in 
-        const userObject = new User(user.displayName, user.uid, user.email);
+        const userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
+        //userObject.addBookToUser('ergofysik2', '123abc');
+
+        //console.table(userObject.getBooks());
       }
     })
   }

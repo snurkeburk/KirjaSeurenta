@@ -1,15 +1,33 @@
 import { db } from './App'
 
 // Adds a new entry to the database
+
 export async function add(collection, document, paramObj) {
   const addToCollection = db.collection(collection).doc(document);
   await addToCollection.set(paramObj);
+  console.log("Added to database", paramObj);
+}
+
+
+export async function nestedAdd(collection1, document1, collection2, document2, paramObj) {
+  const addToCollection = db.collection(collection1).doc(document1).collection(collection2).doc(document2);
+  await addToCollection.set(paramObj);
+  console.log("Added to database (nested)", paramObj);
 }
 
 // Updates existing database entry
 export async function update(collection, document, paramObj) {
   const updateCollection = db.collection(collection).doc(document);
   await updateCollection.update(paramObj);
+}
+
+// Updates a specific field in a database entry (nested objects)
+export async function updateField(collection, document, field, paramObj) {
+  const updateCollection = db.collection(collection).doc(document);
+
+  await updateCollection.update({
+    [field]: paramObj
+  })
 }
 
 // Removes entry from database
@@ -20,8 +38,9 @@ export async function remove(collection, document) {
 
 // Reads content of one specific document
 export async function readOne(collection, document) {
-  const readCollection = db.collection(collection);
+  const readCollection = db.collection(collection).doc(document);
   const doc = await readCollection.get();
+
   if (!doc.exists) {
     console.log("Error");
   } else {
@@ -60,6 +79,18 @@ export async function readWhere(collection, field, data) {
   return arr;
 }
 
+export async function nestedRead(collection1, document1, collection2, field, data) {
+  const readCollection = db.collection(collection1).doc(document1).collection(collection2);
+  const snapshot = await readCollection.where(field, '==', data).get(); //TODO Make '==' general
+
+  let arr = [];
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    arr.push(data);
+  })
+  return arr;
+
+}
 
 
 //* EXAMPLES
