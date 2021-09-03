@@ -4,14 +4,18 @@ import Sidebar from './Sidebar'
 import { motion } from "framer-motion"
 import './Home.css';
 import { Link } from 'react-router-dom';
-
 import User from './User';
 import { add, update, remove, read } from './Crud'
 import { SettingsInputCompositeTwoTone } from '@material-ui/icons';
 import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
+import Add from './Add';
+import randomColor from 'randomcolor';
+
 function Home() {
-   
+        const divStyle = {
+          backgroundColor: randomColor()
+        };         
   /*  const [klasser,setKlasser]=useState([])
     const fetchKlasser=async()=>{
       const response=db.collection('test');
@@ -27,6 +31,8 @@ function Home() {
 
     const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [state, setState] = useState();
+
 
   useEffect(() => {
     const getPostsFromFirebase = [];
@@ -41,6 +47,7 @@ function Home() {
         });
         setPosts(getPostsFromFirebase);
         setLoading(false);
+
       });
 
     // return cleanup function
@@ -84,9 +91,8 @@ function Home() {
                                 transition: { duration: 0.1 },
                               }
                             }
-                        
                               >
-                                <a className="klass" href="#">{post.namn}</a>
+                                <a className="klass" href="#" >{post.namn}</a>
                                 </motion.div>)
                         ) : (
                             <div className="not-found">
@@ -94,6 +100,9 @@ function Home() {
                                 <Link className="link" to="/add">Lägg till en klass</Link>
                             </div>
                         )}
+
+
+
                         {/*
                         klasser.map(klass=>{
                         return(
@@ -105,6 +114,10 @@ function Home() {
                         })
                     */  }
                     </motion.div>
+
+
+
+                     
                 </motion.div>
              
             </motion.div>
