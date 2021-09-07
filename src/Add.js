@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 
 function Add() {
+
     const sparaKlass = (event) => {
         event.preventDefault();
         const elementsArray = [...event.target.elements];   
@@ -62,7 +63,11 @@ function Add() {
                 </Alert>
             </Collapse>
  
-            <div className="add-container">
+            <motion.div 
+            className="add-container"
+            initial={{ opacity: "0%" }}
+            animate={{ opacity: "100%" }}
+            >
                 <h1 className="main-text">Lägg till en klass</h1>
                 <form onSubmit={sparaKlass} autocomplete="off">
                     <motion.input className="input" type="text" id="namn" required placeholder="Skriv här..."
@@ -75,7 +80,7 @@ function Add() {
                       
                       > + </motion.button>        
                 </form>
-            </div>
+            </motion.div>
         </div>
     )
 }

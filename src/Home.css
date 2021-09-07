@@ -1,97 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
 .home-container {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    position: absolute;
-    width: 100vw;
-    margin-top: 3rem;
-    font-family: 'Roboto', sans-serif;
-
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  position: absolute;
+  width: 95vw;
+  margin-top: 3rem;
+  font-family: "Roboto", sans-serif;
 }
 
 .loading {
-    position: absolute;
-    top: 40%;
-    left: 50%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
 }
 
-
-
-.right-side
-{
-   
-    text-align: center;
-    width: 50vw;
-    
+.right-side {
+  text-align: center;
+  width: 50vw;
 }
-.left-side
-{ border-right-style: solid;
-    border-width: 0.1px;
-    border-color: rgba(0, 0, 0, 0.096);
-    padding: 1rem 2rem;
-    text-align: center;
-    width: 10rem;
+.left-side {
+  border-right-style: solid;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  padding: 1rem 2rem;
+  text-align: center;
+  width: 10rem;
 }
 
 .left-side {
-    margin-left: 5rem;
-    margin-right: -5rem;
+  margin-left: 5rem;
+  margin-right: -5rem;
 }
 .right-side {
-    margin-right: 5rem;
+  margin-right: 5rem;
 }
 
 .klasser {
-    border-style: solid;
-    border-width: 0.1px;
-    padding: 60px 100px;
-    margin: 1rem;
-    border-radius: 1.5rem;
-    background-color: rgba(0, 0, 0, 0.527);
-    
+  border-style: solid;
+  border-width: 0.1px;
+  padding: 60px 100px;
+  margin: 1rem;
+  border-radius: 1.5rem;
+  background-color: rgb(53, 131, 177);
 }
 
 .klasser a {
-    text-decoration: none;
-    color: white;
-    font-weight: 500;
-    font-size: 50px;
-    
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-size: 50px;
 }
 .klasser-container {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
-
 
 .total {
-    text-align: left;
-    padding: 1rem 1rem;
-    background-color: rgba(128, 128, 128, 0.192);
-    width: 300px;
-    margin: auto;
-    margin-top: 1rem;
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: 20px;
+  text-align: left;
+  padding: 1rem 1rem;
+  background-color: rgba(128, 128, 128, 0.192);
+  width: 300px;
+  margin: auto;
+  margin-top: 1rem;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 20px;
 }
 
-
 link:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1250px) {
-    .klasser {
-        margin-left: 5rem;
-    }
+  .klasser {
+    margin-left: 5rem;
+  }
 
-    .klasser-container {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        flex-wrap: nowrap;
-    }
+  .klasser-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 }

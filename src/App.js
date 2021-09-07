@@ -10,7 +10,7 @@ import Login from "./Login";
 import { motion } from "framer-motion"
 import Home from './Home'
 import { func } from "prop-types";
-import Add from './Add';
+import Add from './Add';  
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from './Book';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
@@ -27,7 +27,7 @@ export const db = firebase.firestore();
 class App extends Component {
   state = { isSignedIn: false }
   uiConfig = {
-    signInFlow: "popup",
+    signInFlow: "redirect",
     redirectUrl: 'search',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID
