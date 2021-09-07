@@ -24,7 +24,7 @@ export class User {
         this.books[book] = id;
         //console.log(this.books);
         //update('users', this.name, );
-        updateField('Users', this.className, this.name, 'books', this.books);
+        updateField('users', this.className, this.name, 'books', this.books);
     }
 
     setUserStatus() {
@@ -44,7 +44,7 @@ export class User {
     addUser() { // Adds user to database
         //TODO Merge function with userExists() ???
         nestedAdd(
-            'Users',
+            'users',
             //'usersTest',
             'students',
             this.className,
@@ -63,7 +63,7 @@ export class User {
         )
 
         add(
-            'Users',
+            'users',
             //'usersTest',
             'ids',
             {
@@ -82,12 +82,12 @@ export class User {
     async userExists() { // Checks if user is in database, calls addUser() if not 
         //const read = await readWhere('users', 'id', this.id);
         //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
-        const read = await readOne('Users', 'ids');
+        const read = await readOne('users', 'ids');
         console.log(read.ids);
         
         var userExists = false;
 
-        if (!read.ids.includes(this.id)) {
+        if (read.ids === undefined || !read.ids.includes(this.id)) {
             console.log("User does not exist yet");
             this.addUser();
         }
