@@ -10,12 +10,9 @@ import { SettingsInputCompositeTwoTone } from '@material-ui/icons';
 import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
 import Add from './Add';
-import randomColor from 'randomcolor';
-
+import firebase from 'firebase';
 function Home() {
-        const divStyle = {
-          backgroundColor: randomColor()
-        };         
+    
   /*  const [klasser,setKlasser]=useState([])
     const fetchKlasser=async()=>{
       const response=db.collection('test');
@@ -31,13 +28,13 @@ function Home() {
 
     const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [state, setState] = useState();
 
+  let username = firebase.auth().currentUser.displayName
 
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db
-      .collection("test")
+      .collection("users").doc("teachers").collection(username).doc("classes").collection("teknik")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -49,6 +46,10 @@ function Home() {
         setLoading(false);
 
       });
+
+    const ladda = (event) => {
+      
+    }
 
     // return cleanup function
     return () => sender();
