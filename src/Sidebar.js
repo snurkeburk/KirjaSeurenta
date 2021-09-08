@@ -50,7 +50,7 @@ function Sidebar() {
                  <p className="username">{firebase.auth().currentUser.displayName}
                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DatePicker value={selectedDate} onChange={handleDateChange} />
-                    <TimePicker value={selectedDate} onChange={handleDateChange} />
+                    <TimePicker className="time" value={selectedDate} onChange={handleDateChange} />
                 </MuiPickersUtilsProvider>
 
                  </p>
