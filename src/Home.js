@@ -10,7 +10,11 @@ import { SettingsInputCompositeTwoTone } from '@material-ui/icons';
 import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
 import Add from './Add';
+
+import randomColor from 'randomcolor';
+import { userObject } from './App';
 import firebase from 'firebase';
+
 function Home() {
     
   /*  const [klasser,setKlasser]=useState([])
@@ -61,7 +65,7 @@ function Home() {
         </div>
     );
   }
-  return (
+    if (userObject.status === 'teacher') return (
         <div>
              <Sidebar />
              <div className="total">

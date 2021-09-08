@@ -5,14 +5,12 @@ import { db } from './App'
 export async function add(collection, document, paramObj) {
   const addToCollection = db.collection(collection).doc(document);
   await addToCollection.set(paramObj);
-  console.log("Added to database", paramObj);
 }
 
 
 export async function nestedAdd(collection1, document1, collection2, document2, paramObj) {
   const addToCollection = db.collection(collection1).doc(document1).collection(collection2).doc(document2);
   await addToCollection.set(paramObj);
-  console.log("Added to database (nested)", paramObj);
 }
 
 // Updates existing database entry

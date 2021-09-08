@@ -83,11 +83,12 @@ export class User {
         //const read = await readWhere('users', 'id', this.id);
         //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
         const read = await readOne('users', 'ids');
-        // console.log(read.ids);
+        console.log("ID:s : ", read.ids);
+        console.log(this.id);
         
         var userExists = false;
 
-        if (!read.ids.includes(this.id)) {
+        if (read.ids === undefined || !read.ids.includes(this.id)) {
             console.log("User does not exist yet");
             this.addUser();
         }
