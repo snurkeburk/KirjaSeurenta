@@ -40,10 +40,10 @@
 .klasser {
   border-style: solid;
   border-width: 0.1px;
-  padding: 60px 100px;
+  padding: 50px 70px;
   margin: 1rem;
   border-radius: 1.5rem;
-  background-color: rgb(53, 131, 177);
+  background-image: url("./jarre.jpg");
 }
 
 .klasser a {

@@ -34,7 +34,7 @@ function Home() {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db
-      .collection("users").doc("teachers").collection(username).doc("classes").collection("teknik")
+      .collection("users").doc("teachers").collection(username).doc("data").collection("classes")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -47,12 +47,9 @@ function Home() {
 
       });
 
-    const ladda = (event) => {
-      
-    }
-
     // return cleanup function
     return () => sender();
+    
   }, [loading]); 
 
   if (loading) {
@@ -64,7 +61,7 @@ function Home() {
         </div>
     );
   }
-    return (
+  return (
         <div>
              <Sidebar />
              <div className="total">
@@ -102,6 +99,7 @@ function Home() {
                             </div>
                         )}
 
+                          
 
 
                         {/*
@@ -123,7 +121,7 @@ function Home() {
              
             </motion.div>
         </div>
-    )
+    ) 
 }
 
 export default Home

@@ -25,12 +25,12 @@ function Add() {
         let username = firebase.auth().currentUser.displayName
         console.log(formData.namn);   
         if(formData.namn.includes("TE")){
-            db.collection("users").doc("teachers").collection(username).doc("classes").collection("teknik").add(formData);
+            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
         } else if (formData.namn.includes("ES")){
-            db.collection("users").doc("teachers").collection(username).doc("classes").collection("estet").add(formData);
+            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
             console.log(formData)
         } else if (formData.namn.includes("EE")){
-            db.collection("users").doc("teachers").collection(username).doc("classes").collection("el").add(formData);
+            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
         } else {
             console.log("Invalid classname!");
         }
