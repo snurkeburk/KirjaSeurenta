@@ -83,11 +83,8 @@ export class User {
         //const read = await readWhere('users', 'id', this.id);
         //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
         const read = await readOne('users', 'ids');
-<<<<<<< HEAD
-        //console.log(read.ids);
-=======
-        // console.log(read.ids);
->>>>>>> 8976c3e13d00f71fefc473630400ba08591e1cca
+        console.log("ID:s : ", read.ids);
+        console.log(this.id);
         
         var userExists = false;
 

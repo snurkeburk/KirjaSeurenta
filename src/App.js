@@ -22,7 +22,7 @@ firebase.initializeApp({
   projectId: 'kirjanseuranta'
 })
 export const db = firebase.firestore();
-
+export var userObject;
 
 class App extends Component {
   state = { isSignedIn: false }
@@ -43,9 +43,9 @@ class App extends Component {
       //console.log("user", user)
 
       if (user !== null) { //adds user to database if logged in 
-        const userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
-        //userObject.addBookToUser('ergofysik2', '123abc');
-       
+        userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
+        userObject.addBookToUser('ergofysik2', '123abc');
+
         //console.table(userObject.getBooks());
       }
       

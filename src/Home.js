@@ -11,6 +11,7 @@ import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
 import Add from './Add';
 import randomColor from 'randomcolor';
+import { userObject } from './App';
 
 function Home() {
         const divStyle = {
@@ -63,7 +64,7 @@ function Home() {
         </div>
     );
   }
-    return (
+    if (userObject.status === 'teacher') return (
         <div>
              <Sidebar />
              <div className="total">
