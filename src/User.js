@@ -1,6 +1,7 @@
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
 import firebase from "firebase"
-
+import { userObject } from './App';
+import {db} from './App';
 export class User {
 
     constructor(name, id, email, className) {
@@ -33,7 +34,9 @@ export class User {
             this.status = 'student';
         } else if (splitEmail.includes('ntig.se')) {
             this.status = 'teacher';
-        } else {
+            
+        }
+        else {
             this.status = 'unauthorized';
             firebase.auth().signOut();
             
@@ -41,9 +44,11 @@ export class User {
         console.log(this.status);
     }
 
-    addUser() { // Adds user to database
+    addUser() { 
+        
+        // Adds user to database
         //TODO Merge function with userExists() ???
-        nestedAdd(
+       nestedAdd(
             'users',
             //'usersTest',
             'students',
@@ -75,7 +80,8 @@ export class User {
             }
         )
         
-    }
+        }
+
 
 
 
@@ -84,13 +90,11 @@ export class User {
         //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
         const read = await readOne('users', 'ids');
         console.log("ID:s : ", read.ids);
-        console.log(this.id);
-        
-        var userExists = false;
+        console.log(this.id + "exists");
 
         if (read.ids === undefined || !read.ids.includes(this.id)) {
             console.log("User does not exist yet");
-            this.addUser();
+            //this.addUser();
         }
     }  
 

@@ -73,6 +73,24 @@ link:hover {
   cursor: pointer;
 }
 
+.student-s-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.student-left-side {
+}
+
+.status-container {
+  text-align: center;
+  padding: 5px 10px;
+  position: relative;
+  background-color: rgb(118, 218, 118);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 @media screen and (max-width: 1250px) {
   .klasser {
     margin-left: 5rem;

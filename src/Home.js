@@ -1,6 +1,7 @@
 import { db } from './App';
 import React,{useState,useEffect} from 'react';
 import Sidebar from './Sidebar'
+import SidebarStudent from './SidebarStudent'
 import { motion } from "framer-motion"
 import './Home.css';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { SettingsInputCompositeTwoTone } from '@material-ui/icons';
 import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
 import Add from './Add';
-
+import { userExists } from './User';
 import randomColor from 'randomcolor';
 import { userObject } from './App';
 import firebase from 'firebase';
@@ -65,7 +66,8 @@ function Home() {
         </div>
     );
   }
-    if (userObject.status === 'teacher') return (
+
+    if (userObject.status === 'teacher'){ return (
         <div>
              <Sidebar />
              <div className="total">
@@ -125,7 +127,24 @@ function Home() {
              
             </motion.div>
         </div>
-    ) 
+    ) } else if (userObject.status === "student") {
+      return (
+        <div className="student-home-container">
+          <SidebarStudent /> { /* ändra detta till StudentSidebar.js */}
+          <div className="student-s-container">
+         
+          <motion.div className="student-left-side">
+            <p>bok</p>
+
+          </motion.div>
+
+           <motion.div className="student-right-side">
+          </motion.div>
+        </div>
+                  </div>
+
+      )
+    }
 }
 
 export default Home

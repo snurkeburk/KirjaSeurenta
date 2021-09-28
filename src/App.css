@@ -3,72 +3,87 @@
   padding: 0;
 }
 
-body,html {
+body,
+html {
   height: 100vh;
   width: auto;
   background-color: white;
 }
 
-
 :root {
   --faded-color: rgba(0, 0, 0, 0.342);
-  --highlight-color: #FF7C7C;
+  --highlight-color: #ff7c7c;
   --second-highlight-color: rgb(91, 164, 182);
 }
-
 .welcome-container {
   max-height: 100vh;
   min-height: 100vh;
-  background-color: #455064;
+  background-color: #ffffff;
+  width: 70vw;
   display: flex;
+  align-self: center;
+  margin: auto;
   flex-direction: column;
   align-items: center;
-  justify-content: center;  
-  text-shadow: 0px 2px 5px #000000;
+  justify-content: center;
 }
-
-
 
 .welcomeMessege,
 .welcomeUnder,
 .welcomeName {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
-  color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  color: rgb(0, 0, 0);
   text-align: center;
 }
 
-.welcomeMessege{
+.welcomeMessege {
   font-size: 30px;
-  color: rgba(255, 255, 255, 0.705);
-  
+  padding: 1rem 0rem;
+  color: rgba(0, 0, 0, 0.705);
 }
 
 .welcomeName {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-
-  letter-spacing: 20px;
+  font-weight: 100;
+  letter-spacing: 5px;
   color: var(--second-highlight-color);
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 80px;
-  
-  
+  font-family: "Cinzel Decorative", cursive;
+  font-size: 8vw;
 }
 
 .welcomeName > h2 {
   color: var(--highlight-color);
 }
 
-
-.welcomeUnder{
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.705);
+.welcomeUnder {
+  font-size: 4vw;
+  color: rgba(0, 0, 0, 0.705);
 }
 
-.firebaseui-card-content{
+.firebaseui-card-content {
   margin-top: 2rem;
 }
+@media only screen and (min-width: 600px) {
+  .welcome-container {
+    width: 70vw;
+  }
+  .welcomeName {
+    font-size: 3rem;
+    letter-spacing: 10px;
+  }
+  .welcomeUnder {
+    font-weight: 100;
+    font-size: 1.4rem;
+  }
+  .welcomeMessege {
+    font-size: 30px;
+    font-weight: 100;
+    padding: 0rem 0rem;
+    color: rgba(0, 0, 0, 0.705);
+  }
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");

@@ -26,7 +26,7 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 
-function Sidebar() {
+function SidebarStudent() {
     const [selectedDate, handleDateChange] = useState(new Date());
    return (
 
@@ -36,10 +36,7 @@ function Sidebar() {
             </div>
 
             <div className="sidebar__mid">
-                <Link className="Link" to="/">hem</Link> 
-                <Link className="Link" to="/klasser">klasser</Link> 
-                <Link className="Link" to="/sök">sök </Link>
-                <Link className="Link" to="/add">lägg till </Link>
+                <p className="status">{ userObject.status } - TE19D (ex)</p>
             </div>
              <div className="sidebar__right">
                 <img className="profilePic"
@@ -64,4 +61,4 @@ function Sidebar() {
     )
 }
 
-export default Sidebar
+export default SidebarStudent

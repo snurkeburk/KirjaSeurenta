@@ -73,16 +73,21 @@
 
 .Link {
   display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
   padding: 0rem 1rem;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   transition: background-color 100ms ease-out;
   transition: color 100ms ease-out;
   border-radius: 50px;
-  height: 50%;
   margin: auto;
+  height: 50%;
+}
+
+.status {
+  font-weight: 100;
+  font-size: 1rem;
 }
 
 .Link:hover {

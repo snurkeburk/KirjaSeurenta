@@ -15,7 +15,6 @@ import Add from './Add';
 import { Book } from './Book';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
 import { User, setUserStatus } from './User';
-
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com',
@@ -45,7 +44,13 @@ class App extends Component {
       if (user !== null) { //adds user to database if logged in 
         userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
         userObject.addBookToUser('ergofysik2', '123abc');
+        
+        let username = firebase.auth().currentUser.displayName;
 
+        console.log(username + " " +  userObject.status);
+        let test = db.collection("users").doc("students").collection("te19d").doc;
+        console.log("TEST = " + test);
+        
         //console.table(userObject.getBooks());
       }
       
@@ -53,7 +58,8 @@ class App extends Component {
   }
 
 
-getContent () {
+
+getContent() {
   if (this.state.isSignedIn){
     return (
       <motion.div
@@ -96,12 +102,12 @@ getContent () {
       >
         <div className="welcome-container" >
         <h2 className="welcomeMessege">Välkommen till</h2> <h2 class="welcomeName"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
-        <p className="welcomeUnder">För dig som har en jävla massa böcker att hålla koll på</p>
         
       <StyledFirebaseAuth
       uiConfig={this.uiConfig}
       firebaseAuth={firebase.auth()}
       />
+        <p className="welcomeUnder">Gör det lättare för dig att hålla koll på dina skolböcker</p>
       </div>
       </motion.div>
     );
