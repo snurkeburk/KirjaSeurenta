@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 import Home from './Home'
 import { func } from "prop-types";
 import Add from './Add';  
+import ValidateUser from './ValidateUser';
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from './Book';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
@@ -71,9 +72,15 @@ getContent() {
 
       <Switch>
         <Route exact path="/">
-              <Home />
+            <Home />
+          </Route>
+        <Route path="/home">
+            <Home />
         </Route>
-     
+        <Route exact path="/validation">
+          <ValidateUser />
+        </Route>
+
         <Route path="/sök">
                <Search />
         </Route>
@@ -107,7 +114,7 @@ getContent() {
       uiConfig={this.uiConfig}
       firebaseAuth={firebase.auth()}
       />
-        <p className="welcomeUnder">Gör det lättare för dig att hålla koll på dina skolböcker</p>
+        <p className="welcomeUnder">G ör det lättare för dig att hålla koll på dina skolböcker</p>
       </div>
       </motion.div>
     );
