@@ -4,6 +4,7 @@ import Sidebar from './Sidebar'
 import SidebarStudent from './SidebarStudent'
 import { motion } from "framer-motion"
 import './Home.css';
+import { Redirect } from "react-router-dom";  
 import { Link } from 'react-router-dom';
 import User from './User';
 import { add, update, remove, read } from './Crud'
@@ -15,6 +16,7 @@ import { userExists } from './User';
 import randomColor from 'randomcolor';
 import { userObject } from './App';
 import firebase from 'firebase';
+import { isSameWeek } from 'date-fns';
 
 function Home() {
     
@@ -127,7 +129,7 @@ function Home() {
              
             </motion.div>
         </div>
-    ) } else if (userObject.status === "student") {
+    ) } else if (userObject.status === "student" && !username.includes("Isak")) {
       return (
         <div className="student-home-container">
           <SidebarStudent /> { /* ändra detta till StudentSidebar.js */}
@@ -144,6 +146,14 @@ function Home() {
                   </div>
 
       )
+    } else if (userObject.status === "student" && username.includes("Isak")) {
+        return (
+          <div>
+             <p>Vänta...</p>
+             <CircularProgress className="loading"/>
+              <Redirect to="/validation" />
+            </div>
+        )
     }
 }
 

@@ -114,7 +114,7 @@ getContent() {
       uiConfig={this.uiConfig}
       firebaseAuth={firebase.auth()}
       />
-        <p className="welcomeUnder">G ör det lättare för dig att hålla koll på dina skolböcker</p>
+        <p className="welcomeUnder">Gör det lättare för dig att hålla koll på dina skolböcker</p>
       </div>
       </motion.div>
     );

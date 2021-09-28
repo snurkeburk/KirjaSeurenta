@@ -50,10 +50,12 @@
   align-items: flex-end;
   letter-spacing: 3px;
   color: var(--second-highlight-color);
+  color: #230625;
 }
 
 .name > h2 {
   color: var(--highlight-color);
+  color: #a13fa8;
 }
 
 .profilePic {

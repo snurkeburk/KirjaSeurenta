@@ -40,10 +40,16 @@
 .klasser {
   border-style: solid;
   border-width: 0.1px;
-  padding: 50px 70px;
+  padding: 50px 0px;
   margin: 1rem;
-  border-radius: 1.5rem;
-  background-image: url("./jarre.jpg");
+  border-radius: 2rem;
+  background-image: url("./NTI.png");
+  background-position-x: -80px;
+  background-position-y: 90px;
+  -webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
+    0px 42px 0px 0px #7e0086;
+  box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
+    0px 15px 0px 0px #7e0086;
 }
 
 .klasser a {
@@ -51,6 +57,8 @@
   color: white;
   font-weight: 500;
   font-size: 50px;
+  background-color: rgba(49, 8, 47, 0);
+  padding: 10px 70px;
 }
 .klasser-container {
   display: grid;

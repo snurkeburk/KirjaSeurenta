@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  height: 100vh;
+  width: auto;
+  background-color: white;
+}
+
+:root {
+  --faded-color: rgba(0, 0, 0, 0.342);
+  --highlight-color: #ff7c7c;
+  --second-highlight-color: rgb(91, 164, 182);
+}
+
+.valUser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.validate-promt {
+  font-weight: 100;
+  font-size: 3rem;
+}
+.validate-question {
+  font-size: 1.5rem;
+  font-weight: 100;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
+
+.home-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  position: absolute;
+  width: 95vw;
+  margin-top: 3rem;
+  font-family: "Roboto", sans-serif;
+}
+
+.loading {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+}
+
+.validate-klasser {
+  border-bottom-style: groove;
+  border-color: rgb(134, 43, 219);
+  border-width: 10px;
+  border-radius: 10px;
+  padding: 10px 0px;
+  margin: 1rem;
+  background-size: contain;
+}
+
+.validate-klasser a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-weight: 100;
+  font-size: 50px;
+  padding: 0px 10px;
+}
+.validate-klasser-container {
+  display: flex;
+  margin-top: 5rem;
+}
+
+@media only screen and (min-width: 600px) {
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
