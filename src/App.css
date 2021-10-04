@@ -7,7 +7,7 @@ body,
 html {
   height: 100vh;
   width: auto;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
 }
 
 :root {
@@ -15,10 +15,43 @@ html {
   --highlight-color: #ff7c7c;
   --second-highlight-color: rgb(91, 164, 182);
 }
+
+.small-welcome-container {
+  background-color: #a245ff20;
+  border-radius: 2rem;
+  /*background-position-x: -80px;
+  background-position-y: 90px; */
+  display: flex;
+  flex-direction: column;
+  -webkit-box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71); 
+  box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71);
+}
+
+.left {
+  background: #D10BE9;
+background: -moz-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
+background: -webkit-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
+background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
+  border-top-right-radius: 2rem;
+  border-top-left-radius: 2rem;
+  padding: 5rem 2rem;
+  width: 80vw;
+  
+}
+.right {
+ border-style: solid;
+ border-top-style: none;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  padding-top: 1rem;
+  border-width: 0.1px;
+  border-color:rgba(0, 0, 0, 0.213);
+
+}
+
 .welcome-container {
   max-height: 80vh;
   min-height: 80vh;
-  background-color: #ffffff;
   width: 70vw;
   display: flex;
   align-self: center;
@@ -26,22 +59,32 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: top;
-  padding-top: 5rem;
+  padding-top: 50px;
 }
 
+.welcome-container:hover{
+  cursor: default;
+}
+
+.websitelink {
+  font-family: "Roboto", sans-serif;
+  color: white;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 400;
+}
 .welcomeMessege,
 .welcomeUnder,
-.welcomeName {
+.welcomeName{
   font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  color: rgb(0, 0, 0);
+  font-weight: 100;
+  color: rgb(255, 255, 255);
   text-align: center;
 }
 
 .welcomeMessege {
   font-size: 30px;
   padding: 1rem 0rem;
-  color: rgba(0, 0, 0, 0.705);
 }
 
 .welcomeName {
@@ -49,28 +92,71 @@ html {
   flex-direction: row;
   align-items: flex-end;
   font-weight: 100;
-  letter-spacing: 5px;
+  letter-spacing: 1px;
   color: var(--second-highlight-color);
   font-family: "Cinzel Decorative", cursive;
   font-size: 8vw;
-  color: #230625;
+  color: #ebebeb;
+  border-bottom-left-radius: 2rem;
+  border-color: rgb(255, 255, 255);
+  border-bottom-style: solid;
+  padding: 0.3rem 0.5rem;
 }
 
 .welcomeName > h2 {
-  color: var(--highlight-color);
-  color: #a13fa8;
+  color: #50067e;
 }
 .welcomeUnder {
-  font-size: 4vw;
-  color: rgba(0, 0, 0, 0.705);
+  font-size:20px;
+  margin-top: 0rem;
+  padding: 2rem 0rem;
+  color: rgb(255, 255, 255);
+
 }
 
 .firebaseui-card-content {
   margin-top: 0rem;
 }
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 975px) {
   .welcome-container {
     width: 70vw;
+  }
+
+  .small-welcome-container {
+    background-color: #a245ff20;
+    border-radius: 2rem;
+    width: 60rem;
+    height: 80vh;
+    margin-top: 5rem;
+    /*background-position-x: -80px;
+    background-position-y: 90px; */
+    display: flex;
+    flex-direction: row;
+    -webkit-box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71); 
+    box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71);
+  }
+  
+  .left {
+    background: #D10BE9;
+    background: -moz-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
+    background: -webkit-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
+    background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
+    border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+    border-top-right-radius: 0;
+    padding: 0rem 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-self: center;
+    justify-content: center;
+    width: 50rem;
+    
+  }
+  .right {
+    border-style: none;
+    display: flex;
+    align-self: center;
   }
   .welcomeName {
     font-size: 3rem;
@@ -79,12 +165,19 @@ html {
   .welcomeUnder {
     font-weight: 100;
     font-size: 1.4rem;
+    margin-bottom: 0rem;
+  }
+
+  .websitelink {
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: rgb(255, 255, 255);
+    text-align: center;
   }
   .welcomeMessege {
     font-size: 30px;
     font-weight: 100;
     padding: 0rem 0rem;
-    color: rgba(0, 0, 0, 0.705);
   }
 }
 
