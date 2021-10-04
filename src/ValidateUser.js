@@ -6,15 +6,16 @@ import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
+import User from './User'
 function ValidateUser() {
     let username = firebase.auth().currentUser.displayName
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
 
 
-  useEffect(() => {
-    const getPostsFromFirebase = [];
-    const sender = db
+    useEffect(() => {
+        const getPostsFromFirebase = [];
+        const sender = db
       .collection("users").doc("teachers").collection(username).doc("data").collection("classes")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -27,6 +28,7 @@ function ValidateUser() {
         setLoading(false);
 
       });
+    
 
     // return cleanup function
     return () => sender();
@@ -57,7 +59,11 @@ function ValidateUser() {
                               }
                             }
                               >
-                                <a className="validate-klass" /* onclick={addUserToClass()}*/ href="/home" >{post.namn}</a>
+                               
+                               <button className="validate-klass" onClick={() =>                  
+                                    /* KÖR addUser() HÄR */
+                                    console.log("User added")
+                                }  >{post.namn}</button>
                                 </motion.div>)
                         ) : (
                             <div className="validate-not-found">

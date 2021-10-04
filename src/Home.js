@@ -34,8 +34,10 @@ function Home() {
 
 
     const [loading, setLoading] = useState(true);
+    const [loadingBooks, setLoadingBooks] = useState(true);
   const [posts, setPosts] = useState([]);
-
+  const [books, setBooks] = useState([]);
+    const [student, setStudent] = useState([]);
   let username = firebase.auth().currentUser.displayName
 
   useEffect(() => {
@@ -50,7 +52,29 @@ function Home() {
           });
         });
         setPosts(getPostsFromFirebase);
-        setLoading(false);
+        setStudent(true);
+        setLoadingBooks(false);
+
+      });
+
+    // return cleanup function
+    return () => sender();
+    
+  }, [loadingBooks]); 
+ useEffect(() => {
+    const getPostsFromFirebase = [];
+    const sender = db
+      .collection("books")
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          getPostsFromFirebase.push({
+            ...doc.data(), //spread operator
+            key: doc.id, // id från firebase
+          });
+        });
+        setBooks(getPostsFromFirebase);
+        setStudent(false)
+        setLoadingBooks(false);
 
       });
 
@@ -59,7 +83,7 @@ function Home() {
     
   }, [loading]); 
 
-  if (loading) {
+  if (loadingBooks) {
     return (
         <div>
             <Sidebar />
@@ -69,7 +93,7 @@ function Home() {
     );
   }
 
-    if (userObject.status === 'teacher'){ return (
+    if (userObject.status === 'student'){ return (
         <div>
              <Sidebar />
              <div className="total">
@@ -99,6 +123,7 @@ function Home() {
                             }
                               >
                                 <a className="klass" href="#" >{post.namn}</a>
+                                
                                 </motion.div>)
                         ) : (
                             <div className="not-found">
@@ -129,19 +154,51 @@ function Home() {
              
             </motion.div>
         </div>
-    ) } else if (userObject.status === "student" && !username.includes("Isak")) {
+    ) } else if (userObject.status === "teacher" && username.includes("Isak")) {
       return (
         <div className="student-home-container">
           <SidebarStudent /> { /* ändra detta till StudentSidebar.js */}
           <div className="student-s-container">
          
           <motion.div className="student-left-side">
-            <p>bok</p>
+              <motion.div className="böcker-container"layout >
+                        {books.length > 0 ? (
+                            books.map((post) => <motion.div
+                            className="böcker"
+                            key={post.key}
+                            whileHover={{
+                                scale: 1.03,
+                                transition: { duration: 0.1 },
+                              }
+                            }
+                              >
+                                <a className="bok" href="#" >{post.title}</a>
+                                </motion.div>)
+                        ) : (
+                            <div className="not-found">
+                                <h4>Inga böcker tillagda</h4>
+                            </div>
+                        )}
+
+                          
+
+
+                        {/*
+                        klasser.map(klass=>{
+                        return(
+                            <div className="blog-container">
+                            <h4>{klass.namn}</h4>
+
+                            </div>
+                        )
+                        })
+                    */  }
+                    </motion.div>
+
 
           </motion.div>
 
-           <motion.div className="student-right-side">
-          </motion.div>
+
         </div>
                   </div>
 

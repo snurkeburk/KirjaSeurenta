@@ -19,7 +19,9 @@ import { User, setUserStatus } from './User';
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com',
-  projectId: 'kirjanseuranta'
+  projectId: 'kirjanseuranta',
+  storageBucket: "kirjanseuranta.firebaseapp.com"
+
 })
 export const db = firebase.firestore();
 export var userObject;
