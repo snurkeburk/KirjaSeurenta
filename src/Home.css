@@ -40,10 +40,16 @@
 .klasser {
   border-style: solid;
   border-width: 0.1px;
-  padding: 50px 70px;
+  padding: 50px 0px;
   margin: 1rem;
-  border-radius: 1.5rem;
-  background-image: url("./jarre.jpg");
+  border-radius: 2rem;
+  background-image: url("./NTI.png");
+  background-position-x: -80px;
+  background-position-y: 90px;
+  -webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
+    0px 42px 0px 0px #7e0086;
+  box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
+    0px 15px 0px 0px #7e0086;
 }
 
 .klasser a {
@@ -51,10 +57,42 @@
   color: white;
   font-weight: 500;
   font-size: 50px;
+  background-color: rgba(49, 8, 47, 0);
+  padding: 10px 70px;
 }
 .klasser-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.böcker {
+  border-style: solid;
+  text-align: center;
+  background-color: rgb(18, 4, 31);
+  border-width: 0.1px;
+  margin: 1rem;
+  border-radius: 0.2rem;
+  height: 20rem;
+  width: 16rem;
+  -webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
+    0px 42px 0px 0px #7e0086;
+  box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
+    0px 15px 0px 0px #7e0086;
+}
+.böcker a {
+  text-decoration: none;
+  color: white;
+  font-weight: 100;
+  font-size: 35px;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+.böcker-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 10vh;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .total {

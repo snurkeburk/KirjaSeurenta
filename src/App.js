@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 import Home from './Home'
 import { func } from "prop-types";
 import Add from './Add';  
+import ValidateUser from './ValidateUser';
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from './Book';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
@@ -18,7 +19,9 @@ import { User, setUserStatus } from './User';
 firebase.initializeApp({
   apiKey: 'AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs',
   authDomain: 'kirjanseuranta.firebaseapp.com',
-  projectId: 'kirjanseuranta'
+  projectId: 'kirjanseuranta',
+  storageBucket: "kirjanseuranta.firebaseapp.com"
+
 })
 export const db = firebase.firestore();
 export var userObject;
@@ -71,9 +74,15 @@ getContent() {
 
       <Switch>
         <Route exact path="/">
-              <Home />
+            <Home />
+          </Route>
+        <Route path="/home">
+            <Home />
         </Route>
-     
+        <Route exact path="/validation">
+          <ValidateUser />
+        </Route>
+
         <Route path="/sök">
                <Search />
         </Route>
@@ -98,16 +107,25 @@ getContent() {
     return (
       
       <motion.div className="big-welcome-container"
-
+      initial={{ opacity: "0%" }}
+      animate={{ opacity: "100%" }}
       >
         <div className="welcome-container" >
-        <h2 className="welcomeMessege">Välkommen till</h2> <h2 class="welcomeName"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
-        
-      <StyledFirebaseAuth
-      uiConfig={this.uiConfig}
-      firebaseAuth={firebase.auth()}
-      />
-        <p className="welcomeUnder">Gör det lättare för dig att hålla koll på dina skolböcker</p>
+          <motion.div className="small-welcome-container">
+            <motion.div className="left">
+              <h2 className="welcomeMessege">Välkommen till</h2> 
+              <h2 class="welcomeName"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
+              
+              <p className="welcomeUnder">Gör det lättare för dig att hålla koll på dina skolböcker</p>
+              <p className="websitelink">www.kirjanseuranta.se</p>
+           </motion.div>
+            <motion.div className="right">
+              <StyledFirebaseAuth
+              uiConfig={this.uiConfig}
+              firebaseAuth={firebase.auth()}
+              />
+           </motion.div>
+          </motion.div>
       </div>
       </motion.div>
     );

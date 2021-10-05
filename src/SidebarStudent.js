@@ -16,6 +16,7 @@ import ListAlt from '@material-ui/icons/ListAlt';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 import './SidebarOption.css';
+import SwapIcon from '@material-ui/icons/SwapHoriz'
 import App from './App';
 import { userObject } from './App';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
@@ -25,6 +26,8 @@ import {
   DateTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+
+
 
 function SidebarStudent() {
     const [selectedDate, handleDateChange] = useState(new Date());
@@ -36,7 +39,7 @@ function SidebarStudent() {
             </div>
 
             <div className="sidebar__mid">
-                <p className="status">{ userObject.status } - TE19D (ex)</p>
+                
             </div>
              <div className="sidebar__right">
                 <img className="profilePic"
@@ -44,6 +47,7 @@ function SidebarStudent() {
                 src={firebase.auth().currentUser.photoURL}
                 />
                  <p className="username">{firebase.auth().currentUser.displayName}
+                <p className="status">{ userObject.status }</p>
 
                  </p>
                  <Button style={{backgroundColor: "#FFF"}} variant="contained" className="signout" onClick={() => firebase.auth().signOut()}>

@@ -47,7 +47,6 @@ function Sidebar() {
                 src={firebase.auth().currentUser.photoURL}
                 />
                  <p className="username">{firebase.auth().currentUser.displayName}
-
                  </p>
                  <Button style={{backgroundColor: "#FFF"}} variant="contained" className="signout" onClick={() => firebase.auth().signOut()}>
                      <ExitToAppIcon style={{color: "black" }} fontSize="small"/>
