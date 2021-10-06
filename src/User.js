@@ -6,8 +6,6 @@ export class User {
 
     constructor(name, id, email, className) {
         this.name = name;
-        //console.log(name);
-        //this.name = 'Test User.js7'
         this.id = id;
         this.allIds = [];
         this.email = email;
@@ -26,8 +24,6 @@ export class User {
     
     addBookToUser (book, id) { // Adds a book to a user
         this.books[book] = id;
-        //console.log(this.books);
-        //update('users', this.name, );
         updateField('users', this.className, this.name, 'books', this.books);
     }
 
@@ -104,7 +100,7 @@ export class User {
             this.allIds = read.ids;
             this.allIds.push(this.id);
             this.firstLogin = true;
-            this.addUser();
+            //this.addUser();
         } else {
             //console.log("User does exist")
             //this.firstLogin = false;

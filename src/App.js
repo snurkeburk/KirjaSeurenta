@@ -45,15 +45,15 @@ class App extends Component {
       //console.log("user", user)
 
       if (user !== null) { //adds user to database if logged in 
-        userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email, 'te19d');
-        userObject.addBookToUser('ergofysik2', '123abc');
+        userObject = new User( user.displayName  /*"Test Name"*/ ,user.uid, user.email);
+        //userObject.addBookToUser('ergofysik2', '123abc');
         
-        let username = firebase.auth().currentUser.displayName;
+        //let username = firebase.auth().currentUser.displayName;
 
-        console.log(username + " " +  userObject.status);
-        let test = db.collection("users").doc("students").collection("te19d").doc;
-        console.log("TEST = " + test);
-        
+        //console.log(username + " " +  userObject.status);
+        //let test = db.collection("users").doc("students").collection("te19d").doc;
+        //console.log("TEST = " + test);
+        //console.log(userObject.firstLogin);
         //console.table(userObject.getBooks());
       }
       
