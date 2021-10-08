@@ -93,7 +93,7 @@ function Home() {
     );
   }
 
-    if (userObject.status === 'student'){ return (
+    if (userObject.status === 'teacher'){ return (
         <div>
              <Sidebar />
              <div className="total">
@@ -154,7 +154,7 @@ function Home() {
              
             </motion.div>
         </div>
-    ) } else if (userObject.status === "teacher" && username.includes("Isak")) {
+    ) } else if (userObject.status === "student" && username.includes("Nils") && userObject.firstLogin === false) {
       return (
         <div className="student-home-container">
           <SidebarStudent /> { /* ändra detta till StudentSidebar.js */}
@@ -203,7 +203,8 @@ function Home() {
                   </div>
 
       )
-    } else if (userObject.status === "student" && username.includes("Isak")) {
+    } else if (userObject.status === "student" && userObject.firstLogin === true) {
+      console.log(userObject.firstLogin);
         return (
           <div>
              <p>Vänta...</p>

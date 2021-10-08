@@ -6,15 +6,16 @@ export class User {
 
     constructor(name, id, email, className) {
         this.name = name;
-        //console.log(name);
-        //this.name = 'Test User.js7'
         this.id = id;
+        this.allIds = [];
         this.email = email;
         this.className = className;
     
         this.books = {};
         this.setUserStatus();
         this.userExists();
+
+        this.firstLogin = false;
     }
 
     getBooks() { //Returns books and book numbers as an array of arrays
@@ -23,8 +24,6 @@ export class User {
     
     addBookToUser (book, id) { // Adds a book to a user
         this.books[book] = id;
-        //console.log(this.books);
-        //update('users', this.name, );
         updateField('users', this.className, this.name, 'books', this.books);
     }
 
@@ -72,11 +71,14 @@ export class User {
             //'usersTest',
             'ids',
             {
-                ids: [
+                ids: this.allIds
+                
+                /*ids: [
                     'testID1',
                     'testID2',
                     this.id
-                ]
+                ]*/
+                
             }
         )
         
@@ -90,11 +92,19 @@ export class User {
         //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
         const read = await readOne('users', 'ids');
         console.log("ID:s : ", read.ids);
-        console.log(this.id + "exists");
+        console.log("Current user id: " + this.id);
 
-        if (read.ids === undefined || !read.ids.includes(this.id)) {
-            console.log("User does not exist yet");
+
+        if (/*read.ids === undefined ||*/ !read.ids.includes(this.id)) {
+            //console.log("User does not exist yet");
+            this.allIds = read.ids;
+            this.allIds.push(this.id);
+            this.firstLogin = true;
             //this.addUser();
+        } else {
+            //console.log("User does exist")
+            //this.firstLogin = false;
+            //console.log("Firstlogin in class: " + this.firstLogin);
         }
     }  
 
