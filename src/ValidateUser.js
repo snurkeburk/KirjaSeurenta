@@ -22,6 +22,8 @@ function ValidateUser() {
     function AddClassToUser(className){ 
       userObject.className = className;
       setClassChosen(true);
+      userObject.addBookToUser('matte50004', '123abc');
+      userObject.addBookToUser('ergofysik1', 'abcdefg');
       userObject.addUser();
       userObject.firstLogin = false;
     }

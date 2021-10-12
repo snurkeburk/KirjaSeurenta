@@ -8,7 +8,7 @@ import { Redirect } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import User from './User';
 import { add, update, remove, read } from './Crud'
-import { SettingsInputCompositeTwoTone } from '@material-ui/icons';
+import { Dock, SettingsInputCompositeTwoTone } from '@material-ui/icons';
 import { AnimateSharedLayout } from "framer-motion"
 import { CircularProgress } from '@material-ui/core';
 import Add from './Add';
@@ -62,8 +62,8 @@ function Home() {
     
   }, [loadingBooks]); 
  useEffect(() => {
-    const getPostsFromFirebase = [];
-    const sender = db
+    //const getPostsFromFirebase = [];
+    /*const sender = db
       .collection("books")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -76,10 +76,55 @@ function Home() {
         setStudent(false)
         setLoadingBooks(false);
 
-      });
+      }); */
+      //const getPostsFromFirebase = [];
+      
+      async function sender() {
+        console.log('sendeA');
+
+        const readCollection = db.collection('users').doc('students').collection('TE19D').doc(username);
+        const doc = await readCollection.get();
+
+        if(!doc.exists) {
+          console.log("Error");
+        } else {
+          return doc.data();
+        }
+
+        /*
+        await console.log(snapshot);
+        let arr = [];
+        await snapshot.forEach(doc => {
+          const data = doc.data();
+          arr.push(data);
+
+        })
+        */
+        //getPostsFromFirebase.push('Matte 5000 4')
+        
+        //getPostsFromFirebase = arr;
+        /*
+        console.log(getPostsFromFirebase);
+        setBooks(getPostsFromFirebase);
+        setStudent(false);
+        setLoadingBooks(false);
+        */
+
+      }
+
+      sender().then(function(res) {
+        console.log(res.books);
+
+        const booksArray = Object.keys(res.books);
+
+        setBooks(booksArray);
+        setStudent(false);
+        setLoadingBooks(false);
+      })
+      //return sender();
 
     // return cleanup function
-    return () => sender();
+    //return () => sender();
     
   }, [loading]); 
 
@@ -172,7 +217,7 @@ function Home() {
                               }
                             }
                               >
-                                <a className="bok" href="#" >{post.title}</a>
+                                <a className="bok" href="#" >{books}</a>
                                 </motion.div>)
                         ) : (
                             <div className="not-found">
