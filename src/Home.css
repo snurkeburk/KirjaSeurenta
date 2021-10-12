@@ -38,18 +38,20 @@
 }
 
 .klasser {
+  display: flex;
+  flex-direction: column;
   border-style: solid;
   border-width: 0.1px;
-  padding: 50px 0px;
+  padding-top: 2.5rem;
   margin: 1rem;
   border-radius: 2rem;
   background-image: url("./NTI.png");
   background-position-x: -80px;
-  background-position-y: 90px;
-  -webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
+  background-position-y: 80px;
+  /*-webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
     0px 42px 0px 0px #7e0086;
   box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
-    0px 15px 0px 0px #7e0086;
+    0px 15px 0px 0px #7e0086;*/
 }
 
 .klasser a {
@@ -58,7 +60,51 @@
   font-weight: 500;
   font-size: 50px;
   background-color: rgba(49, 8, 47, 0);
-  padding: 10px 70px;
+  padding-bottom: 2.5rem;
+}
+.klasser .klassEleverContainer {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+  background-color: white;
+  padding: 7px 0px;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+.klassEleverStatus {
+  display: flex;
+  justify-content: space-around;
+  border-right-style: solid;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.24);
+}
+.klassEleverAntal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.saknas,
+.utdelade {
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  color: white;
+}
+
+.antalElever {
+  padding: 5px;
+
+  font-size: 1.6rem;
+}
+
+.utdelade {
+  background-color: rgb(52, 209, 52);
+}
+.saknas {
+  background-color: rgb(252, 72, 72);
 }
 .klasser-container {
   display: grid;
