@@ -1,22 +1,28 @@
-import { db } from "./App";
-import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
-import SidebarStudent from "./SidebarStudent";
-import { motion } from "framer-motion";
-import "./Home.css";
-import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
-import User from "./User";
-import { add, update, remove, read } from "./Crud";
-import { Dock, SettingsInputCompositeTwoTone } from "@material-ui/icons";
-import { AnimateSharedLayout } from "framer-motion";
-import { CircularProgress } from "@material-ui/core";
-import Add from "./Add";
-import { userExists } from "./User";
-import randomColor from "randomcolor";
-import { userObject } from "./App";
-import firebase from "firebase";
-import { isSameWeek } from "date-fns";
+/* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and cofidential
+* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+*/
+
+import { db } from './App';
+import React,{useState,useEffect} from 'react';
+import Sidebar from './Sidebar'
+import SidebarStudent from './SidebarStudent'
+import { motion } from "framer-motion"
+import './Home.css';
+import { Redirect } from "react-router-dom";  
+import { Link } from 'react-router-dom';
+import User from './User';
+import { add, update, remove, read } from './Crud'
+import { Dock, SettingsInputCompositeTwoTone } from '@material-ui/icons';
+import { AnimateSharedLayout } from "framer-motion"
+import { CircularProgress } from '@material-ui/core';
+import Add from './Add';
+import { userExists } from './User';
+import randomColor from 'randomcolor';
+import { userObject } from './App';
+import firebase from 'firebase';
+import { isSameWeek } from 'date-fns';
 
 function Home() {
   const [loading, setLoading] = useState(true);
