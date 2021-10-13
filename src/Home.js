@@ -3,7 +3,7 @@
 * Proprietary and cofidential
 * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
 */
-
+import { Button } from '@material-ui/core';
 import { db } from './App';
 import React,{useState,useEffect} from 'react';
 import Sidebar from './Sidebar'
@@ -23,15 +23,19 @@ import randomColor from 'randomcolor';
 import { userObject } from './App';
 import firebase from 'firebase';
 import { isSameWeek } from 'date-fns';
-
+import Footer from "./Footer";
 function Home() {
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
+  const [loadingStudents, setLoadingStudents] = useState(true);
+  const [students, setStudents] = useState([]);
   const [posts, setPosts] = useState([]);
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
+
+  
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db
@@ -48,13 +52,33 @@ function Home() {
           });
         });
         setPosts(getPostsFromFirebase);
-        setStudent(true);
         setLoadingBooks(false);
       });
 
     // return cleanup function
     return () => sender();
   }, [loadingBooks]);
+  // för elever i klassen:
+  useEffect(() => {
+    const getStudentsFromFirebase = [];
+    const sender = db
+      .collection("users")
+      .doc("students")
+      .collection("TE19D")
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          getStudentsFromFirebase.push({
+            ...doc.data(), //spread operator
+            key: doc.id, // id från firebase
+          });
+        });
+        setStudents(getStudentsFromFirebase);
+        setLoadingStudents(false);
+      });
+
+    // return cleanup function
+    return () => sender();
+  }, [loadingStudents]);
   useEffect(() => {
     //const getPostsFromFirebase = [];
     /*const sender = db
@@ -124,7 +148,7 @@ function Home() {
     // return cleanup function
     //return () => sender();
   }, [loading]);
-
+  
   if (loadingBooks) {
     return (
       <div>
@@ -164,7 +188,8 @@ function Home() {
                     <a className="klass" href="#">
                       {post.namn}
                     </a>
-
+                   
+                    <Button  style={{color: "#fff"}}>test</Button>
                     <div className="klassEleverContainer">
                       <div className="klassEleverStatus">
                         <p className="utdelade">30</p>
@@ -174,6 +199,33 @@ function Home() {
                         <p className="antalElever">31</p>
                       </div>
                     </div>
+                    <motion.div className="students-container" layout>
+                  {students.length > 0 ? (
+                     students.map((post) => (
+                    <motion.div
+                      className="students"
+                      key={post.key}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.1 },
+                      }}
+                    >
+                    <a className="student" href="#">
+                      {post.name}
+                    </a>
+
+                  </motion.div>
+                ))
+              ) : (
+                <div className="not-found">
+                  <h4>Inga elever tillagda</h4>
+                  <Link className="link" to="/add">
+                    Lägg till elever
+                  </Link>
+                </div>
+              )} 
+              </motion.div>
+
                   </motion.div>
                 ))
               ) : (
@@ -207,7 +259,7 @@ function Home() {
   ) {
     return (
       <div className="student-home-container">
-        <SidebarStudent /> {/* ändra detta till StudentSidebar.js */}
+        <SidebarStudent /> 
         <div className="student-s-container">
           <motion.div className="student-left-side">
             <motion.div className="böcker-container" layout>

@@ -54,6 +54,7 @@
   background-image: url("./NTI.png");
   background-position-x: -80px;
   background-position-y: 80px;
+  
   /*-webkit-box-shadow: 0px 20px 0px 0px #f000ff, 0px 32px 0px 0px #a700b1,
     0px 42px 0px 0px #7e0086;
   box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
@@ -169,8 +170,7 @@ link:hover {
   justify-content: space-evenly;
 }
 
-.student-left-side {
-}
+
 
 .status-container {
   text-align: center;
@@ -180,6 +180,28 @@ link:hover {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
+
+.students-container {
+  width: 100%;
+  display: flex;
+}
+.students {
+  width: 100%;
+  padding: 2rem 2rem;
+  margin: 0;
+  background-color: rgb(255, 255, 255);
+  padding-top: 2rem;
+}
+
+.students-container .student{
+  color: black;
+  font-size: 1.2rem;
+  width: 100%;
+  font-weight: 100;
+  
+}
+
 
 @media screen and (max-width: 1250px) {
   .klasser {
