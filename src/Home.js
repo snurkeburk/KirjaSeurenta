@@ -34,6 +34,7 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
+  const [bookIds, setIds] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
 
@@ -139,6 +140,9 @@ function Home() {
     sender().then(function (res) {
 
       const booksArray = Object.keys(res.books);
+     
+      const idsArray = Object.values(res.books)
+
       let bookTitleArray = [];
       let bookImageArray = [];
       
@@ -153,6 +157,7 @@ function Home() {
 
       });
 
+      setIds(idsArray);
       setStudent(false);
       setLoadingBooks(false);
     });
@@ -275,10 +280,16 @@ function Home() {
             <motion.div className="böcker-container" layout>
               {books.length > 0 ? (
                 books.map((post, index) => (
+                  <motion.div className="bokContainer"> 
                   <motion.div
                     className="böcker"
                     
-                    style = {{backgroundImage: bookImages[index]}}
+                    style = {{
+                      backgroundImage: bookImages[index],
+                      backgroundSize: 'cover'
+                      /*backgroundSize: 'cover' */
+                      
+                    }}
                     key={post.key}
                     whileHover={{
                       scale: 1.03,
@@ -288,6 +299,12 @@ function Home() {
                     <a className="bok" href="#"  /* style={{backgroundColor: 'green'}} */>
                       {post}
                     </a>
+
+                  </motion.div>
+                    <div className="bokId" >
+                      <p>id: {bookIds[index]} </p>
+                    </div>
+
                   </motion.div>
                 ))
               ) : (
