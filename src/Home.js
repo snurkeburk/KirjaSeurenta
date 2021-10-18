@@ -24,6 +24,7 @@ import { userObject } from './App';
 import firebase from 'firebase';
 import { isSameWeek } from 'date-fns';
 import Footer from "./Footer";
+import { ar } from 'date-fns/locale';
 function Home() {
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
@@ -32,6 +33,7 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
+  const [bookImages, setImages] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
 
@@ -80,26 +82,8 @@ function Home() {
     return () => sender();
   }, [loadingStudents]);
   useEffect(() => {
-    //const getPostsFromFirebase = [];
-    /*const sender = db
-      .collection("books")
-
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
-        });
-        setBooks(getPostsFromFirebase);
-        setStudent(false);
-        setLoadingBooks(false);
-
-      }); */
-    //const getPostsFromFirebase = [];
 
     async function sender() {
-      console.log("sendeA");
 
       const readCollection = db
         .collection("users")
@@ -114,39 +98,65 @@ function Home() {
         return doc.data();
       }
 
-      /*
-        await console.log(snapshot);
-        let arr = [];
-        await snapshot.forEach(doc => {
-          const data = doc.data();
-          arr.push(data);
+    }
 
+    async function returnBookTitle(arr) {
+
+      let bookTitleArray = [];
+      let allBooksArray = [];
+      let bookImageArray = [];
+
+      const readCollection = db
+          .collection("books")
+        const snapshot = await readCollection.get();
+
+        
+        snapshot.forEach(doc => {
+          allBooksArray.push(
+            {
+              'id': doc.id,
+              'data': doc.data()
+            }
+          )
         })
-        */
-      //getPostsFromFirebase.push('Matte 5000 4')
 
-      //getPostsFromFirebase = arr;
-      /*
-        console.log(getPostsFromFirebase);
-        setBooks(getPostsFromFirebase);
-        setStudent(false);
-        setLoadingBooks(false);
-        */
+      arr.forEach(element => {
+        allBooksArray.forEach(bookElement => {
+
+          if (element == bookElement.id) {
+            bookTitleArray.push(bookElement.data.title);
+            bookImageArray.push("url(" + bookElement.data.cover + ")")
+          }
+
+        }) 
+
+      })
+
+      return([bookTitleArray, bookImageArray]);
+
     }
 
     sender().then(function (res) {
-      console.log(res.books);
 
       const booksArray = Object.keys(res.books);
+      let bookTitleArray = [];
+      let bookImageArray = [];
+      
+      returnBookTitle(booksArray).then(function (res) {
+        bookTitleArray = res[0];
 
-      setBooks(booksArray);
+        setBooks(bookTitleArray);
+        
+        bookImageArray = res[1];
+
+        setImages(bookImageArray);
+
+      });
+
       setStudent(false);
       setLoadingBooks(false);
     });
-    //return sender();
 
-    // return cleanup function
-    //return () => sender();
   }, [loading]);
   
   if (loadingBooks) {
@@ -158,7 +168,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "student") {
+  if (userObject.status === "teacher") { //teacher view
     return (
       <div className="home">
         <Sidebar />
@@ -254,7 +264,7 @@ function Home() {
       </div>
     );
   } else if (
-    userObject.status === "student" &&
+    userObject.status === "student" && //student view
     userObject.firstLogin === false
   ) {
     return (
@@ -264,17 +274,19 @@ function Home() {
           <motion.div className="student-left-side">
             <motion.div className="böcker-container" layout>
               {books.length > 0 ? (
-                books.map((post) => (
+                books.map((post, index) => (
                   <motion.div
                     className="böcker"
+                    
+                    style = {{backgroundImage: bookImages[index]}}
                     key={post.key}
                     whileHover={{
                       scale: 1.03,
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <a className="bok" href="#">
-                      {books}
+                    <a className="bok" href="#"  /* style={{backgroundColor: 'green'}} */>
+                      {post}
                     </a>
                   </motion.div>
                 ))
