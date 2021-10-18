@@ -1,43 +1,40 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and cofidential
-* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
-*/
-import { Button } from '@material-ui/core';
-import { db } from './App';
-import React,{useState,useEffect} from 'react';
-import Sidebar from './Sidebar'
-import SidebarStudent from './SidebarStudent'
-import { motion } from "framer-motion"
-import './Home.css';
-import { Redirect } from "react-router-dom";  
-import { Link } from 'react-router-dom';
-import User from './User';
-import { add, update, remove, read } from './Crud'
-import { Dock, SettingsInputCompositeTwoTone } from '@material-ui/icons';
-import { AnimateSharedLayout } from "framer-motion"
-import { CircularProgress } from '@material-ui/core';
-import Add from './Add';
-import { userExists } from './User';
-import randomColor from 'randomcolor';
-import { userObject } from './App';
-import firebase from 'firebase';
-import { isSameWeek } from 'date-fns';
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and cofidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ */
+import { Button } from "@material-ui/core";
+import { db } from "./App";
+import React, { useState, useEffect } from "react";
+import Sidebar from "./Sidebar";
+import SidebarStudent from "./SidebarStudent";
+import { motion } from "framer-motion";
+import "./Home.css";
+import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import User from "./User";
+import { add, update, remove, read } from "./Crud";
+import { Dock, SettingsInputCompositeTwoTone } from "@material-ui/icons";
+import { AnimateSharedLayout } from "framer-motion";
+import { CircularProgress } from "@material-ui/core";
+import Add from "./Add";
+import { userExists } from "./User";
+import randomColor from "randomcolor";
+import { userObject } from "./App";
+import firebase from "firebase";
+import { isSameWeek } from "date-fns";
 import Footer from "./Footer";
-import { ar } from 'date-fns/locale';
+import { ar } from "date-fns/locale";
 function Home() {
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
-  const [loadingStudents, setLoadingStudents] = useState(true);
-  const [students, setStudents] = useState([]);
+
   const [posts, setPosts] = useState([]);
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
-
-  
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db
@@ -60,31 +57,9 @@ function Home() {
     // return cleanup function
     return () => sender();
   }, [loadingBooks]);
-  // för elever i klassen:
-  useEffect(() => {
-    const getStudentsFromFirebase = [];
-    const sender = db
-      .collection("users")
-      .doc("students")
-      .collection("TE19D")
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getStudentsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
-        });
-        setStudents(getStudentsFromFirebase);
-        setLoadingStudents(false);
-      });
 
-    // return cleanup function
-    return () => sender();
-  }, [loadingStudents]);
   useEffect(() => {
-
     async function sender() {
-
       const readCollection = db
         .collection("users")
         .doc("students")
@@ -97,68 +72,55 @@ function Home() {
       } else {
         return doc.data();
       }
-
     }
 
     async function returnBookTitle(arr) {
-
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
 
-      const readCollection = db
-          .collection("books")
-        const snapshot = await readCollection.get();
+      const readCollection = db.collection("books");
+      const snapshot = await readCollection.get();
 
-        
-        snapshot.forEach(doc => {
-          allBooksArray.push(
-            {
-              'id': doc.id,
-              'data': doc.data()
-            }
-          )
-        })
+      snapshot.forEach((doc) => {
+        allBooksArray.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
 
-      arr.forEach(element => {
-        allBooksArray.forEach(bookElement => {
-
+      arr.forEach((element) => {
+        allBooksArray.forEach((bookElement) => {
           if (element == bookElement.id) {
             bookTitleArray.push(bookElement.data.title);
-            bookImageArray.push("url(" + bookElement.data.cover + ")")
+            bookImageArray.push("url(" + bookElement.data.cover + ")");
           }
+        });
+      });
 
-        }) 
-
-      })
-
-      return([bookTitleArray, bookImageArray]);
-
+      return [bookTitleArray, bookImageArray];
     }
 
     sender().then(function (res) {
-
       const booksArray = Object.keys(res.books);
       let bookTitleArray = [];
       let bookImageArray = [];
-      
+
       returnBookTitle(booksArray).then(function (res) {
         bookTitleArray = res[0];
 
         setBooks(bookTitleArray);
-        
+
         bookImageArray = res[1];
 
         setImages(bookImageArray);
-
       });
 
       setStudent(false);
       setLoadingBooks(false);
     });
-
   }, [loading]);
-  
+
   if (loadingBooks) {
     return (
       <div>
@@ -168,7 +130,8 @@ function Home() {
     );
   }
 
-  if (userObject.status === "teacher") { //teacher view
+  if (userObject.status === "student") {
+    //teacher view
     return (
       <div className="home">
         <Sidebar />
@@ -195,11 +158,11 @@ function Home() {
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <a className="klass" href="#">
+                    <Link className="klass" to={"klass/" + post.namn}>
                       {post.namn}
-                    </a>
-                   
-                    <Button  style={{color: "#fff"}}>test</Button>
+                    </Link>
+
+                    {/*  <Button style={{ color: "#fff" }}>test</Button>
                     <div className="klassEleverContainer">
                       <div className="klassEleverStatus">
                         <p className="utdelade">30</p>
@@ -209,33 +172,7 @@ function Home() {
                         <p className="antalElever">31</p>
                       </div>
                     </div>
-                    <motion.div className="students-container" layout>
-                  {students.length > 0 ? (
-                     students.map((post) => (
-                    <motion.div
-                      className="students"
-                      key={post.key}
-                      whileHover={{
-                        scale: 1.03,
-                        transition: { duration: 0.1 },
-                      }}
-                    >
-                    <a className="student" href="#">
-                      {post.name}
-                    </a>
-
-                  </motion.div>
-                ))
-              ) : (
-                <div className="not-found">
-                  <h4>Inga elever tillagda</h4>
-                  <Link className="link" to="/add">
-                    Lägg till elever
-                  </Link>
-                </div>
-              )} 
-              </motion.div>
-
+                    */}
                   </motion.div>
                 ))
               ) : (
@@ -269,7 +206,7 @@ function Home() {
   ) {
     return (
       <div className="student-home-container">
-        <SidebarStudent /> 
+        <SidebarStudent />
         <div className="student-s-container">
           <motion.div className="student-left-side">
             <motion.div className="böcker-container" layout>
@@ -277,15 +214,17 @@ function Home() {
                 books.map((post, index) => (
                   <motion.div
                     className="böcker"
-                    
-                    style = {{backgroundImage: bookImages[index]}}
+                    style={{ backgroundImage: bookImages[index] }}
                     key={post.key}
                     whileHover={{
                       scale: 1.03,
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <a className="bok" href="#"  /* style={{backgroundColor: 'green'}} */>
+                    <a
+                      className="bok"
+                      href="#" /* style={{backgroundColor: 'green'}} */
+                    >
                       {post}
                     </a>
                   </motion.div>
