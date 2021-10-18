@@ -33,6 +33,7 @@ import {
   nestedRead,
   readOne,
 } from "./Crud";
+
 import { User, setUserStatus } from "./User";
 firebase.initializeApp({
   apiKey: "AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs",
@@ -41,6 +42,10 @@ firebase.initializeApp({
   storageBucket: "kirjanseuranta.firebaseapp.com",
 });
 export const db = firebase.firestore();
+export const FieldValue = firebase.firestore.FieldValue;
+
+console.log(FieldValue);
+
 export var userObject;
 
 class App extends Component {
@@ -66,15 +71,7 @@ class App extends Component {
           user.uid,
           user.email
         );
-        //userObject.addBookToUser('ergofysik2', '123abc');
 
-        //let username = firebase.auth().currentUser.displayName;
-
-        //console.log(username + " " +  userObject.status);
-        //let test = db.collection("users").doc("students").collection("te19d").doc;
-        //console.log("TEST = " + test);
-        //console.log(userObject.firstLogin);
-        //console.table(userObject.getBooks());
       }
     });
   };

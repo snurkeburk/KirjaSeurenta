@@ -9,12 +9,13 @@ import firebase from "firebase"
 import { userObject } from './App';
 import {db} from './App';
 export class User {
-  constructor(name, id, email, className) {
+  constructor(name, id, email, className, classes) {
     this.name = name;
     this.id = id;
     this.allIds = [];
     this.email = email;
     this.className = className;
+    this.classes = classes;
 
     this.books = {};
     this.setUserStatus();
@@ -36,10 +37,14 @@ export class User {
 
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
-    if (splitEmail.includes("elev")) {
-      this.status = "student";
-    } else if (splitEmail.includes("ntig.se")) {
+    if (splitEmail.includes("elev")) { //student
+      //this.status = "student";
       this.status = "teacher";
+     
+    } else if (splitEmail.includes("ntig.se")) { //teacher
+      //this.status = "teacher";
+      this.status = "student";
+ 
     } else {
       this.status = "unauthorized";
       firebase.auth().signOut();
@@ -47,17 +52,42 @@ export class User {
     console.log(this.status);
   }
 
+  AddTeacher(){
+
+    const collection = db.collection('users').doc('teachers').collection(this.name).doc('data');
+
+    /*
+    if (this.firstLogin == true) {
+      collection.set({
+        classes: []
+      })
+    }
+    */
+    
+    collection.set({
+      classes: []
+    });
+    
+    add(
+      "users",
+      //'usersTest'>,
+      "ids",
+      {
+        ids: this.allIds,
+            
+        /*ids: [
+          'testID1',
+          'testID2',
+          this.id
+        ]*/
+      }
+    );
+  }
+
   addUser() {
     // Adds user to database
     //TODO Merge function with userExists() ???
 
-
-
-
-
-    if (this.status == 'student') {
-
-      
       nestedAdd(
         "users",
         //'usersTest',
@@ -91,57 +121,34 @@ export class User {
           }
           );
     }
-    else if (this.status == 'teacher') {
-      nestedAdd (
+    
 
-        'users', 
-        'teacher',
-        this.name,
-        'classes',
-        {
-          id: this.id,
-          email: this.email,
-          status: this.status,
-          
-        }
-
-      ) 
-        add(
-          "users",
-          //'usersTest',
-          "ids",
-          {
-            ids: this.allIds,
-            
-            /*ids: [
-              'testID1',
-              'testID2',
-              this.id
-            ]*/
-          }
-          );
-    } 
-    /*
-    else if (this.status == 'mentor') {
-
-    } 
-    */
-
-      }
+      
+    
+    
         
-        async userExists() {
+  async userExists() {
           // Checks if user is in database, calls addUser() if not
           //const read = await readWhere('users', 'id', this.id);
           //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
-          const read = await readOne("users", "ids");
-          console.log("ID:s : ", read.ids);
-          console.log("Current user id: " + this.id);
+    const read = await readOne("users", "ids");
+    console.log("ID:s : ", read.ids);
+    console.log("Current user id: " + this.id);
 
     if (/*read.ids === undefined ||*/ !read.ids.includes(this.id)) {
       //console.log("User does not exist yet");
       this.allIds = read.ids;
       this.allIds.push(this.id);
       this.firstLogin = true;
+
+      console.log("User does not exist, creating now");
+
+      console.log(this.allIds);
+      
+      if (this.status == 'teacher') {
+        this.AddTeacher();
+      }
+
       //this.addUser();
     } else {
       //console.log("User does exist")

@@ -25,10 +25,12 @@ import firebase from 'firebase';
 import { isSameWeek } from 'date-fns';
 import Footer from "./Footer";
 import { ar } from 'date-fns/locale';
+
 function Home() {
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(true);
+  const [loadingTeachers, setLoadingTeachers] = useState(true);
   const [students, setStudents] = useState([]);
   const [posts, setPosts] = useState([]);
   const [books, setBooks] = useState([]);
@@ -37,29 +39,35 @@ function Home() {
   const [bookIds, setIds] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
-
-  
   useEffect(() => {
-    const getPostsFromFirebase = [];
-    const sender = db
-      .collection("users")
-      .doc("teachers")
-      .collection(username)
-      .doc("data")
-      .collection("classes")
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
-        });
-        setPosts(getPostsFromFirebase);
-        setLoadingBooks(false);
-      });
+      
+    async function GetTeachersClasses() {
+
+      const getPostsFromFirebase = [];
+      const collection = db.collection('users').doc('teachers').collection(username).doc('data');
+
+      const doc = await collection.get();
+
+      if (!doc.exists) {
+        console.log("Error!");
+        return;
+      } else {
+        return doc.data();
+      }
+        
+    }
+
+
+    GetTeachersClasses().then(function (res) {
+      console.log(res.classes);
+      let classes = res.classes;
+      setPosts(classes);
+      setLoadingBooks(false);
+    });
+    
 
     // return cleanup function
-    return () => sender();
+    //return () => sender();
   }, [loadingBooks]);
   // för elever i klassen:
   useEffect(() => {
@@ -137,30 +145,33 @@ function Home() {
 
     }
 
-    sender().then(function (res) {
+    if (userObject.status == 'student') { 
 
-      const booksArray = Object.keys(res.books);
+      sender().then(function (res) {
+
+        const booksArray = Object.keys(res.books);
      
-      const idsArray = Object.values(res.books)
+        const idsArray = Object.values(res.books)
 
-      let bookTitleArray = [];
-      let bookImageArray = [];
-      
-      returnBookTitle(booksArray).then(function (res) {
-        bookTitleArray = res[0];
-
-        setBooks(bookTitleArray);
+        let bookTitleArray = [];
+        let bookImageArray = [];
         
-        bookImageArray = res[1];
+        returnBookTitle(booksArray).then(function (res) {
+          bookTitleArray = res[0];
 
-        setImages(bookImageArray);
+          setBooks(bookTitleArray);
+        
+          bookImageArray = res[1];
 
+          setImages(bookImageArray);
+
+        });
+
+        setIds(idsArray);
+        setStudent(false);
+        setLoadingBooks(false);
       });
-
-      setIds(idsArray);
-      setStudent(false);
-      setLoadingBooks(false);
-    });
+    }
 
   }, [loading]);
   
@@ -201,7 +212,7 @@ function Home() {
                     }}
                   >
                     <a className="klass" href="#">
-                      {post.namn}
+                      {post}
                     </a>
                    
                     <Button  style={{color: "#fff"}}>test</Button>
