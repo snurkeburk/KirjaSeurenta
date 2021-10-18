@@ -57,14 +57,14 @@ function Home() {
 
     // return cleanup function
     return () => sender();
-  }, [loadingBooks]);
+  }, [loading]);
 
   useEffect(() => {
     async function sender() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D")
+        .collection("TE19D") 
         .doc(username);
       const doc = await readCollection.get();
 
@@ -156,6 +156,9 @@ function Home() {
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
+                  initial={{ opacity: "0%" }}
+                  animate={{ opacity: "100%" }}
+                  
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -167,7 +170,6 @@ function Home() {
                       {post.namn}
                     </Link>
 
-                    {/*  <Button style={{ color: "#fff" }}>test</Button>
                     <div className="klassEleverContainer">
                       <div className="klassEleverStatus">
                         <p className="utdelade">30</p>
@@ -177,7 +179,7 @@ function Home() {
                         <p className="antalElever">31</p>
                       </div>
                     </div>
-                    */}
+                    
                   </motion.div>
                 ))
               ) : (

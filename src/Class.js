@@ -5,6 +5,8 @@ import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import "./Class.css";
+
 function Class() {
   const { id } = useParams();
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -36,33 +38,57 @@ function Class() {
     return <CircularProgress />;
   } else
     return (
-      <div>
+      <motion.div
+        initial={{ opacity: "0%" }}
+        animate={{ opacity: "100%" }}
+      >
         <Sidebar />
-        <h1>{id}</h1>
-        <ul>
-          <li>
-            <motion.div className="students-container" layout>
-              {students.length > 0 ? (
-                students.map((post) => (
-                  <motion.div
-                    className="students"
-                    key={post.key}
-                    whileHover={{}}
-                  >
-                    <p className="student" href="#">
-                      {post.name}
-                    </p>
-                  </motion.div>
-                ))
-              ) : (
-                <div className="not-found">
-                  <h4>Inga elever tillagda</h4>
-                </div>
-              )}
-            </motion.div>
-          </li>
-        </ul>
-      </div>
+        <div className="totalContainer">
+          <h1 className="class-title">{id}</h1>
+          <div className="innerTotalContainer">
+            <div className="class-utdeladeContainer">
+              <p className="class-utdelade">30</p>
+              <p>utdelade</p>
+            </div>
+            <div className="class-saknasContainer">
+              <p className="class-saknas">1</p>
+              <p>saknas</p>
+            </div>
+          </div>
+        </div>
+      <div className="class-big-container">
+      <div className="class-left-side"></div>
+
+        <div className="class-right-side">
+          <ul>
+            <li>
+              <motion.div className="students-container" layout>
+                {students.length > 0 ? (
+                  students.map((post) => (
+                    <motion.div
+                      className="students"
+                      key={post.key}
+                      whileHover={{}}
+                    >
+                      <p className="student-number">nr: 215</p>
+                      <p className="student" href="#">
+                        {post.name}
+                      </p>
+                      <p className="student-status"></p>
+
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="not-found">
+                    <h4>Inga elever tillagda</h4>
+                  </div>
+                )}
+              </motion.div>
+            </li>
+          </ul>
+        </div>
+        </div>
+      </motion.div>
     );
 }
 

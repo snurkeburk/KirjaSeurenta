@@ -15,6 +15,9 @@
   border-width: 0.1px;
   border-color: var(--faded-color);
   font-family: "Roboto", sans-serif;
+  box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
+  -webkit-box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
+  -moz-box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
 }
 
 .sidebar__mid {
@@ -91,15 +94,15 @@
 .Link {
   display: flex;
   cursor: pointer;
-  padding: 0rem 1rem;
+  padding: 1rem 1rem;
   align-items: center;
   justify-content: center;
   background-color: white;
   transition: background-color 100ms ease-out;
   transition: color 100ms ease-out;
-  border-radius: 50px;
   margin: auto;
   height: 50%;
+  transition: margin-top 200s;
 }
 
 .status {
@@ -108,8 +111,7 @@
 }
 
 .Link:hover {
-  background-color: rgba(212, 212, 212, 0.123);
-  color: var(--highlight-color);
+  margin-top: -0.2rem;
 }
 
 .Link {
