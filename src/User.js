@@ -50,47 +50,92 @@ export class User {
   addUser() {
     // Adds user to database
     //TODO Merge function with userExists() ???
-    nestedAdd(
-      "users",
-      //'usersTest',
-      "students",
-      this.className,
-      this.name,
-      {
-        //'test': 'user.js l43'
-        id: this.id,
-        //'matte50004': 'User.js'
 
-        email: this.email,
-        name: this.name,
-        status: this.status,
-        books: this.books,
+
+
+
+
+    if (this.status == 'student') {
+
+      
+      nestedAdd(
+        "users",
+        //'usersTest',
+        "students",
+        this.className,
+        this.name,
+        {
+          //'test': 'user.js l43'
+          id: this.id,
+          //'matte50004': 'User.js'
+          
+          email: this.email,
+          name: this.name,
+          status: this.status,
+          books: this.books,
+        }
+        );
+        
+        add(
+          "users",
+          //'usersTest',
+          "ids",
+          {
+            ids: this.allIds,
+            
+            /*ids: [
+              'testID1',
+              'testID2',
+              this.id
+            ]*/
+          }
+          );
+    }
+    else if (this.status == 'teacher') {
+      nestedAdd (
+
+        'users', 
+        'teacher',
+        this.name,
+        'classes',
+        {
+          id: this.id,
+          email: this.email,
+          status: this.status,
+          
+        }
+
+      ) 
+        add(
+          "users",
+          //'usersTest',
+          "ids",
+          {
+            ids: this.allIds,
+            
+            /*ids: [
+              'testID1',
+              'testID2',
+              this.id
+            ]*/
+          }
+          );
+    } 
+    /*
+    else if (this.status == 'mentor') {
+
+    } 
+    */
+
       }
-    );
-
-    add(
-      "users",
-      //'usersTest',
-      "ids",
-      {
-        ids: this.allIds,
-
-        /*ids: [
-                    'testID1',
-                    'testID2',
-                    this.id
-                ]*/
-      }
-    );
-  }
-
-  async userExists() {
-    // Checks if user is in database, calls addUser() if not
-    //const read = await readWhere('users', 'id', this.id);
-    //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
-    const read = await readOne("users", "ids");
-    console.log("ID:s : ", read.ids);
-    console.log("Current user id: " + this.id);
+        
+        async userExists() {
+          // Checks if user is in database, calls addUser() if not
+          //const read = await readWhere('users', 'id', this.id);
+          //const read = await nestedRead('users', 'students' , this.className, 'id', this.id);
+          const read = await readOne("users", "ids");
+          console.log("ID:s : ", read.ids);
+          console.log("Current user id: " + this.id);
 
     if (/*read.ids === undefined ||*/ !read.ids.includes(this.id)) {
       //console.log("User does not exist yet");
