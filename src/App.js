@@ -1,15 +1,15 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and cofidential
-* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
-*/
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and cofidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ */
 
-import React, { Component } from "react"
-import firebase from "firebase"
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
-import './App.css';
-import Sidebar from './Sidebar';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { Component } from "react";
+import firebase from "firebase";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import "./App.css";
+import Sidebar from "./Sidebar";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./Search";
 import Klasser from "./Klasser";
 import Login from "./Login";
@@ -18,7 +18,7 @@ import Home from "./Home";
 import { func } from "prop-types";
 import Add from "./Add";
 import Footer from "./Footer";
-
+import Class from "./Class";
 import ValidateUser from "./ValidateUser";
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from "./Book";
@@ -101,6 +101,9 @@ class App extends Component {
                 </Route>
                 <Route path="/add">
                   <Add />
+                </Route>
+                <Route path="/klass/:id">
+                  <Class />
                 </Route>
               </Switch>
             </span>
