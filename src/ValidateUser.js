@@ -1,7 +1,7 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and cofidential
- * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ * Proprietary and confidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
 
 import React, { useEffect, useState } from "react";
@@ -19,12 +19,6 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function ValidateUser() {
-<<<<<<< HEAD
-  let username = firebase.auth().currentUser.displayName;
-  const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
-  const [classChosen, setClassChosen] = useState(false);
-=======
     let username = firebase.auth().currentUser.displayName
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
@@ -38,7 +32,6 @@ function ValidateUser() {
       userObject.addUser();
       userObject.firstLogin = false;
     }
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
 
   function AddClassToUser(className) {
     userObject.className = className;
@@ -49,7 +42,6 @@ function ValidateUser() {
     userObject.firstLogin = false;
   }
 
-<<<<<<< HEAD
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db.collection("classes").onSnapshot((querySnapshot) => {
@@ -57,18 +49,6 @@ function ValidateUser() {
         getPostsFromFirebase.push({
           ...doc.data(), //spread operator
           key: doc.id, // id från firebase
-=======
-    useEffect(() => {
-      const getPostsFromFirebase = [];
-      const sender = db
-      .collection('classes')
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
         });
       });
       setPosts(getPostsFromFirebase);
@@ -81,15 +61,9 @@ function ValidateUser() {
 
   if (loading) {
     return (
-<<<<<<< HEAD
       <div>
         <CircularProgress className="loading" />
       </div>
-=======
-        <div>
-            <CircularProgress className="loading"/> 
-        </div>
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
     );
   }
   if (classChosen == false) {
