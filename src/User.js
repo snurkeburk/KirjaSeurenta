@@ -1,13 +1,23 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and cofidential
-* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
-*/
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and cofidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ */
 
-import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
-import firebase from "firebase"
-import { userObject } from './App';
-import {db} from './App';
+import {
+  add,
+  update,
+  remove,
+  read,
+  readWhere,
+  updateField,
+  nestedAdd,
+  nestedRead,
+  readOne,
+} from "./Crud";
+import firebase from "firebase";
+import { userObject } from "./App";
+import { db } from "./App";
 export class User {
   constructor(name, id, email, className) {
     this.name = name;
@@ -93,14 +103,14 @@ export class User {
     console.log("Current user id: " + this.id);
 
     if (/*read.ids === undefined ||*/ !read.ids.includes(this.id)) {
-      //console.log("User does not exist yet");
+      console.log("User does not exist yet");
       this.allIds = read.ids;
       this.allIds.push(this.id);
       this.firstLogin = true;
       //this.addUser();
     } else {
-      //console.log("User does exist")
-      //this.firstLogin = false;
+      console.log("User does exist");
+      this.firstLogin = false;
       //console.log("Firstlogin in class: " + this.firstLogin);
     }
   }
