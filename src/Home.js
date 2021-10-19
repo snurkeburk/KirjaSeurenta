@@ -64,7 +64,7 @@ function Home() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D") 
+        .collection("TE19D")
         .doc(username);
       const doc = await readCollection.get();
 
@@ -156,9 +156,8 @@ function Home() {
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
-                  initial={{ opacity: "0%" }}
-                  animate={{ opacity: "100%" }}
-                  
+                    initial={{ opacity: "0%" }}
+                    animate={{ opacity: "100%" }}
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -179,7 +178,6 @@ function Home() {
                         <p className="antalElever">31</p>
                       </div>
                     </div>
-                    
                   </motion.div>
                 ))
               ) : (

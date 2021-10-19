@@ -1,49 +1,48 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
+body,
+html {
 }
 
 .class-title {
-    font-weight: 100;
-    font-size:2.5rem ;
-    height: 0rem;
-    margin-top: 0.4rem;
+  font-weight: 100;
+  font-size: 2rem;
+  margin-bottom: 4px;
 }
 
 .totalContainer {
-    background-color: rgba(128, 128, 128, 0.179);
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    width: 35vw;
-    margin: auto;
-    margin-top: 2rem;
-    border-radius: 2rem;
-
+  background-color: rgba(128, 128, 128, 0.179);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 35vw;
+  margin: auto;
+  margin-top: 2rem;
+  border-radius: 2rem;
 }
 .innerTotalContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 10vw;
-    border-right-style: solid;
-    border-color: white;
-    border-width: 2px;
-    padding: 8px 0px;
-    padding-right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 10vw;
+  border-right-style: solid;
+  border-color: white;
+  border-width: 2px;
+  padding: 4px 0px;
+  padding-right: 1rem;
 }
 .class-saknas,
 .class-utdelade {
-  width: 15px;
-  height: 15px;
   border-radius: 50%;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: white;
+  width: 2rem;
+  text-align: center;
+  height: 2rem;
 }
-
 
 .class-utdelade {
   background-color: rgb(52, 209, 52);
@@ -53,68 +52,65 @@ body, html {
 }
 .class-utdeladeContainer,
 .class-saknasContainer {
-    color:rgba(128, 128, 128, 0.412);
+  color: rgba(128, 128, 128, 0.412);
 }
 
-.class-saknas,
-.class-utdelade
- {
-    text-align: center;
-    width: 40px;
-    height: 40px;
- }
+.class-saknas-desc,
+.class-utdelade-desc {
+  font-size: 0.8rem;
+}
 
- .class-big-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
- }
+.class-big-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
 
- .student {
-    color: black;
-    font-size: 1.2rem;
-    font-weight: 100;
-     text-align: left;
-     padding: 0;
-     width: 12rem;
- }
+.student {
+  color: black;
+  font-size: 1.2rem;
+  font-weight: 100;
+  text-align: left;
+  padding: 0;
+  width: 12rem;
+}
 
- .students {
-     padding: 1rem;
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     text-align: left;
- }
+.students {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+}
 
- .student-number {
-     width: 100px;
- }
- .student-status {
-     background-color: rgb(118, 218, 118);
-     width: 25px;
-     height: 25px;
-     border-radius: 50%;
- }
- .class-left-side {
-    border-right-style: none;
-    border-width: 0.1px;
-    border-color: rgba(0, 0, 0, 0.096);
-    padding: 1rem 2rem;
-    text-align: center;
-    width: 30vw;
-    background-color: rgba(0, 0, 0, 0);
- }
+.student-number {
+  width: 100px;
+}
+.student-status {
+  background-color: rgb(118, 218, 118);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.class-left-side {
+  border-right-style: none;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  padding: 1rem 2rem;
+  text-align: center;
+  width: 30vw;
+  background-color: rgba(0, 0, 0, 0);
+}
 
- .class-right-side {
-    background-color: rgba(134, 58, 58, 0);
-    padding: 1rem 2rem;
-    width: 30vw;
-    border-left-style: solid;
-    border-width: 0.1px;
-    border-color: rgba(0, 0, 0, 0.096);
- }
+.class-right-side {
+  background-color: rgba(134, 58, 58, 0);
+  padding: 1rem 2rem;
+  width: 30vw;
+  border-left-style: solid;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+}
 
- .class-right-side ul li {
-    list-style-type: none;
- }
+.class-right-side ul li {
+  list-style-type: none;
+}
