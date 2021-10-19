@@ -29,15 +29,15 @@ function ValidateUser() {
       userObject.className = className;
       setClassChosen(true);
       userObject.addBookToUser('matte50004', '123abc');
-      userObject.addBookToUser('ergofysik1', 'abcdefg');
+      userObject.addBookToUser('ergofysik2', 'abcdefg');
       userObject.addUser();
       userObject.firstLogin = false;
     }
 
 
     useEffect(() => {
-        const getPostsFromFirebase = [];
-        const sender = db
+      const getPostsFromFirebase = [];
+      const sender = db
       .collection('classes')
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -60,8 +60,7 @@ function ValidateUser() {
   if (loading) {
     return (
         <div>
-            <CircularProgress className="loading"/>
-            
+            <CircularProgress className="loading"/> 
         </div>
     );
   } if (classChosen == false) {

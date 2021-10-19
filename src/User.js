@@ -38,12 +38,12 @@ export class User {
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
     if (splitEmail.includes("elev")) { //student
-      //this.status = "student";
-      this.status = "teacher";
+      this.status = "student";
+      //this.status = "teacher";
      
     } else if (splitEmail.includes("ntig.se")) { //teacher
-      //this.status = "teacher";
-      this.status = "student";
+      this.status = "teacher";
+      //this.status = "student";
  
     } else {
       this.status = "unauthorized";
@@ -143,7 +143,7 @@ export class User {
 
       console.log("User does not exist, creating now");
 
-      console.log(this.allIds);
+      //console.log(this.allIds);
       
       if (this.status == 'teacher') {
         this.AddTeacher();

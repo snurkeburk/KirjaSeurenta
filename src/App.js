@@ -44,8 +44,6 @@ firebase.initializeApp({
 export const db = firebase.firestore();
 export const FieldValue = firebase.firestore.FieldValue;
 
-console.log(FieldValue);
-
 export var userObject;
 
 class App extends Component {
@@ -73,6 +71,9 @@ class App extends Component {
         );
 
       }
+
+      console.log(userObject);
+
     });
   };
 

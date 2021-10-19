@@ -27,6 +27,10 @@ import Footer from "./Footer";
 import { ar } from 'date-fns/locale';
 
 function Home() {
+
+  //console.log("Home userObject: ");
+  //console.log(userObject);
+
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -57,14 +61,18 @@ function Home() {
         
     }
 
+    if (userObject.status == 'teacher') {
 
-    GetTeachersClasses().then(function (res) {
-      console.log(res.classes);
-      let classes = res.classes;
-      setPosts(classes);
-      setLoadingBooks(false);
-    });
-    
+      GetTeachersClasses().then(function (res) {
+        console.log(res.classes);
+        let classes = res.classes;
+        setPosts(classes);
+        setLoadingBooks(false);
+      });
+      
+
+    }
+
 
     // return cleanup function
     //return () => sender();
@@ -86,13 +94,14 @@ function Home() {
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
       });
+    });
 
   useEffect(() => {
     async function sender() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D") 
+        .collection("te19d") 
         .doc(username);
       const doc = await readCollection.get();
 
@@ -134,6 +143,8 @@ function Home() {
 
       sender().then(function (res) {
 
+        console.log(res);
+
         const booksArray = Object.keys(res.books);
      
         const idsArray = Object.values(res.books)
@@ -169,7 +180,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "student") {
+  if (userObject.status === "teacher") {
     //teacher view
     return (
       <div className="home">
@@ -245,6 +256,7 @@ function Home() {
     userObject.status === "student" && //student view
     userObject.firstLogin === false
   ) {
+    console.log(userObject.firstLogin);
     return (
       <div className="student-home-container">
         <SidebarStudent />
@@ -315,5 +327,6 @@ function Home() {
     );
   }
 }
+
 
 export default Home;
