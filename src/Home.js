@@ -25,10 +25,16 @@ import firebase from "firebase";
 import { isSameWeek } from "date-fns";
 import Footer from "./Footer";
 import { ar } from "date-fns/locale";
+
 function Home() {
+  //console.log("Home userObject: ");
+  //console.log(userObject);
+
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
-
+  const [loadingStudents, setLoadingStudents] = useState(true);
+  const [loadingTeachers, setLoadingTeachers] = useState(true);
+  const [students, setStudents] = useState([]);
   const [posts, setPosts] = useState([]);
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
@@ -37,34 +43,61 @@ function Home() {
   let username = firebase.auth().currentUser.displayName;
 
   useEffect(() => {
-    const getPostsFromFirebase = [];
+    async function GetTeachersClasses() {
+      const getPostsFromFirebase = [];
+      const collection = db
+        .collection("users")
+        .doc("teachers")
+        .collection(username)
+        .doc("data");
+
+      const doc = await collection.get();
+
+      if (!doc.exists) {
+        console.log("Error!");
+        return;
+      } else {
+        return doc.data();
+      }
+    }
+
+    if (userObject.status == "teacher") {
+      GetTeachersClasses().then(function (res) {
+        console.log(res.classes);
+        let classes = res.classes;
+        setPosts(classes);
+        setLoadingBooks(false);
+      });
+    }
+
+    // return cleanup function
+    //return () => sender();
+  }, [loadingBooks]);
+  // för elever i klassen:
+  useEffect(() => {
+    const getStudentsFromFirebase = [];
     const sender = db
       .collection("users")
-      .doc("teachers")
-      .collection(username)
-      .doc("data")
-      .collection("classes")
+      .doc("students")
+      .collection("TE19D")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
+          getStudentsFromFirebase.push({
             ...doc.data(), //spread operator
             key: doc.id, // id från firebase
           });
         });
-        setPosts(getPostsFromFirebase);
-        setLoadingBooks(false);
+        setStudents(getStudentsFromFirebase);
+        setLoadingStudents(false);
       });
-
-    // return cleanup function
-    return () => sender();
-  }, [loading]);
+  });
 
   useEffect(() => {
     async function sender() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D")
+        .collection("te19d")
         .doc(username);
       const doc = await readCollection.get();
 
@@ -102,28 +135,32 @@ function Home() {
       return [bookTitleArray, bookImageArray];
     }
 
-    sender().then(function (res) {
-      const booksArray = Object.keys(res.books);
+    if (userObject.status == "student") {
+      sender().then(function (res) {
+        console.log(res);
 
-      const idsArray = Object.values(res.books);
+        const booksArray = Object.keys(res.books);
 
-      let bookTitleArray = [];
-      let bookImageArray = [];
+        const idsArray = Object.values(res.books);
 
-      returnBookTitle(booksArray).then(function (res) {
-        bookTitleArray = res[0];
+        let bookTitleArray = [];
+        let bookImageArray = [];
 
-        setBooks(bookTitleArray);
+        returnBookTitle(booksArray).then(function (res) {
+          bookTitleArray = res[0];
 
-        bookImageArray = res[1];
+          setBooks(bookTitleArray);
 
-        setImages(bookImageArray);
+          bookImageArray = res[1];
+
+          setImages(bookImageArray);
+        });
+
+        setIds(idsArray);
+        setStudent(false);
+        setLoadingBooks(false);
       });
-
-      setIds(idsArray);
-      setStudent(false);
-      setLoadingBooks(false);
-    });
+    }
   }, [loading]);
 
   if (loadingBooks) {
@@ -135,7 +172,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "student") {
+  if (userObject.status === "teacher") {
     //teacher view
     return (
       <div className="home">
@@ -209,6 +246,7 @@ function Home() {
     userObject.status === "student" && //student view
     userObject.firstLogin === false
   ) {
+    console.log(userObject.firstLogin);
     return (
       <div className="student-home-container">
         <SidebarStudent />

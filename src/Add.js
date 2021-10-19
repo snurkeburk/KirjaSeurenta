@@ -17,6 +17,41 @@ import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import firebase from 'firebase';
+import { FieldValue } from './App';
+
+
+
+async function AddClassToTeacher (formData) {
+    
+    let username = firebase.auth().currentUser.displayName
+    const collection = db.collection('users').doc('teachers').collection(username).doc('data');
+
+    if(formData.includes("te")){ //lägger till en teknikklass, samma för de under.
+
+        const addClass = await collection.update({
+            classes: FieldValue.arrayUnion(formData)
+        })
+            
+    } else if (formData.includes("es")){
+
+        const addClass = await collection.update({
+            classes: FieldValue.arrayUnion(formData)
+        })
+        
+    } else if (formData.includes("ee")){
+
+        const addClass = await collection.update({
+            classes: FieldValue.arrayUnion(formData)
+        })
+
+    } else {
+        console.log("Invalid classname!");
+    }
+
+}
+
+
+
 function Add() {
 
     const sparaKlass = (event) => {
@@ -29,17 +64,14 @@ function Add() {
             return accumulator;
         },{});
         let username = firebase.auth().currentUser.displayName
-        console.log(formData.namn);   
-        if(formData.namn.includes("TE")){
-            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
-        } else if (formData.namn.includes("ES")){
-            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
-            console.log(formData)
-        } else if (formData.namn.includes("EE")){
-            db.collection("users").doc("teachers").collection(username).doc("data").collection("classes").add(formData);
-        } else {
-            console.log("Invalid classname!");
-        }
+
+        let formDataClassName = formData.namn.toLowerCase();
+
+        console.log(formDataClassName);   
+
+
+        AddClassToTeacher(formDataClassName);
+
         setTimeout(() => {
             setOpen(true);
           }, 500);
