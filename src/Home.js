@@ -91,17 +91,21 @@ function Home() {
         setLoadingStudents(false);
       });
   });
-
+  // för böcker 
   useEffect(() => {
     async function sender() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("te19d")
+        .collection("TE19D") // <--- DET VAR HÄR ERROR VAR, 
+                            // den sökte i te19d, inte TE19D
+                            // detta gjorde att den inte hittade username
+                            // Isak Anderson i mitt fall
         .doc(username);
-      const doc = await readCollection.get();
+        const doc = await readCollection.get();
 
       if (!doc.exists) {
+        console.log(username)
         console.log("Error");
       } else {
         return doc.data();
@@ -109,13 +113,13 @@ function Home() {
     }
 
     async function returnBookTitle(arr) {
+
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
 
       const readCollection = db.collection("books");
       const snapshot = await readCollection.get();
-
       snapshot.forEach((doc) => {
         allBooksArray.push({
           id: doc.id,
@@ -246,7 +250,6 @@ function Home() {
     userObject.status === "student" && //student view
     userObject.firstLogin === false
   ) {
-    console.log(userObject.firstLogin);
     return (
       <div className="student-home-container">
         <SidebarStudent />
