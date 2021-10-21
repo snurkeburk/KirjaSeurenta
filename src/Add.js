@@ -17,8 +17,9 @@ import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import firebase from 'firebase';
-function Add() {
 
+function Add() {
+  
     const sparaKlass = (event) => {
         event.preventDefault();
         const elementsArray = [...event.target.elements];   
@@ -27,7 +28,10 @@ function Add() {
                 accumulator[currentValue.id] = currentValue.value;
             }
             return accumulator;
+           
+
         },{});
+        
         let username = firebase.auth().currentUser.displayName
         console.log(formData.namn);   
         if(formData.namn.includes("TE")){
@@ -42,8 +46,9 @@ function Add() {
         }
         setTimeout(() => {
             setOpen(true);
+
           }, 500);
-        setOpen(false);
+            setOpen(false);
     };
 
     const useStyles = makeStyles((theme) => ({

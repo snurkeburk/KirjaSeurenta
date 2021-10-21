@@ -43,7 +43,7 @@ function Sidebar() {
 
             <div className="sidebar__mid">
                 <Link className="Link" to="/">hem</Link> 
-                <Link className="Link" to="/klasser">klasser</Link> 
+                <Link className="Link" to="/böcker">böcker</Link> 
                 <Link className="Link" to="/sök">sök </Link>
                 <Link className="Link" to="/add">lägg till </Link>
             </div>

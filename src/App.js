@@ -11,7 +11,7 @@ import "./App.css";
 import Sidebar from "./Sidebar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./Search";
-import Klasser from "./Klasser";
+import Books from "./Books";
 import Login from "./Login";
 import { motion } from "framer-motion";
 import Home from "./Home";
@@ -86,21 +86,21 @@ class App extends Component {
           <Router>
             <span>
               <Switch>
+                <Route path="/validation">
+                  <ValidateUser />
+                </Route>
                 <Route exact path="/">
                   <Home />
                 </Route>
                 <Route path="/home">
                   <Home />
                 </Route>
-                <Route exact path="/validation">
-                  <ValidateUser />
-                </Route>
 
                 <Route path="/sök">
                   <Search />
                 </Route>
-                <Route path="/klasser">
-                  <Klasser />
+                <Route path="/böcker">
+                  <Books />
                 </Route>
                 <Route path="/add">
                   <Add />
