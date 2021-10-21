@@ -19,26 +19,10 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function ValidateUser() {
-<<<<<<< HEAD
   let username = firebase.auth().currentUser.displayName;
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [classChosen, setClassChosen] = useState(false);
-=======
-    let username = firebase.auth().currentUser.displayName
-    const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState([]);
-    const [classChosen, setClassChosen] = useState(false);
-
-    function AddClassToUser(className){ 
-      userObject.className = className;
-      setClassChosen(true);
-      userObject.addBookToUser('matte50004', '123abc');
-      userObject.addBookToUser('ergofysik2', 'abcdefg');
-      userObject.addUser();
-      userObject.firstLogin = false;
-    }
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
 
   function AddClassToUser(className) {
     userObject.className = className;
@@ -49,7 +33,6 @@ function ValidateUser() {
     userObject.firstLogin = false;
   }
 
-<<<<<<< HEAD
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db.collection("classes").onSnapshot((querySnapshot) => {
@@ -57,18 +40,6 @@ function ValidateUser() {
         getPostsFromFirebase.push({
           ...doc.data(), //spread operator
           key: doc.id, // id från firebase
-=======
-    useEffect(() => {
-      const getPostsFromFirebase = [];
-      const sender = db
-      .collection('classes')
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
         });
       });
       setPosts(getPostsFromFirebase);
@@ -81,15 +52,9 @@ function ValidateUser() {
 
   if (loading) {
     return (
-<<<<<<< HEAD
       <div>
         <CircularProgress className="loading" />
       </div>
-=======
-        <div>
-            <CircularProgress className="loading"/> 
-        </div>
->>>>>>> 94bef05132e23130d83f5ec04340c9b78241cf21
     );
   }
   if (classChosen == false) {
