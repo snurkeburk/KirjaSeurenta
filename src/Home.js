@@ -61,7 +61,7 @@ function Home() {
       }
     }
 
-    if (userObject.status == "teacher") {
+    if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
         console.log(res.classes);
         let classes = res.classes;
@@ -91,21 +91,21 @@ function Home() {
         setLoadingStudents(false);
       });
   });
-  // för böcker 
+  // för böcker
   useEffect(() => {
     async function sender() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D") // <--- DET VAR HÄR ERROR VAR, 
-                            // den sökte i te19d, inte TE19D
-                            // detta gjorde att den inte hittade username
-                            // Isak Anderson i mitt fall
+        .collection("TE19D") // <--- DET VAR HÄR ERROR VAR,
+        // den sökte i te19d, inte TE19D
+        // detta gjorde att den inte hittade username
+        // Isak Anderson i mitt fall
         .doc(username);
-        const doc = await readCollection.get();
+      const doc = await readCollection.get();
 
       if (!doc.exists) {
-        console.log(username)
+        console.log(username);
         console.log("Error");
       } else {
         return doc.data();
@@ -113,7 +113,6 @@ function Home() {
     }
 
     async function returnBookTitle(arr) {
-
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
@@ -176,7 +175,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "teacher") {
+  if (userObject.status === "student") {
     //teacher view
     return (
       <div className="home">
