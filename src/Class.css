@@ -13,26 +13,34 @@ html {
   margin-bottom: 4px;
 }
 
+.class-deleteClass {
+  color: rgb(0, 0, 0);
+  border-color: white;
+  border-width: 0.1px;
+  height: 3vw;
+  
+}
+
 .totalContainer {
   background-color: rgba(128, 128, 128, 0.179);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 35vw;
+  width: 30vw;
   margin: auto;
   margin-top: 2rem;
   border-radius: 2rem;
 }
 .innerTotalContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   width: 10vw;
   border-right-style: solid;
   border-color: white;
   border-width: 2px;
   padding: 4px 0px;
-  padding-right: 1rem;
+  padding-left: 4rem;
 }
 .class-saknas,
 .class-utdelade {

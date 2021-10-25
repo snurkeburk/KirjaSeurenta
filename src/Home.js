@@ -40,7 +40,10 @@ function Home() {
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
+  
   let username = firebase.auth().currentUser.displayName;
+
+ 
 
   useEffect(() => {
     async function GetTeachersClasses() {
@@ -64,6 +67,7 @@ function Home() {
     if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
         console.log(res.classes);
+        console.log("class: " + res.classes[1])
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
@@ -94,19 +98,18 @@ function Home() {
   // för böcker
   useEffect(() => {
     async function sender() {
+      console.log("FUCKING SKITBÖCKER")
       const readCollection = db
-        .collection("users")
+        .collection("users") 
         .doc("students")
-        .collection("TE19D") // <--- DET VAR HÄR ERROR VAR,
-        // den sökte i te19d, inte TE19D
-        // detta gjorde att den inte hittade username
-        // Isak Anderson i mitt fall
+        .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
         .doc(username);
       const doc = await readCollection.get();
 
       if (!doc.exists) {
         console.log(username);
         console.log("Error");
+     
       } else {
         return doc.data();
       }
@@ -116,7 +119,6 @@ function Home() {
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
-
       const readCollection = db.collection("books");
       const snapshot = await readCollection.get();
       snapshot.forEach((doc) => {
@@ -140,30 +142,34 @@ function Home() {
 
     if (userObject.status == "student") {
       sender().then(function (res) {
-        console.log(res);
+        console.log("Active class: ")
 
+        if(!null){ // hela skiten här e knullad ska fixa det nån annan gång
         const booksArray = Object.keys(res.books);
 
         const idsArray = Object.values(res.books);
 
-        let bookTitleArray = [];
-        let bookImageArray = [];
-
-        returnBookTitle(booksArray).then(function (res) {
-          bookTitleArray = res[0];
-
-          setBooks(bookTitleArray);
-
-          bookImageArray = res[1];
-
-          setImages(bookImageArray);
+          let bookTitleArray = [];
+          let bookImageArray = [];
+          
+          returnBookTitle(booksArray).then(function (res) {
+            bookTitleArray = res[0];
+            
+            setBooks(bookTitleArray);
+            
+            bookImageArray = res[1];
+            
+            setImages(bookImageArray);
+          });
+          
+          setIds(idsArray);
+          setStudent(false);
+          setLoadingBooks(false);
+        } else {
+          console.log("res.books är null"); 
+        }
         });
-
-        setIds(idsArray);
-        setStudent(false);
-        setLoadingBooks(false);
-      });
-    }
+      }
   }, [loading]);
 
   if (loadingBooks) {
@@ -175,7 +181,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "student") {
+  if (userObject.status === "teacher") {
     //teacher view
     return (
       <div className="home">
@@ -205,8 +211,8 @@ function Home() {
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <Link className="klass" to={"klass/" + post.namn}>
-                      {post.namn}
+                    <Link className="klass" to={"klass/" + post}>
+                      {post}
                     </Link>
 
                     <div className="klassEleverContainer">

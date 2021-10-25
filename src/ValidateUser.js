@@ -44,6 +44,7 @@ function ValidateUser() {
       });
       setPosts(getPostsFromFirebase);
       setLoading(false);
+      console.log(getPostsFromFirebase[1])
     });
 
     // return cleanup function
@@ -77,9 +78,9 @@ function ValidateUser() {
               >
                 <button
                   className="validate-klass"
-                  onClick={() => AddClassToUser(post.namn)}
+                  onClick={() => AddClassToUser(post.key)}
                 >
-                  {post.namn}
+                  {post.key}
                 </button>
               </motion.div>
             ))

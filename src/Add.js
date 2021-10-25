@@ -31,22 +31,29 @@ async function AddClassToTeacher (formData) {
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
         })
+
             
     } else if (formData.includes("es")){
 
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
         })
-        
+  
+            
     } else if (formData.includes("ee")){
 
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
+
         })
+ 
+            
+        console.log("formdata: " + formData );
 
     } else {
         console.log("Invalid classname!");
     }
+    
 
 }
 
