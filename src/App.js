@@ -47,6 +47,7 @@ export const FieldValue = firebase.firestore.FieldValue;
 export var userObject;
 
 class App extends Component {
+  
   state = { isSignedIn: false };
   uiConfig = {
     signInFlow: "redirect",
@@ -72,7 +73,7 @@ class App extends Component {
 
       }
 
-      console.log(userObject);
+      console.log("user object: " + userObject);
 
     });
   };

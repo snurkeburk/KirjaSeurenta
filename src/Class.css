@@ -17,7 +17,7 @@ html {
   color: rgb(0, 0, 0);
   border-color: white;
   border-width: 0.1px;
-  height: 3vw;
+  height: 3rem;
   
 }
 
@@ -26,21 +26,22 @@ html {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 30vw;
+  width: 25rem;
   margin: auto;
   margin-top: 2rem;
   border-radius: 2rem;
 }
 .innerTotalContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  width: 10vw;
+  width: 6rem;
   border-right-style: solid;
   border-color: white;
   border-width: 2px;
   padding: 4px 0px;
   padding-left: 4rem;
+  padding-right: 2rem;
 }
 .class-saknas,
 .class-utdelade {
@@ -72,6 +73,7 @@ html {
   display: flex;
   justify-content: center;
   margin-top: 2rem;
+  flex-wrap: wrap-reverse;
 }
 
 .student {
@@ -117,6 +119,7 @@ html {
   border-left-style: solid;
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
+  min-width: 300px;
 }
 
 .class-right-side ul li {

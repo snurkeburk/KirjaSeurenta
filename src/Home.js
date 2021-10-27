@@ -4,7 +4,7 @@
  * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
  */
 import { Button } from "@material-ui/core";
-import { db } from "./App";
+import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import SidebarStudent from "./SidebarStudent";
@@ -41,9 +41,40 @@ function Home() {
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
   
+
+  
   let username = firebase.auth().currentUser.displayName;
 
- 
+  const containerVariants = {
+    hidden: { 
+      opacity: 0, 
+      x: '0',
+      transition: {
+        staggerChildren: 0.1,
+      } 
+    },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { 
+        type: 'spring',
+        mass: 0.1,
+        damping: 8,
+        staggerChildren: 0.1,
+        delay: 0,
+        when: "beforeChildren",
+      }
+    },
+  };
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    }
+  }
+
 
   useEffect(() => {
     async function GetTeachersClasses() {
@@ -64,10 +95,8 @@ function Home() {
       }
     }
 
-    if (userObject.status == "student") {
+   if (userObject.status == "student") { 
       GetTeachersClasses().then(function (res) {
-        console.log(res.classes);
-        console.log("class: " + res.classes[1])
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
@@ -96,9 +125,11 @@ function Home() {
       });
   });
   // för böcker
+  
   useEffect(() => {
     async function sender() {
       console.log("FUCKING SKITBÖCKER")
+
       const readCollection = db
         .collection("users") 
         .doc("students")
@@ -114,8 +145,9 @@ function Home() {
         return doc.data();
       }
     }
-
+  
     async function returnBookTitle(arr) {
+      console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbb")
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
@@ -140,7 +172,11 @@ function Home() {
       return [bookTitleArray, bookImageArray];
     }
 
+
+    
+
     if (userObject.status == "student") {
+
       sender().then(function (res) {
         console.log("Active class: ")
 
@@ -171,6 +207,8 @@ function Home() {
         });
       }
   }, [loading]);
+    
+
 
   if (loadingBooks) {
     return (
@@ -180,8 +218,8 @@ function Home() {
       </div>
     );
   }
-
-  if (userObject.status === "teacher") {
+  
+  if (userObject.status === "student") {
     //teacher view
     return (
       <div className="home">
@@ -189,21 +227,26 @@ function Home() {
         <div className="total">
           <p>Totalt:</p>
         </div>
+        
         <motion.div
           className="home-container"
-          initial={{ opacity: "0%" }}
-          animate={{ opacity: "100%" }}
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
         >
           <div className="left-side">
             <p>Sök efter bok</p>
           </div>
           <motion.div className="right-side">
-            <motion.div className="klasser-container" layout>
+            <motion.div className="klasser-container" 
+               initial="hidden"
+               animate="visible"
+               variants={containerVariants}
+            layout>
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
-                    initial={{ opacity: "0%" }}
-                    animate={{ opacity: "100%" }}
+                  variants={childVariants}
+        
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -254,9 +297,9 @@ function Home() {
   } else if (
     userObject.status === "student" && //student view
     userObject.firstLogin === false
-  ) {
-    return (
-      <div className="student-home-container">
+  ) {      
+      return (
+        <div className="student-home-container">
         <SidebarStudent />
         <div className="student-s-container">
           <motion.div className="student-left-side">
@@ -277,11 +320,11 @@ function Home() {
                         scale: 1.03,
                         transition: { duration: 0.1 },
                       }}
-                    >
+                      >
                       <a
                         className="bok"
                         href="#" /* style={{backgroundColor: 'green'}} */
-                      >
+                        >
                         {post}
                       </a>
                     </motion.div>
@@ -290,22 +333,22 @@ function Home() {
                     </div>
                   </motion.div>
                 ))
-              ) : (
-                <div className="not-found">
+                ) : (
+                  <div className="not-found">
                   <h4>Inga böcker tillagda</h4>
                 </div>
               )}
 
               {/*
                         klasser.map(klass=>{
-                        return(
+                          return(
                             <div className="blog-container">
                             <h4>{klass.namn}</h4>
-
+                            
                             </div>
-                        )
-                        })
-                    */}
+                            )
+                          })
+                        */}
             </motion.div>
           </motion.div>
         </div>
@@ -314,7 +357,8 @@ function Home() {
   } else if (
     userObject.status === "student" &&
     userObject.firstLogin === true
-  ) {
+    ) {
+      
     console.log(userObject.firstLogin);
     return (
       <div>

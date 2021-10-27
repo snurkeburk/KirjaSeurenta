@@ -57,7 +57,10 @@ function Class() {
             <AiFillDelete className="class-deleteClass" size={35}/></Button>
         </div>
         <div className="class-big-container">
-          <div className="class-left-side"></div>
+          <div className="class-left-side">
+            <h1>bok här</h1>
+
+          </div>
 
           <div className="class-right-side">
             <ul>

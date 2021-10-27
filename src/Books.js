@@ -5,13 +5,14 @@
 */
 
 import { CircularProgress } from "@material-ui/core";
-import { db } from "./App";
+import { db} from "./App";
 import React, { useState, useEffect} from 'react';
 import User from './User';
 import App from './App';
 import { motion } from "framer-motion"
 import Sidebar from './Sidebar'
 import firebase from 'firebase';
+
 import './Books.css';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
 
@@ -25,7 +26,7 @@ function Books() {
     const [bookImages, setImages] = useState([]);
     const [bookIds, setIds] = useState([]);
     let username = firebase.auth().currentUser.displayName;
-    
+  
       useEffect(() => {
         async function sender() {
           const readCollection = db
@@ -92,7 +93,35 @@ function Books() {
           setLoadingBooks(false);
         });
       }, [loadingBooks]);
-    
+      const containerVariants = {
+        hidden: { 
+          opacity: 0, 
+          x: '0',
+          transition: {
+            staggerChildren: 0.1,
+          } 
+        },
+        visible: { 
+          opacity: 1, 
+          x: 0,
+          transition: { 
+            type: 'spring',
+            mass: 0.1,
+            damping: 8,
+            staggerChildren: 0.1,
+            delay: 0,
+            when: "beforeChildren",
+          }
+        },
+      };
+      const childVariants = {
+        hidden: {
+          opacity: 0,
+        },
+        visible: {
+          opacity: 1,
+        }
+      }
       if (loadingBooks) {
         return (
           <div>
@@ -124,18 +153,23 @@ function Books() {
             <Sidebar />
             <motion.div className="MyBooks"
             initial={{opacity: "0%" }}
-            animate={{opacity: "100%" }}
-            >
-            
-
-            <div className="left-books-container">
+            animate={{opacity: "100%" }}>
+              <motion.div 
+             
+            className="left-books-container">
                 <p>Alla böcker:</p>
                 
                 <motion.div className="böcker-mybooks-container" layout>
                 {books.length > 0 ? (
                     books.map((post, index) => (
-                    <motion.div className="bokContainer">
+                    <motion.div 
+                    initial="hidden"
+                    animate="visible"
+                    variants={containerVariants}
+                    className="bokContainer">
                         <motion.div
+                          variants={childVariants}
+
                         className="böcker-mybooks"
                         style={{ backgroundImage: bookImages[index] }}
                         style={{
@@ -143,6 +177,7 @@ function Books() {
                             backgroundSize: "cover",
                             /*backgroundSize: 'cover' */
                         }}
+                      
                         key={post.key}
                         whileHover={{
                             scale: 1.03,
@@ -155,9 +190,11 @@ function Books() {
                             >
                         </a>
                         </motion.div>
-                        <div className="allbooks-id">
+                        <motion.div 
+                          variants={childVariants}
+                        className="allbooks-id">
                               <p className="allbooks-name"> {post} </p>
-                        </div>
+                        </motion.div>
                     </motion.div>
                     ))
                     ) : (
@@ -166,7 +203,7 @@ function Books() {
                     </div>
                 )}
                 </motion.div>
-                        </div>
+                        </motion.div>
                         <div className="right-books-container">
                             <p>Mina böcker:</p>
 

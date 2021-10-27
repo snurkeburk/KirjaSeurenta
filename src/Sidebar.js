@@ -23,6 +23,9 @@ import { Link } from 'react-router-dom';
 import './Sidebar.css';
 import './SidebarOption.css';
 import App from './App';
+import { motion } from "framer-motion";
+
+import { AiOutlineMenu } from "react-icons/ai"
 import { userObject } from './App';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
@@ -31,22 +34,32 @@ import {
   DateTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import { SettingsApplicationsTwoTone } from '@material-ui/icons';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 function Sidebar() {
-    const [selectedDate, handleDateChange] = useState(new Date());
-   return (
 
+
+
+   return (
+    <div className="big-sidebar">
         <div className="sidebar">
              <div className="sidebar__left">
                 <h2 class="name"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
             </div>
-
             <div className="sidebar__mid">
                 <Link className="Link" to="/">hem</Link> 
                 <Link className="Link" to="/böcker">böcker</Link> 
                 <Link className="Link" to="/sök">sök </Link>
                 <Link className="Link" to="/add">lägg till </Link>
             </div>
+           
              <div className="sidebar__right">
                 <img className="profilePic"
                 alt="profile picture"
@@ -58,14 +71,39 @@ function Sidebar() {
                      <ExitToAppIcon style={{color: "black" }} fontSize="small"/>
                      
                 </Button>
-               
+             <div 
+       
+             className="trashDropdownContainer">
+                <Menu className="dropdown"
+                 menuButton={<MenuButton> <AiOutlineMenu style={{color: "black" }} size={"30px"}/></MenuButton>} transition>
+                        <div className="dropdown-links-container">
+                            <Link className="Link-drop" to="/">hem</Link> 
+                            <Link className="Link-drop" to="/böcker">böcker</Link> 
+                            <Link className="Link-drop" to="/sök">sök </Link>
+                            <Link className="Link-drop" to="/add">lägg till </Link>
+                            <Button variant="contained" style={{backgroundColor: "rgb(225, 142, 142)", height: "34px"}} onClick={() => firebase.auth().signOut()}> 
+                             <ExitToAppIcon style={{color: "black" }} fontSize="medium"/>
+                             </Button>
+                        </div>
+                </Menu>
 
             </div>
             
-           
-            
+            </div>
+                </div>
+                <motion.div 
+               
+                className="sidebar__mid_lower">
+                    <div className="lower_inner">
+                        <Link className="Link" to="/">hem</Link> 
+                        <Link className="Link" to="/böcker">böcker</Link> 
+                        <Link className="Link" to="/sök">sök </Link>
+                        <Link className="Link" to="/add">lägg till </Link>
+                    </div>
+                 </motion.div>
+
+                
         </div>
-        
     )
 }
 
