@@ -49,9 +49,9 @@
   align-items: center;
   min-width: 10vw;
   font-family: "Cinzel Decorative", cursive;
-  border-bottom-style: double;
-  border-width: 0.1px;
-  border-color: var(--second-highlight-color);
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: #230625;
   border-bottom-left-radius: 2rem;
   padding-left: 1rem;
 }
@@ -138,6 +138,11 @@
 .trashDropdownContainer {
   display:none
 }
+.sidebar-upper-960px-container {
+  display: flex;
+  width: 95vw;
+  justify-content: space-between;
+}
 @media screen and (max-width: 960px) {
     .sidebar__mid {
       display: none;
@@ -150,9 +155,14 @@
     }
 
     .sidebar {
-      width: 100%;
+      width: auto;
       box-shadow: none;
       border-style: none;
+    }
+    .sidebar-upper-960px-container {
+      display: flex;
+      width: 80vw;
+      justify-content: space-between;
     }
   
     .sidebar__mid_lower{

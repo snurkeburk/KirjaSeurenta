@@ -50,6 +50,7 @@ function Sidebar() {
    return (
     <div className="big-sidebar">
         <div className="sidebar">
+            <div className="sidebar-upper-960px-container">
              <div className="sidebar__left">
                 <h2 class="name"><h2>K</h2>irja<h2>S</h2>eurenta</h2>
             </div>
@@ -59,7 +60,6 @@ function Sidebar() {
                 <Link className="Link" to="/sök">sök </Link>
                 <Link className="Link" to="/add">lägg till </Link>
             </div>
-           
              <div className="sidebar__right">
                 <img className="profilePic"
                 alt="profile picture"
@@ -71,6 +71,7 @@ function Sidebar() {
                      <ExitToAppIcon style={{color: "black" }} fontSize="small"/>
                      
                 </Button>
+                </div>
              <div 
        
              className="trashDropdownContainer">

@@ -18,6 +18,7 @@ import {
 import firebase from "firebase";
 import { userObject } from "./App";
 import { db } from "./App";
+
 export class User {
   constructor(name, id, email, className, classes) {
     this.name = name;
@@ -47,10 +48,12 @@ export class User {
 
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
+    let username = firebase.auth().currentUser.displayName;
+
     if (splitEmail.includes("elev")) { //student
       this.status = "student";
       //this.status = "teacher";
-     
+    
     } else if (splitEmail.includes("ntig.se")) { //teacher
       this.status = "teacher";
       //this.status = "student";
@@ -150,7 +153,6 @@ export class User {
       this.allIds = read.ids;
       this.allIds.push(this.id);
       this.firstLogin = true;
-
       console.log("User does not exist, creating now");
 
       //console.log(this.allIds);

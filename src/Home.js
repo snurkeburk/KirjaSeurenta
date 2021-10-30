@@ -147,7 +147,6 @@ function Home() {
     }
   
     async function returnBookTitle(arr) {
-      console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbb")
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
@@ -219,7 +218,7 @@ function Home() {
     );
   }
   
-  if (userObject.status === "student") {
+  if (userObject.status === "teacher") {
     //teacher view
     return (
       <div className="home">
@@ -355,7 +354,6 @@ function Home() {
       </div>
     );
   } else if (
-    userObject.status === "student" &&
     userObject.firstLogin === true
     ) {
       
@@ -364,7 +362,7 @@ function Home() {
       <div>
         <p>Vänta...</p>
         <CircularProgress className="loading" />
-        <Redirect to="/validation" />
+        <Redirect to="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34" />
       </div>
     );
   }

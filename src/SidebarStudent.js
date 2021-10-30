@@ -53,7 +53,7 @@ function SidebarStudent() {
                 src={firebase.auth().currentUser.photoURL}
                 />
                  <p className="username">{firebase.auth().currentUser.displayName}
-                <p className="status">{ userObject.status }</p>
+                <p className="status">{ "student" }</p>
 
                  </p>
                  <Button style={{backgroundColor: "#FFF"}} variant="contained" className="signout" onClick={() => firebase.auth().signOut()}>

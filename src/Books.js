@@ -5,18 +5,21 @@
 */
 
 import { CircularProgress } from "@material-ui/core";
-import { db} from "./App";
+import { db, userObject} from "./App";
 import React, { useState, useEffect} from 'react';
 import User from './User';
 import App from './App';
 import { motion } from "framer-motion"
 import Sidebar from './Sidebar'
 import firebase from 'firebase';
+import { useHistory } from "react-router-dom";
 
 import './Books.css';
 import { add, update, remove, read, readWhere, updateField, nestedAdd, nestedRead, readOne } from './Crud'
+import { Redirect } from "react-router";
 
 
+import {useLocation } from 'react-router-dom'
 
 function Books() {
     const [loadingBooks, setLoadingBooks] = useState(true);
@@ -26,7 +29,9 @@ function Books() {
     const [bookImages, setImages] = useState([]);
     const [bookIds, setIds] = useState([]);
     let username = firebase.auth().currentUser.displayName;
-  
+    let history = useHistory();
+    const location = useLocation()
+
       useEffect(() => {
         async function sender() {
           const readCollection = db
@@ -39,6 +44,7 @@ function Books() {
           if (!doc.exists) {
             console.log("Error");
           } else {
+            console.log(history)
             return doc.data();
           }
         }
@@ -122,6 +128,8 @@ function Books() {
           opacity: 1,
         }
       }
+
+
       if (loadingBooks) {
         return (
           <div>
@@ -146,8 +154,7 @@ function Books() {
             </motion.div>
           </div>
         );
-      }
-        else { 
+      } else if(!loadingBooks) { 
             return (
         <div>
             <Sidebar />
@@ -212,6 +219,8 @@ function Books() {
                 </motion.div>
         </div>
     )
-}}
+                    }
+
+}
 
 export default Books

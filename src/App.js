@@ -19,7 +19,9 @@ import { func } from "prop-types";
 import Add from "./Add";
 import Footer from "./Footer";
 import Class from "./Class";
+import Elev from "./Elev";
 import ValidateUser from "./ValidateUser";
+import TeacherRouting from "./TeacherRouting";
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from "./Book";
 import {
@@ -58,58 +60,30 @@ class App extends Component {
     },
   };
 
+  
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
       //console.log("user", user)
-
-      if (user !== null) {
+     if (user !== null) {
         //adds user to database if logged in
         userObject = new User(
-          user.displayName /*"Test Name"*/,
+          user.displayName,
           user.uid,
-          user.email
+          user.email,
+          user.status,
         );
 
       }
 
-      console.log("user object: " + userObject);
 
     });
   };
-
   getContent() {
     if (this.state.isSignedIn) {
       return (
         <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
-          <Router>
-            <span>
-              <Switch>
-                <Route path="/validation">
-                  <ValidateUser />
-                </Route>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/home">
-                  <Home />
-                </Route>
-
-                <Route path="/sök">
-                  <Search />
-                </Route>
-                <Route path="/böcker">
-                  <Books />
-                </Route>
-                <Route path="/add">
-                  <Add />
-                </Route>
-                <Route path="/klass/:id">
-                  <Class />
-                </Route>
-              </Switch>
-            </span>
-          </Router>
+          <TeacherRouting />
         </motion.div>
       );
     } else {

@@ -1,6 +1,6 @@
 import { CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
-import { db } from "./App";
+import { db, userObject } from "./App";
 import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -33,6 +33,8 @@ function Class() {
     // return cleanup function
     return () => sender();
   }, [loadingStudents]);
+
+
 
   if (loadingStudents) {
     <Sidebar />;
