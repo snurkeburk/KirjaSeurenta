@@ -40,10 +40,8 @@ function Home() {
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-  
-  let username = firebase.auth().currentUser.displayName;
 
- 
+  let username = firebase.auth().currentUser.displayName;
 
   useEffect(() => {
     async function GetTeachersClasses() {
@@ -67,7 +65,7 @@ function Home() {
     if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
         console.log(res.classes);
-        console.log("class: " + res.classes[1])
+        console.log("class: " + res.classes[1]);
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
@@ -98,9 +96,9 @@ function Home() {
   // för böcker
   useEffect(() => {
     async function sender() {
-      console.log("FUCKING SKITBÖCKER")
+      console.log("FUCKING SKITBÖCKER");
       const readCollection = db
-        .collection("users") 
+        .collection("users")
         .doc("students")
         .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
         .doc(username);
@@ -109,7 +107,6 @@ function Home() {
       if (!doc.exists) {
         console.log(username);
         console.log("Error");
-     
       } else {
         return doc.data();
       }
@@ -142,34 +139,35 @@ function Home() {
 
     if (userObject.status == "student") {
       sender().then(function (res) {
-        console.log("Active class: ")
+        console.log("Active class: ");
 
-        if(!null){ // hela skiten här e knullad ska fixa det nån annan gång
-        const booksArray = Object.keys(res.books);
+        if (!null) {
+          // hela skiten här e knullad ska fixa det nån annan gång
+          const booksArray = Object.keys(res.books);
 
-        const idsArray = Object.values(res.books);
+          const idsArray = Object.values(res.books);
 
           let bookTitleArray = [];
           let bookImageArray = [];
-          
+
           returnBookTitle(booksArray).then(function (res) {
             bookTitleArray = res[0];
-            
+
             setBooks(bookTitleArray);
-            
+
             bookImageArray = res[1];
-            
+
             setImages(bookImageArray);
           });
-          
+
           setIds(idsArray);
           setStudent(false);
           setLoadingBooks(false);
         } else {
-          console.log("res.books är null"); 
+          console.log("res.books är null");
         }
-        });
-      }
+      });
+    }
   }, [loading]);
 
   if (loadingBooks) {

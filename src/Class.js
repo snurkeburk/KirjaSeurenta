@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@material-ui/core";
 import "./Class.css";
-import { AiFillDelete } from "react-icons/ai"
+import { AiFillDelete } from "react-icons/ai";
 function Class() {
   const { id } = useParams();
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -53,8 +53,9 @@ function Class() {
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
-          <Button size={"small"}> 
-            <AiFillDelete className="class-deleteClass" size={35}/></Button>
+          <Button size={"small"}>
+            <AiFillDelete className="class-deleteClass" size={35} />
+          </Button>
         </div>
         <div className="class-big-container">
           <div className="class-left-side"></div>
