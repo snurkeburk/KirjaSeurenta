@@ -5,7 +5,7 @@
  */
 
 import { Button } from "@material-ui/core";
-import { db } from "./App";
+import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import SidebarStudent from "./SidebarStudent";
@@ -41,7 +41,38 @@ function Home() {
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
+
   let username = firebase.auth().currentUser.displayName;
+
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      x: "0",
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        mass: 0.1,
+        damping: 8,
+        staggerChildren: 0.1,
+        delay: 0,
+        when: "beforeChildren",
+      },
+    },
+  };
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    },
+  };
 
   useEffect(() => {
     async function GetTeachersClasses() {
@@ -62,9 +93,8 @@ function Home() {
       }
     }
 
-    if (userObject.status == "teacher") {
+    if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
-        console.log(res.classes);
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
@@ -92,17 +122,21 @@ function Home() {
         setLoadingStudents(false);
       });
   });
+  // för böcker
 
   useEffect(() => {
     async function sender() {
+      console.log("FUCKING SKITBÖCKER");
+
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("te19d")
+        .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
         .doc(username);
       const doc = await readCollection.get();
 
       if (!doc.exists) {
+        console.log(username);
         console.log("Error");
       } else {
         return doc.data();
@@ -113,10 +147,8 @@ function Home() {
       let bookTitleArray = [];
       let allBooksArray = [];
       let bookImageArray = [];
-
       const readCollection = db.collection("books");
       const snapshot = await readCollection.get();
-
       snapshot.forEach((doc) => {
         allBooksArray.push({
           id: doc.id,
@@ -138,28 +170,33 @@ function Home() {
 
     if (userObject.status == "student") {
       sender().then(function (res) {
-        console.log(res);
+        console.log("Active class: ");
 
-        const booksArray = Object.keys(res.books);
+        if (!null) {
+          // hela skiten här e knullad ska fixa det nån annan gång
+          const booksArray = Object.keys(res.books);
 
-        const idsArray = Object.values(res.books);
+          const idsArray = Object.values(res.books);
 
-        let bookTitleArray = [];
-        let bookImageArray = [];
+          let bookTitleArray = [];
+          let bookImageArray = [];
 
-        returnBookTitle(booksArray).then(function (res) {
-          bookTitleArray = res[0];
+          returnBookTitle(booksArray).then(function (res) {
+            bookTitleArray = res[0];
 
-          setBooks(bookTitleArray);
+            setBooks(bookTitleArray);
 
-          bookImageArray = res[1];
+            bookImageArray = res[1];
 
-          setImages(bookImageArray);
-        });
+            setImages(bookImageArray);
+          });
 
-        setIds(idsArray);
-        setStudent(false);
-        setLoadingBooks(false);
+          setIds(idsArray);
+          setStudent(false);
+          setLoadingBooks(false);
+        } else {
+          console.log("res.books är null");
+        }
       });
     }
   }, [loading]);
@@ -173,7 +210,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "teacher") {
+  if (userObject.status === "student") {
     //teacher view
     return (
       <div className="home">
@@ -181,21 +218,27 @@ function Home() {
         <div className="total">
           <p>Totalt:</p>
         </div>
+
         <motion.div
           className="home-container"
-          initial={{ opacity: "0%" }}
-          animate={{ opacity: "100%" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
           <div className="left-side">
             <p>Sök efter bok</p>
           </div>
           <motion.div className="right-side">
-            <motion.div className="klasser-container" layout>
+            <motion.div
+              className="klasser-container"
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+              layout
+            >
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
-                    initial={{ opacity: "0%" }}
-                    animate={{ opacity: "100%" }}
+                    variants={childVariants}
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -203,8 +246,8 @@ function Home() {
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <Link className="klass" to={"klass/" + post.namn}>
-                      {post.namn}
+                    <Link className="klass" to={"klass/" + post}>
+                      {post}
                     </Link>
 
                     <div className="klassEleverContainer">
@@ -247,7 +290,6 @@ function Home() {
     userObject.status === "student" && //student view
     userObject.firstLogin === false
   ) {
-    console.log(userObject.firstLogin);
     return (
       <div className="student-home-container">
         <SidebarStudent />
@@ -291,29 +333,26 @@ function Home() {
 
               {/*
                         klasser.map(klass=>{
-                        return(
+                          return(
                             <div className="blog-container">
                             <h4>{klass.namn}</h4>
-
+                            
                             </div>
-                        )
-                        })
-                    */}
+                            )
+                          })
+                        */}
             </motion.div>
           </motion.div>
         </div>
       </div>
     );
-  } else if (
-    userObject.status === "student" &&
-    userObject.firstLogin === true
-  ) {
+  } else if (userObject.firstLogin === true) {
     console.log(userObject.firstLogin);
     return (
       <div>
         <p>Vänta...</p>
         <CircularProgress className="loading" />
-        <Redirect to="/validation" />
+        <Redirect to="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34" />
       </div>
     );
   }

@@ -6,13 +6,14 @@
 
 import { CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
-import { db } from "./App";
+import { db, userObject } from "./App";
 import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Button } from "@material-ui/core";
 import "./Class.css";
-
+import { AiFillDelete } from "react-icons/ai";
 function Class() {
   const { id } = useParams();
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -39,6 +40,8 @@ function Class() {
     return () => sender();
   }, [loadingStudents]);
 
+
+
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -58,9 +61,15 @@ function Class() {
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
+          <Button size={"small"}>
+            <AiFillDelete className="class-deleteClass" size={35} />
+          </Button>
         </div>
         <div className="class-big-container">
-          <div className="class-left-side"></div>
+          <div className="class-left-side">
+            <h1>bok här</h1>
+
+          </div>
 
           <div className="class-right-side">
             <ul>

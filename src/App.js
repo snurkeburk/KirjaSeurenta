@@ -11,7 +11,7 @@ import "./App.css";
 import Sidebar from "./Sidebar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./Search";
-import Klasser from "./Klasser";
+import Books from "./Books";
 import Login from "./Login";
 import { motion } from "framer-motion";
 import Home from "./Home";
@@ -19,7 +19,9 @@ import { func } from "prop-types";
 import Add from "./Add";
 import Footer from "./Footer";
 import Class from "./Class";
+import Elev from "./Elev";
 import ValidateUser from "./ValidateUser";
+import TeacherRouting from "./TeacherRouting";
 //import { add, update, remove, read } from './Crud' //! Remove later
 import { Book } from "./Book";
 import {
@@ -47,6 +49,7 @@ export const FieldValue = firebase.firestore.FieldValue;
 export var userObject;
 
 class App extends Component {
+  
   state = { isSignedIn: false };
   uiConfig = {
     signInFlow: "redirect",
@@ -57,58 +60,30 @@ class App extends Component {
     },
   };
 
+  
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
       //console.log("user", user)
-
-      if (user !== null) {
+     if (user !== null) {
         //adds user to database if logged in
         userObject = new User(
-          user.displayName /*"Test Name"*/,
+          user.displayName,
           user.uid,
-          user.email
+          user.email,
+          user.status,
         );
 
       }
 
-      console.log(userObject);
 
     });
   };
-
   getContent() {
     if (this.state.isSignedIn) {
       return (
         <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
-          <Router>
-            <span>
-              <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/home">
-                  <Home />
-                </Route>
-                <Route exact path="/validation">
-                  <ValidateUser />
-                </Route>
-
-                <Route path="/sök">
-                  <Search />
-                </Route>
-                <Route path="/klasser">
-                  <Klasser />
-                </Route>
-                <Route path="/add">
-                  <Add />
-                </Route>
-                <Route path="/klass/:id">
-                  <Class />
-                </Route>
-              </Switch>
-            </span>
-          </Router>
+          <TeacherRouting />
         </motion.div>
       );
     } else {

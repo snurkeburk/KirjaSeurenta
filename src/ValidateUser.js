@@ -19,19 +19,10 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 function ValidateUser() {
-    let username = firebase.auth().currentUser.displayName
-    const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState([]);
-    const [classChosen, setClassChosen] = useState(false);
-
-    function AddClassToUser(className){ 
-      userObject.className = className;
-      setClassChosen(true);
-      userObject.addBookToUser('matte50004', '123abc');
-      userObject.addBookToUser('ergofysik2', 'abcdefg');
-      userObject.addUser();
-      userObject.firstLogin = false;
-    }
+  let username = firebase.auth().currentUser.displayName;
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [classChosen, setClassChosen] = useState(false);
 
   function AddClassToUser(className) {
     userObject.className = className;
@@ -53,6 +44,7 @@ function ValidateUser() {
       });
       setPosts(getPostsFromFirebase);
       setLoading(false);
+      console.log(getPostsFromFirebase[1])
     });
 
     // return cleanup function
@@ -86,9 +78,9 @@ function ValidateUser() {
               >
                 <button
                   className="validate-klass"
-                  onClick={() => AddClassToUser(post.namn)}
+                  onClick={() => AddClassToUser(post.key)}
                 >
-                  {post.namn}
+                  {post.key}
                 </button>
               </motion.div>
             ))

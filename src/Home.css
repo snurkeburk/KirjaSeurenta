@@ -222,3 +222,71 @@ link:hover {
     flex-wrap: nowrap;
   }
 }
+/* lön vs fakturera, fakturera -> mst ha företag */
+@media screen and (max-width: 700px){
+  .home .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .left-side {
+    align-self: center;
+    margin: 0;
+    border-style: none;
+    border-bottom-style: solid;
+  }
+
+  .right-side{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .klasser{
+    padding:0;
+  }
+  .right-side {
+    margin-right: 0rem;
+  }
+
+  .klasser-container{
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  .klasser {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 0.1px;
+    margin: 1rem;
+    border-radius: 2rem;
+    background-image: url("./NTI.png");
+    background-position-x: -80px;
+    background-position-y: 80px;
+    
+  }
+  
+  .klass {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 50px;
+    padding-top: 2.5rem;
+    background-color: rgba(49, 8, 47, 0);
+    padding-bottom: 2.5rem;
+  }
+  .klasser .klassEleverContainer {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr;
+    background-color: white;
+    padding: 7px 0px;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    
+  }
+}

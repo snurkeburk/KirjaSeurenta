@@ -25,35 +25,43 @@ async function AddClassToTeacher (formData) {
     
     let username = firebase.auth().currentUser.displayName
     const collection = db.collection('users').doc('teachers').collection(username).doc('data');
-
+    
     if(formData.includes("te")){ //lägger till en teknikklass, samma för de under.
 
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
         })
+
             
     } else if (formData.includes("es")){
 
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
         })
-        
+  
+            
     } else if (formData.includes("ee")){
 
         const addClass = await collection.update({
             classes: FieldValue.arrayUnion(formData)
+
         })
+ 
+            
+        console.log("formdata: " + formData );
 
     } else {
         console.log("Invalid classname!");
     }
+    
 
 }
 
 
 
-function Add() {
 
+function Add() {
+  
     const sparaKlass = (event) => {
         event.preventDefault();
         const elementsArray = [...event.target.elements];   
@@ -62,7 +70,10 @@ function Add() {
                 accumulator[currentValue.id] = currentValue.value;
             }
             return accumulator;
+           
+
         },{});
+        
         let username = firebase.auth().currentUser.displayName
 
         let formDataClassName = formData.namn.toLowerCase();
@@ -74,8 +85,9 @@ function Add() {
 
         setTimeout(() => {
             setOpen(true);
+
           }, 500);
-        setOpen(false);
+            setOpen(false);
     };
 
     const useStyles = makeStyles((theme) => ({
