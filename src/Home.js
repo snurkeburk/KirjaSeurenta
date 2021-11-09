@@ -4,7 +4,7 @@
  * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
  */
 import { Button } from "@material-ui/core";
-import { db } from "./App";
+import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import SidebarStudent from "./SidebarStudent";
@@ -43,6 +43,36 @@ function Home() {
 
   let username = firebase.auth().currentUser.displayName;
 
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      x: "0",
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        mass: 0.1,
+        damping: 8,
+        staggerChildren: 0.1,
+        delay: 0,
+        when: "beforeChildren",
+      },
+    },
+  };
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    },
+  };
+
   useEffect(() => {
     async function GetTeachersClasses() {
       const getPostsFromFirebase = [];
@@ -64,8 +94,6 @@ function Home() {
 
     if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
-        console.log(res.classes);
-        console.log("class: " + res.classes[1]);
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
@@ -94,9 +122,11 @@ function Home() {
       });
   });
   // för böcker
+
   useEffect(() => {
     async function sender() {
       console.log("FUCKING SKITBÖCKER");
+
       const readCollection = db
         .collection("users")
         .doc("students")
@@ -179,7 +209,7 @@ function Home() {
     );
   }
 
-  if (userObject.status === "teacher") {
+  if (userObject.status === "student") {
     //teacher view
     return (
       <div className="home">
@@ -187,21 +217,27 @@ function Home() {
         <div className="total">
           <p>Totalt:</p>
         </div>
+
         <motion.div
           className="home-container"
-          initial={{ opacity: "0%" }}
-          animate={{ opacity: "100%" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
           <div className="left-side">
             <p>Sök efter bok</p>
           </div>
           <motion.div className="right-side">
-            <motion.div className="klasser-container" layout>
+            <motion.div
+              className="klasser-container"
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+              layout
+            >
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
-                    initial={{ opacity: "0%" }}
-                    animate={{ opacity: "100%" }}
+                    variants={childVariants}
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -296,29 +332,26 @@ function Home() {
 
               {/*
                         klasser.map(klass=>{
-                        return(
+                          return(
                             <div className="blog-container">
                             <h4>{klass.namn}</h4>
-
+                            
                             </div>
-                        )
-                        })
-                    */}
+                            )
+                          })
+                        */}
             </motion.div>
           </motion.div>
         </div>
       </div>
     );
-  } else if (
-    userObject.status === "student" &&
-    userObject.firstLogin === true
-  ) {
+  } else if (userObject.firstLogin === true) {
     console.log(userObject.firstLogin);
     return (
       <div>
         <p>Vänta...</p>
         <CircularProgress className="loading" />
-        <Redirect to="/validation" />
+        <Redirect to="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34" />
       </div>
     );
   }

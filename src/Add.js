@@ -25,7 +25,7 @@ async function AddClassToTeacher (formData) {
     
     let username = firebase.auth().currentUser.displayName
     const collection = db.collection('users').doc('teachers').collection(username).doc('data');
-
+    
     if(formData.includes("te")){ //lägger till en teknikklass, samma för de under.
 
         const addClass = await collection.update({

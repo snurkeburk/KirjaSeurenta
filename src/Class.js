@@ -1,6 +1,6 @@
 import { CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
-import { db } from "./App";
+import { db, userObject } from "./App";
 import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -34,6 +34,8 @@ function Class() {
     return () => sender();
   }, [loadingStudents]);
 
+
+
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -58,7 +60,10 @@ function Class() {
           </Button>
         </div>
         <div className="class-big-container">
-          <div className="class-left-side"></div>
+          <div className="class-left-side">
+            <h1>bok här</h1>
+
+          </div>
 
           <div className="class-right-side">
             <ul>
