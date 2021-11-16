@@ -24,10 +24,17 @@ class TeacherRouting extends Component {
     const collection = db
       .collection("users")
       .doc("students")
-      .collection("TE19D")
+      .collection("TE19D") // fixa den här routen så att den kollar efter typ id eller något annat
       .doc(username);
     if (collection.id.length > 0) {
-      console.log("TEACHERROUTING - User exists : " + collection.id);
+      console.log(
+        "TEACHERROUTING - User exists : " +
+          collection.id +
+          " Username: " +
+          username
+      );
+    } else if (collection.id.length == 0) {
+      console.log("TEACHERROUTING - User does not exist!");
     }
     if (collection.id.length > 0) {
       return (
@@ -66,11 +73,11 @@ class TeacherRouting extends Component {
         <Router>
           <span>
             <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34">
+              <Route path="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34">
                 <ValidateUser />
+              </Route>
+              <Route path="/">
+                <Home />
               </Route>
               <Route component={() => <Redirect to="/" />} />
             </Switch>

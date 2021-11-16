@@ -48,7 +48,7 @@ async function AddClassToTeacher(formData) {
   }
 }
 
-function Add() {
+function SmallAdd() {
   const sparaKlass = (event) => {
     event.preventDefault();
     const elementsArray = [...event.target.elements];
@@ -85,8 +85,7 @@ function Add() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   return (
-    <div className="add">
-      <Sidebar />
+    <div className="smalladd">
       <Collapse in={open}>
         <Alert
           action={
@@ -107,14 +106,13 @@ function Add() {
       </Collapse>
 
       <motion.div
-        className="add-container"
+        className="smalladd-container"
         initial={{ opacity: "0%" }}
         animate={{ opacity: "100%" }}
       >
-        <h1 className="main-text">Lägg till en klass</h1>
-        <form onSubmit={sparaKlass} autocomplete="off">
+        <form className="smallForm" onSubmit={sparaKlass} autocomplete="off">
           <motion.input
-            className="input"
+            className="smallinput"
             type="text"
             id="namn"
             required
@@ -124,9 +122,10 @@ function Add() {
 
           <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
         </form>
+        <h1 className="smallmain-text">Lägg till en klass</h1>
       </motion.div>
     </div>
   );
 }
 
-export default Add;
+export default SmallAdd;

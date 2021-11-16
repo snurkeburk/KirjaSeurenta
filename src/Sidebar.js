@@ -46,6 +46,8 @@ function Sidebar() {
         <div className="sidebar-upper-960px-container">
           <div className="sidebar__left">
             <h2 class="name">
+              {" "}
+              // TOTO: gör denna till href="/"
               <h2>K</h2>irja<h2>S</h2>eurenta
             </h2>
           </div>

@@ -25,11 +25,13 @@ import firebase from "firebase";
 import { isSameWeek } from "date-fns";
 import Footer from "./Footer";
 import { ar } from "date-fns/locale";
-
+import SmallAdd from "./SmallAdd";
+import AbortController from "abort-controller";
 function Home() {
   //console.log("Home userObject: ");
   //console.log(userObject);
-
+  const controller = new AbortController();
+  const signal = controller.signal;
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -42,7 +44,6 @@ function Home() {
   const [bookIds, setIds] = useState([]);
 
   let username = firebase.auth().currentUser.displayName;
-
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -119,8 +120,9 @@ function Home() {
         });
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
+        console.log("Home js är typ fast i en loop");
       });
-  });
+  }, [loadingBooks]);
   // för böcker
 
   useEffect(() => {
@@ -198,7 +200,11 @@ function Home() {
         }
       });
     }
-  }, [loading]);
+  }, [loadingBooks]);
+
+  signal.addEventListener("abort", () => {
+    console.log("aborted!");
+  });
 
   if (loadingBooks) {
     return (
@@ -214,10 +220,12 @@ function Home() {
     return (
       <div className="home">
         <Sidebar />
-        <div className="total">
-          <p>Totalt:</p>
+        <div className="upper-container">
+          <div className="total">
+            <p>Totalt:</p>
+          </div>
+          <SmallAdd />
         </div>
-
         <motion.div
           className="home-container"
           initial={{ opacity: 0 }}
@@ -345,8 +353,7 @@ function Home() {
         </div>
       </div>
     );
-  } else if (userObject.firstLogin === true) {
-    console.log(userObject.firstLogin);
+  } else if (userObject.status == "student" && userObject.firstLogin === true) {
     return (
       <div>
         <p>Vänta...</p>

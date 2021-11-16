@@ -1,5 +1,6 @@
 import { CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
+import firebase from "firebase";
 import { db, userObject } from "./App";
 import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
@@ -9,7 +10,8 @@ import { Button } from "@material-ui/core";
 import "./Class.css";
 import { AiFillDelete } from "react-icons/ai";
 function Class() {
-  const { id } = useParams();
+  const { id } = useParams(); // id = klassnamnet
+  let username = firebase.auth().currentUser.displayName;
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [students, setStudents] = useState([]);
   // för elever i klassen:
@@ -34,8 +36,6 @@ function Class() {
     return () => sender();
   }, [loadingStudents]);
 
-
-
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -47,11 +47,11 @@ function Class() {
           <h1 className="class-title">{id}</h1>
           <div className="innerTotalContainer">
             <div className="class-utdeladeContainer">
-              <p className="class-utdelade">30</p>
+              <p className="class-utdelade">0</p>
               <p className="class-utdelade-desc">utdelade</p>
             </div>
             <div className="class-saknasContainer">
-              <p className="class-saknas">1</p>
+              <p className="class-saknas">0</p>
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
@@ -62,7 +62,6 @@ function Class() {
         <div className="class-big-container">
           <div className="class-left-side">
             <h1>bok här</h1>
-
           </div>
 
           <div className="class-right-side">
