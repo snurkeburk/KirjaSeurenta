@@ -1,3 +1,9 @@
+/* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
+*/
+
 import { CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
 import firebase from "firebase";

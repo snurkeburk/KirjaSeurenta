@@ -1,8 +1,9 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and cofidential
- * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ * Proprietary and confidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
+
 import { Button } from "@material-ui/core";
 import { db, username } from "./App";
 import React, { useState, useEffect } from "react";

@@ -1,7 +1,7 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and cofidential
- * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ * Proprietary and confidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
 
 import React, { useState } from "react";
@@ -27,17 +27,17 @@ async function AddClassToTeacher(formData) {
     .collection(username)
     .doc("data");
 
-  if (formData.includes("TE")) {
+  if (formData.includes("te")) {
     //lägger till en teknikklass, samma för de under.
 
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
-  } else if (formData.includes("ES")) {
+  } else if (formData.includes("es")) {
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
-  } else if (formData.includes("EE")) {
+  } else if (formData.includes("ee")) {
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
