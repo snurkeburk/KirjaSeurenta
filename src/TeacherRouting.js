@@ -20,13 +20,17 @@ import firebase from "firebase";
         //console.log("THANK YOU LORD JESUS CHECK CONFIRMED")
         // DET HÄR ÄR RIKTIGT SMAKLIG KOD JAO 
         let username = firebase.auth().currentUser.displayName;
+        let studentAuth;
   //  if(auth == "teacher"){
          //   userObject.status = auth;
          const collection = db.collection('users').doc('students').collection("TE19D").doc(username);
          if (collection.id.length > 0){
              console.log("TEACHERROUTING - User exists : " + collection.id)
+             studentAuth = true;
+         } else if ( collection.id.length == 0){
+             studentAuth = false;
          }
-         if (collection.id.length == 0){
+         if (!studentAuth){
 
              return ( 
                  <Router>
@@ -61,7 +65,7 @@ import firebase from "firebase";
                 </Router>
 
 );
-} else if (collection.id.length>0){
+} else if (studentAuth){
     
             return (
                 <Router>

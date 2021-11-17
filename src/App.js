@@ -98,7 +98,7 @@ class App extends Component {
               <motion.div className="left">
                 <h2 className="welcomeMessege">Välkommen till</h2>
                 <h2 class="welcomeName">
-                  <h2>K</h2>irja<h2>S</h2>eurenta
+                  <h2>K</h2>irjan<h2>S</h2>eurenta
                 </h2>
 
                 <p className="welcomeUnder">
