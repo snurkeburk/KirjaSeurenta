@@ -1,8 +1,9 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and cofidential
- * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+ * Proprietary and confidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
+
 import { Button } from "@material-ui/core";
 import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
@@ -25,11 +26,13 @@ import firebase from "firebase";
 import { isSameWeek } from "date-fns";
 import Footer from "./Footer";
 import { ar } from "date-fns/locale";
-
+import SmallAdd from "./SmallAdd";
+import AbortController from "abort-controller";
 function Home() {
   //console.log("Home userObject: ");
   //console.log(userObject);
-
+  const controller = new AbortController();
+  const signal = controller.signal;
   const [loading, setLoading] = useState(true);
   const [loadingBooks, setLoadingBooks] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -40,30 +43,27 @@ function Home() {
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-  
 
-  
   let username = firebase.auth().currentUser.displayName;
-
   const containerVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: '0',
+    hidden: {
+      opacity: 0,
+      x: "0",
       transition: {
         staggerChildren: 0.1,
-      } 
+      },
     },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
-      transition: { 
-        type: 'spring',
+      transition: {
+        type: "spring",
         mass: 0.1,
         damping: 8,
         staggerChildren: 0.1,
         delay: 0,
         when: "beforeChildren",
-      }
+      },
     },
   };
   const childVariants = {
@@ -72,9 +72,8 @@ function Home() {
     },
     visible: {
       opacity: 1,
-    }
-  }
-
+    },
+  };
 
   useEffect(() => {
     async function GetTeachersClasses() {
@@ -95,7 +94,7 @@ function Home() {
       }
     }
 
-   if (userObject.status == "student") { 
+    if (userObject.status == "student") {
       GetTeachersClasses().then(function (res) {
         let classes = res.classes;
         setPosts(classes);
@@ -122,16 +121,17 @@ function Home() {
         });
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
+        console.log("Home js är typ fast i en loop");
       });
-  });
+  }, [loadingBooks]);
   // för böcker
-  
+
   useEffect(() => {
     async function sender() {
-      console.log("FUCKING SKITBÖCKER")
+      console.log("FUCKING SKITBÖCKER");
 
       const readCollection = db
-        .collection("users") 
+        .collection("users")
         .doc("students")
         .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
         .doc(username);
@@ -140,12 +140,11 @@ function Home() {
       if (!doc.exists) {
         console.log(username);
         console.log("Error");
-     
       } else {
         return doc.data();
       }
     }
-  
+
     async function returnBookTitle(arr) {
       let bookTitleArray = [];
       let allBooksArray = [];
@@ -171,43 +170,42 @@ function Home() {
       return [bookTitleArray, bookImageArray];
     }
 
-
-    
-
     if (userObject.status == "student") {
-
       sender().then(function (res) {
-        console.log("Active class: ")
+        console.log("Active class: ");
 
-        if(!null){ // hela skiten här e knullad ska fixa det nån annan gång
-        const booksArray = Object.keys(res.books);
+        if (!null) {
+          // hela skiten här e knullad ska fixa det nån annan gång
+          const booksArray = Object.keys(res.books);
 
-        const idsArray = Object.values(res.books);
+          const idsArray = Object.values(res.books);
 
           let bookTitleArray = [];
           let bookImageArray = [];
-          
+
           returnBookTitle(booksArray).then(function (res) {
             bookTitleArray = res[0];
-            
+
             setBooks(bookTitleArray);
-            
+
             bookImageArray = res[1];
-            
+
             setImages(bookImageArray);
           });
-          
+
           setIds(idsArray);
           setStudent(false);
           setLoadingBooks(false);
         } else {
-          console.log("res.books är null"); 
+          console.log("res.books är null");
         }
-        });
-      }
-  }, [loading]);
-    
+      });
+    }
+  }, [loadingBooks]);
 
+  signal.addEventListener("abort", () => {
+    console.log("aborted!");
+  });
 
   if (loadingBooks) {
     return (
@@ -217,35 +215,38 @@ function Home() {
       </div>
     );
   }
-  
-  if (userObject.status === "teacher") {
+
+  if (userObject.status === "student") {
     //teacher view
     return (
       <div className="home">
         <Sidebar />
-        <div className="total">
-          <p>Totalt:</p>
+        <div className="upper-container">
+          <div className="total">
+            <p>Totalt:</p>
+          </div>
+          <SmallAdd />
         </div>
-        
         <motion.div
           className="home-container"
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
           <div className="left-side">
             <p>Sök efter bok</p>
           </div>
           <motion.div className="right-side">
-            <motion.div className="klasser-container" 
-               initial="hidden"
-               animate="visible"
-               variants={containerVariants}
-            layout>
+            <motion.div
+              className="klasser-container"
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+              layout
+            >
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <motion.div
-                  variants={childVariants}
-        
+                    variants={childVariants}
                     className="klasser"
                     key={post.key}
                     whileHover={{
@@ -296,9 +297,9 @@ function Home() {
   } else if (
     userObject.status === "student" && //student view
     userObject.firstLogin === false
-  ) {      
-      return (
-        <div className="student-home-container">
+  ) {
+    return (
+      <div className="student-home-container">
         <SidebarStudent />
         <div className="student-s-container">
           <motion.div className="student-left-side">
@@ -319,11 +320,11 @@ function Home() {
                         scale: 1.03,
                         transition: { duration: 0.1 },
                       }}
-                      >
+                    >
                       <a
                         className="bok"
                         href="#" /* style={{backgroundColor: 'green'}} */
-                        >
+                      >
                         {post}
                       </a>
                     </motion.div>
@@ -332,8 +333,8 @@ function Home() {
                     </div>
                   </motion.div>
                 ))
-                ) : (
-                  <div className="not-found">
+              ) : (
+                <div className="not-found">
                   <h4>Inga böcker tillagda</h4>
                 </div>
               )}
@@ -353,11 +354,7 @@ function Home() {
         </div>
       </div>
     );
-  } else if (
-    userObject.firstLogin === true
-    ) {
-      
-    console.log(userObject.firstLogin);
+  } else if (userObject.status == "student" && userObject.firstLogin === true) {
     return (
       <div>
         <p>Vänta...</p>

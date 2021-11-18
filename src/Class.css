@@ -1,3 +1,9 @@
+/* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
+*/
+
 * {
   margin: 0;
   padding: 0;
@@ -76,25 +82,53 @@ html {
   flex-wrap: wrap-reverse;
 }
 
-.student {
-  color: black;
-  font-size: 1.2rem;
-  font-weight: 100;
-  text-align: left;
-  padding: 0;
-  width: 12rem;
-}
+
 
 .students {
-  padding: 1rem;
+  padding: 0.4rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
 }
 
+.form-submit {
+  border-style: solid;
+  padding: 0 10px;
+  border-radius: 1.5rem;
+  border-color: rgba(0, 0, 0, 0.205);
+  border-width: 0.1px;
+}
+
+.student-number-disp {
+  width: 50px;
+}
+
+.submit-number{
+  width: 3rem;
+  height: 3rem;
+  border-style: none;
+  border-radius: 1rem;
+  background-color: rgb(218, 218, 218);
+}
+
+.student {
+  color: black;
+  font-size: 1.34rem;
+  font-weight: 100;
+  text-align: center;
+  padding: 0rem 1rem;
+  width: 12rem;
+}
+
+.student-number-disp{
+  font-weight: 100;
+  font-size: 1.34rem;
+}
+
 .student-number {
-  width: 100px;
+  width: 50px;
+  border-style: none;
 }
 .student-status {
   background-color: rgb(118, 218, 118);
@@ -108,14 +142,14 @@ html {
   border-color: rgba(0, 0, 0, 0.096);
   padding: 1rem 2rem;
   text-align: center;
-  width: 30vw;
+  width: 40vw;
   background-color: rgba(0, 0, 0, 0);
 }
 
 .class-right-side {
   background-color: rgba(134, 58, 58, 0);
   padding: 1rem 2rem;
-  width: 30vw;
+  width: 40vw;
   border-left-style: solid;
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
@@ -124,4 +158,11 @@ html {
 
 .class-right-side ul li {
   list-style-type: none;
+}
+
+.student-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }

@@ -1,56 +1,88 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
 * Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and cofidential
-* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
+* Proprietary and confidential
+* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
 .add-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding: 10vw;
-    font-family: 'Roboto', sans-serif;
-    cursor: default;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 10vw;
+  font-family: "Roboto", sans-serif;
+  cursor: default;
 }
 
 .main-text {
-    font-weight: 100;
+  font-weight: 100;
 }
 
 input {
-    padding: 0.5rem 0rem;
-    width: 100px;
-    font-size: 20px;
-    border-style:none;
-    border-bottom-style: solid;
-    border-width: 0.1px;
-    text-align: left;
-    margin: 1rem;
+  padding: 0.5rem 0rem;
+  width: 100px;
+  font-size: 20px;
+  border-style: none;
+  border-bottom-style: solid;
+  border-width: 0.1px;
+  text-align: left;
+  margin: 1rem;
 }
-input:focus {outline:none!important;}
+input:focus {
+  outline: none !important;
+}
 
 form {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
-    background-color: rgba(119, 32, 32, 0);
-    height: 50px;
-    width: 50px;
-    z-index: 100;
-    font-size:2rem;
-    border-style: solid;
-    border-color: black;
-    border-radius: 50%;
+  background-color: rgba(119, 32, 32, 0);
+  height: 50px;
+  width: 50px;
+  z-index: 100;
+  font-size: 2rem;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50%;
 }
 
 button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
+.upper-container {
+  display: grid;
+  grid-template-columns: 25vw 50vw 30vw;
+}
+.smallmain-text {
+  font-weight: 100;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 3.3rem;
+  margin-top: -0.7rem;
+}
+.smalladd {
+  border-style: solid;
+  padding: 0;
+  border-radius: 1.5rem;
+  border-color: rgba(0, 0, 0, 0.205);
+  border-width: 0.1px;
+  padding-bottom: 1rem;
+  margin: 0.4rem 0rem;
+  width: 16rem;
+  text-align: center;
+  grid-column: 3;
+}
+.smallinput {
+  padding-top: 0.5rem;
+  background-color: rgba(0, 0, 0, 0);
+}
+.total {
+  grid-column: 2;
+}

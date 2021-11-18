@@ -1,7 +1,7 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
+ * Proprietary and cofidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson@gmail.com
  */
 
 import React, { useState } from "react";
@@ -27,17 +27,17 @@ async function AddClassToTeacher(formData) {
     .collection(username)
     .doc("data");
 
-  if (formData.includes("te")) {
+  if (formData.includes("TE")) {
     //lägger till en teknikklass, samma för de under.
 
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
-  } else if (formData.includes("es")) {
+  } else if (formData.includes("ES")) {
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
-  } else if (formData.includes("ee")) {
+  } else if (formData.includes("EE")) {
     const addClass = await collection.update({
       classes: FieldValue.arrayUnion(formData),
     });
@@ -48,7 +48,7 @@ async function AddClassToTeacher(formData) {
   }
 }
 
-function Add() {
+function SmallAdd() {
   const sparaKlass = (event) => {
     event.preventDefault();
     const elementsArray = [...event.target.elements];
@@ -85,8 +85,7 @@ function Add() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   return (
-    <div className="add">
-      <Sidebar />
+    <div className="smalladd">
       <Collapse in={open}>
         <Alert
           action={
@@ -107,14 +106,13 @@ function Add() {
       </Collapse>
 
       <motion.div
-        className="add-container"
+        className="smalladd-container"
         initial={{ opacity: "0%" }}
         animate={{ opacity: "100%" }}
       >
-        <h1 className="main-text">Lägg till en klass</h1>
-        <form onSubmit={sparaKlass} autocomplete="off">
+        <form className="smallForm" onSubmit={sparaKlass} autocomplete="off">
           <motion.input
-            className="input"
+            className="smallinput"
             type="text"
             id="namn"
             required
@@ -124,9 +122,10 @@ function Add() {
 
           <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
         </form>
+        <h1 className="smallmain-text">Lägg till en klass</h1>
       </motion.div>
     </div>
   );
 }
 
-export default Add;
+export default SmallAdd;
