@@ -50,8 +50,11 @@ html {
   padding-right: 2rem;
 }
 .class-saknas,
-.class-utdelade {
+.class-utdelade,
+.class-totalt
+ {
   border-radius: 50%;
+  margin: 0 0.2rem;
   font-size: 1.3rem;
   color: white;
   width: 2rem;
@@ -60,18 +63,22 @@ html {
 }
 
 .class-utdelade {
-  background-color: rgb(52, 209, 52);
+ /* background-color: rgb(52, 209, 52);*/
+ background-color: green;
 }
 .class-saknas {
   background-color: rgb(252, 72, 72);
 }
+
 .class-utdeladeContainer,
-.class-saknasContainer {
+.class-saknasContainer
+{
   color: rgba(128, 128, 128, 0.412);
 }
 
 .class-saknas-desc,
-.class-utdelade-desc {
+.class-utdelade-desc
+{
   font-size: 0.8rem;
 }
 
@@ -130,12 +137,7 @@ html {
   width: 50px;
   border-style: none;
 }
-.student-status {
-  background-color: rgb(118, 218, 118);
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-}
+
 .class-left-side {
   border-right-style: none;
   border-width: 0.1px;

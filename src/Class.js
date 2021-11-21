@@ -21,61 +21,92 @@ import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
-
+import {v4 as uuid_v4} from 'uuid'
+import { getOverlappingDaysInIntervals } from "date-fns";
  
 function Class() {
-async function AddNr(name, formData) { // HÄR TAR DEN NAMN O NUMMER 
-  // OCH LÄGGER TILL I FIREBASE
-console.log("AddNR")
-db
-.collection("users")
-.doc("students")
-.collection("TE19D")
-.doc(name)
-.update({
-nr: formData
-})
+  const [antal, setAntal] = useState([]);
 
-}
-
-  const { id } = useParams(); // id = klassnamnet
-  let username = firebase.auth().currentUser.displayName;
-  const [loadingStudents, setLoadingStudents] = useState(true);
-  const [students, setStudents] = useState([]);
-  const [name, setName] = useState([]);
-  const sparaKlass = (event) => {
+ function AddNr(name, formData) { // HÄR TAR DEN NAMN O NUMMER 
+    // OCH LÄGGER TILL I FIREBASE
+  console.log("AddNR")
+  db
+  .collection("users")
+  .doc("students")
+  .collection(id)
+  .doc(name)
+  .update({
+  nr: formData
+  })
  
-    event.preventDefault();
-    const elementsArray = [...event.target.elements];
-    const formData = elementsArray.reduce((accumulator, currentValue) => {
-      if (currentValue.id) {
-        accumulator[currentValue.id] = currentValue.value;
+  }
+    const [color, setColor] = useState([]);
+   function SetStatus(name, status){
+      console.log(name + " " + status)
+      if(status == "green"){
+      status = "red";
+        db
+        .collection("users")
+        .doc("students")
+        .collection(id)
+        .doc(name)
+        .update({
+        bookStatus: status
+        })
+      } else if (status == "red"){
+      status = "green";
+        db
+        .collection("users")
+        .doc("students")
+        .collection(id)
+        .doc(name)
+        .update({
+        bookStatus: status
+        })
+      } else if (status == undefined){
+        status ="green";
+        db
+        .collection("users")
+        .doc("students")
+        .collection(id)
+        .doc(name)
+        .update({
+        bookStatus: status
+        })
       }
-      return accumulator;
-    }, {});
+  }
 
+
+    const { id } = useParams(); // id = klassnamnet
     let username = firebase.auth().currentUser.displayName;
+    const [loadingStudents, setLoadingStudents] = useState(true);
+    const [students, setStudents] = useState([]);
+    const [name, setName] = useState([]);
 
-    let formDataClassName = formData.namn.toUpperCase();
 
-    middleman(formDataClassName); // skickar nr till middleman
-
+    const sparaKlass = (event) => {
+      event.preventDefault();
+      const elementsArray = [...event.target.elements];
+      const formData = elementsArray.reduce((accumulator, currentValue) => {
+        if (currentValue.id) {
+          accumulator[currentValue.id] = currentValue.value;
+        }
+        return accumulator;
+      }, {});
   
-  }
+      let username = firebase.auth().currentUser.displayName;
   
-  function Cum(name){ // HÄR FÅR DEN NAMN
-    setName(name) // sätter namn till const
-  }
-  function middleman(nr){
-    console.log("middleman")
-    console.log("Namn: " + name + " Nr: " + nr)
-    AddNr(name,nr); // skickar namn och nr till AddNr
+      let formDataClassName = formData.namn.toUpperCase();
+      
+       AddNr(name,formDataClassName); // skickar namn och nr till AddNr
+    }
     
-  }
-
+ 
+    const [x, setX] = useState([]);
+    const [antalTwo, setAntalTwo] = useState([]);
   // för elever i klassen:
+  const getStudentsFromFirebase = [];
   useEffect(() => {
-    const getStudentsFromFirebase = [];
     const sender = db
       .collection("users")
       .doc("students")
@@ -88,24 +119,29 @@ nr: formData
           });
         });
         setStudents(getStudentsFromFirebase);
-        setLoadingStudents(false);
+        setAntal(getStudentsFromFirebase.length);
+        console.log(antal);
+        setLoadingStudents(false);  
+       
       });
 
     // return cleanup function
-    return () => sender();
   }, [loadingStudents]);
 
+  
 
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
   } else
+
     return (
       <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
         <Sidebar />
         <div className="totalContainer">
           <h1 className="class-title">{id}</h1>
           <div className="innerTotalContainer">
+        
             <div className="class-utdeladeContainer">
               <p className="class-utdelade">0</p>
               <p className="class-utdelade-desc">utdelade</p>
@@ -130,23 +166,25 @@ nr: formData
             <ul>
               <li>
                 <motion.div className="students-container" layout>
-                  {students.length > 0 ? (
-                    students.map((post) => (
+                  {students.length > 0  ? (
+                    students.map(post => (               
                       <motion.div
                         className="students"
-                        key={post.key}
-                        whileHover={{}}
-                      >
-                       
-                      
+                        key={post.id}                       
+                      >                  
                         <p className="student-number-disp">{post.nr}</p>
                         <p className="student">
                           {post.name}
                         </p>
-                        <p className="student-status"></p>
+                        <Button 
+                        onClick={() => SetStatus(post.name, post.bookStatus)}
+                        variant="contained"
+                        disableElevation
+                        style={{backgroundColor: post.bookStatus, color: '#FFFFFF', width: '10px', height: '20px'}}
+                        className="student-status"></Button>
                         <div>
                           <form className="form-submit" onSubmit={sparaKlass} autocomplete="off">
-                          <motion.button onClick={() => Cum(post.name)} className="submit-number" whileHover={{ scale: 1.1 }}> 
+                          <motion.button onClick={() => setName(post.name)} className="submit-number" whileHover={{ scale: 1.1 }}> 
                             <AiFillEdit />
                           </motion.button>
                             <motion.input
@@ -160,6 +198,7 @@ nr: formData
                           </form>
                         </div>
                       </motion.div>
+                      
                     ))
                   ) : (
                     <div className="not-found">

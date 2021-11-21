@@ -105,6 +105,7 @@ function Home() {
     // return cleanup function
     //return () => sender();
   }, [loadingBooks]);
+
   // för elever i klassen:
   useEffect(() => {
     const getStudentsFromFirebase = [];
@@ -121,7 +122,6 @@ function Home() {
         });
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
-        console.log("Home js är typ fast i en loop");
       });
   }, [loadingBooks]);
   // för böcker
@@ -207,6 +207,8 @@ function Home() {
     console.log("aborted!");
   });
 
+
+ 
   if (loadingBooks) {
     return (
       <div>
@@ -264,7 +266,7 @@ function Home() {
                         <p className="saknas">1</p>
                       </div>
                       <div className="klassEleverAntal">
-                        <p className="antalElever">31</p>
+                        <p className="antalElever">{post.antal}</p>
                       </div>
                     </div>
                   </motion.div>
