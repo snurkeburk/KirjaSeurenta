@@ -24,7 +24,6 @@ html {
   border-color: white;
   border-width: 0.1px;
   height: 3rem;
-  
 }
 
 .totalContainer {
@@ -51,8 +50,7 @@ html {
 }
 .class-saknas,
 .class-utdelade,
-.class-totalt
- {
+.class-totalt {
   border-radius: 50%;
   margin: 0 0.2rem;
   font-size: 1.3rem;
@@ -63,22 +61,20 @@ html {
 }
 
 .class-utdelade {
- /* background-color: rgb(52, 209, 52);*/
- background-color: green;
+  /* background-color: rgb(52, 209, 52);*/
+  background-color: green;
 }
 .class-saknas {
   background-color: rgb(252, 72, 72);
 }
 
 .class-utdeladeContainer,
-.class-saknasContainer
-{
+.class-saknasContainer {
   color: rgba(128, 128, 128, 0.412);
 }
 
 .class-saknas-desc,
-.class-utdelade-desc
-{
+.class-utdelade-desc {
   font-size: 0.8rem;
 }
 
@@ -89,14 +85,37 @@ html {
   flex-wrap: wrap-reverse;
 }
 
+.student-books-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-top: 0.6rem;
+  padding: 0;
+}
 
+.books p {
+  padding: 5px 0px;
+  display: flex;
+}
+
+.w-cont {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  margin: 1.3rem 0rem;
+  padding: 0.4rem 1rem;
+}
 
 .students {
-  padding: 0.4rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.469);
   text-align: left;
+  margin: 0;
 }
 
 .form-submit {
@@ -111,7 +130,7 @@ html {
   width: 50px;
 }
 
-.submit-number{
+.submit-number {
   width: 3rem;
   height: 3rem;
   border-style: none;
@@ -125,10 +144,10 @@ html {
   font-weight: 100;
   text-align: center;
   padding: 0rem 1rem;
-  width: 12rem;
+  width: 10rem;
 }
 
-.student-number-disp{
+.student-number-disp {
   font-weight: 100;
   font-size: 1.34rem;
 }
@@ -141,17 +160,16 @@ html {
 .class-left-side {
   border-right-style: none;
   border-width: 0.1px;
+  padding: 1rem 0rem;
   border-color: rgba(0, 0, 0, 0.096);
-  padding: 1rem 2rem;
-  text-align: center;
-  width: 40vw;
+  width: 30vw;
   background-color: rgba(0, 0, 0, 0);
 }
 
 .class-right-side {
   background-color: rgba(134, 58, 58, 0);
   padding: 1rem 2rem;
-  width: 40vw;
+  width: 50vw;
   border-left-style: solid;
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
@@ -160,6 +178,54 @@ html {
 
 .class-right-side ul li {
   list-style-type: none;
+}
+
+.s-name {
+  padding: 0.7rem 0rem;
+  height: auto;
+  text-align: left;
+  display: flex;
+  align-items: top;
+  width: 25vw;
+  justify-content: space-between;
+  font-weight: 100;
+  font-size: 1.2rem;
+  border-bottom-style: solid;
+  border-color: lightgray;
+  border-bottom-left-radius: 2rem;
+  padding-left: 2rem;
+  margin-left: -2rem;
+}
+.s-name-nr {
+  width: 50px;
+}
+.s-name-name {
+  text-align: left;
+  width: 100%;
+}
+
+.s-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  width: 25vw;
+}
+.s-info-margin {
+  padding-right: 11.5rem;
+}
+
+.e-book-nf {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+.student-status {
+  border-radius: 0;
+  width: 25px;
+  border-radius: 0.2rem;
+  height: 25px;
+  padding: 0;
+  border-style: none;
+  margin: 0.2rem;
 }
 
 .student-button {

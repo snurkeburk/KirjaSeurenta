@@ -207,8 +207,6 @@ function Home() {
     console.log("aborted!");
   });
 
-
- 
   if (loadingBooks) {
     return (
       <div>
