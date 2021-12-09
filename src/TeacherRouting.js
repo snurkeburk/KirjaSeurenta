@@ -35,7 +35,7 @@ class TeacherRouting extends Component {
           username
       );
     } else if (collection.id.length == 0) {
-      console.log("TEACHERROUTING - User does not exist!");
+      console.log("TEACHERROUTING - User (student) does not exist!");
     }
     if (collection.id.length > 0) {
       return (
