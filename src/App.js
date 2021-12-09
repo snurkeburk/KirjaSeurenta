@@ -49,7 +49,6 @@ export const FieldValue = firebase.firestore.FieldValue;
 export var userObject;
 
 class App extends Component {
-  
   state = { isSignedIn: false };
   uiConfig = {
     signInFlow: "redirect",
@@ -60,23 +59,19 @@ class App extends Component {
     },
   };
 
-  
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user });
       //console.log("user", user)
-     if (user !== null) {
+      if (user !== null) {
         //adds user to database if logged in
         userObject = new User(
           user.displayName,
           user.uid,
           user.email,
-          user.status,
+          user.status
         );
-
       }
-
-
     });
   };
   getContent() {

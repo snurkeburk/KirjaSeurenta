@@ -174,7 +174,7 @@ function Home() {
       sender().then(function (res) {
         console.log("Active class: ");
 
-        if (!null) {
+        if (res.books != null || res.books != undefined) {
           // hela skiten här e knullad ska fixa det nån annan gång
           const booksArray = Object.keys(res.books);
 

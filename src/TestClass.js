@@ -28,10 +28,11 @@ import { getOverlappingDaysInIntervals } from "date-fns";
 
 function TestClass() {
   const { id } = useParams(); // id = klassnamnet
-
-  // för elever i klassen:
+  const [loadingBooks, setLoadingBooks] = useState(false);
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
+
+  // för elever i klassen:
   const getStudentsFromFirebase = [];
   useEffect(() => {
     const sender = db
@@ -47,7 +48,13 @@ function TestClass() {
         });
         // TODO om sidan märker en change i firebase så kommer det en POPUP
         // som tillåter användaren att "uppdatera sidan" eller "X".
-
+        for (let i = 0; i < getStudentsFromFirebase.length; i++) {
+          if (getStudentsFromFirebase[i].marker == "green") {
+            console.log("green: " + getStudentsFromFirebase[i].name);
+          } else if (getStudentsFromFirebase[i].marker == "red") {
+            console.log("red: " + getStudentsFromFirebase[i].name);
+          }
+        }
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
       });
@@ -55,10 +62,15 @@ function TestClass() {
     // return cleanup function
   }, [loadingStudents]);
 
-  const [loadingBooks, setLoadingBooks] = useState(false);
+  const [antal, setAntal] = useState([]);
   const [books, setBooks] = useState([]);
   const getBooksFromFirebase = [];
   const [user, SetUser] = useState([]);
+  const [missingCounter, setMissingCounter] = useState([]);
+  const [person, setPerson] = useState([]);
+  const [missing, setMissing] = useState(false);
+  const [checkUser, setCheckUser] = useState([]);
+
   async function showBooks(user) {
     SetUser(user);
     const sender = db
@@ -74,6 +86,7 @@ function TestClass() {
             key: doc.id, // id från firebase
           });
         });
+
         setBooks(getBooksFromFirebase);
 
         setLoadingBooks(false);
@@ -85,8 +98,6 @@ function TestClass() {
   // .. visa t.ex. gult ifall eleven inte har någon bok (eller vitt/grått)
 
   async function changeStatus(status, book) {
-    console.log(status, book);
-    console.log(user);
     if (status == "green") {
       status = "red";
       db.collection("users")
@@ -98,6 +109,11 @@ function TestClass() {
         .update({
           status: "red",
         });
+      showBooks(user);
+
+      db.collection("users").doc("students").collection(id).doc(user).update({
+        marker: "red",
+      });
     } else if (status == "red") {
       status = "green";
       db.collection("users")
@@ -109,16 +125,57 @@ function TestClass() {
         .update({
           status: "green",
         });
-    }
+      const sender = db
+        .collection("users")
+        .doc("students")
+        .collection(id)
+        .doc(user)
+        .collection("books")
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            getBooksFromFirebase.push({
+              ...doc.data(), //spread operator
+              key: doc.id, // id från firebase
+            });
+          });
 
-    showBooks(user);
+          setBooks(getBooksFromFirebase);
+          if (books.length == 0) {
+            db.collection("users")
+              .doc("students")
+              .collection(id)
+              .doc(user)
+              .update({
+                marker: "yellow",
+              });
+          }
+          for (let i = 0; i < books.length; i++) {
+            if (books[i].status == "red") {
+              db.collection("users")
+                .doc("students")
+                .collection(id)
+                .doc(user)
+                .update({
+                  marker: "red",
+                });
+            } else {
+              db.collection("users")
+                .doc("students")
+                .collection(id)
+                .doc(user)
+                .update({
+                  marker: "green",
+                });
+            }
+          }
+        });
+    }
   }
 
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
   } else {
-    console.log(students);
   }
   return (
     <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
@@ -155,8 +212,6 @@ function TestClass() {
                   <div className="s-name-name">{book.name}</div>
                   <button
                     onClick={() => changeStatus(book.status, book.subj)}
-                    variant="contained"
-                    disableElevation
                     style={{
                       backgroundColor: book.status,
                     }}
@@ -186,6 +241,7 @@ function TestClass() {
                     <div className="w-cont">
                       <motion.div className="students">
                         <p className="student-number-disp">{}</p>
+
                         <p className="student">{post.name}</p>
                         <Button
                           onClick={() => showBooks(post.name)}
@@ -199,6 +255,12 @@ function TestClass() {
                         >
                           visa
                         </Button>
+                        <button
+                          style={{
+                            backgroundColor: post.marker,
+                          }}
+                          className="student-status-marker"
+                        ></button>
                       </motion.div>
                     </div>
                   ))
