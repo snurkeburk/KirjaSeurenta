@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body,html {
+
+}
+
+.c-fake-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin-top: 0rem;
+    margin-left: 65vw;
+    margin-top: -4rem;
+    border-style: none;
+    border-width: 0.1px;
+    border-color: lightgray;
+    padding: 0.5rem 5rem;
+}
+.c-fake-container p {
+    font-size: 0.7rem;
+    color: rgb(88, 88, 88);
+}

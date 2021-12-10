@@ -87,6 +87,9 @@ function Books() {
     }
 
     sender().then(function (res) {
+      if (!res.books == undefined){
+        
+      
       const booksArray = Object.keys(res.books);
 
       const idsArray = Object.values(res.books);
@@ -107,6 +110,7 @@ function Books() {
       setIds(idsArray);
       setStudent(false);
       setLoadingBooks(false);
+    }
     });
   }, [loadingBooks]);
   const containerVariants = {

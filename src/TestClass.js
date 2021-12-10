@@ -10,25 +10,16 @@ import firebase from "firebase";
 import { db, userObject } from "./App";
 import Sidebar from "./Sidebar";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
 import Footer from "./Footer";
 import "./Class.css";
 import { AiFillDelete, AiOutlineConsoleSql } from "react-icons/ai";
-import { AiFillEdit } from "react-icons/ai";
-import Collapse from "@material-ui/core/Collapse";
-import { makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
-import Alert from "@material-ui/lab/Alert";
-import IconButton from "@material-ui/core/IconButton";
-import { v4 as uuid_v4 } from "uuid";
-import { getOverlappingDaysInIntervals } from "date-fns";
+import CreateFakeUser from "./CreateFakeUser";
+import { FaUserEdit } from "react-icons/fa";
 
 function TestClass() {
   const { id } = useParams(); // id = klassnamnet
-  const [loadingBooks, setLoadingBooks] = useState(false);
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
 
@@ -57,23 +48,19 @@ function TestClass() {
         }
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
+        sender();
       });
 
     // return cleanup function
   }, [loadingStudents]);
 
-  const [antal, setAntal] = useState([]);
   const [books, setBooks] = useState([]);
   const getBooksFromFirebase = [];
   const [user, SetUser] = useState([]);
-  const [missingCounter, setMissingCounter] = useState([]);
-  const [person, setPerson] = useState([]);
-  const [missing, setMissing] = useState(false);
-  const [checkUser, setCheckUser] = useState([]);
 
   async function showBooks(user) {
     SetUser(user);
-    const sender = db
+    const stop = db
       .collection("users")
       .doc("students")
       .collection(id)
@@ -86,10 +73,8 @@ function TestClass() {
             key: doc.id, // id från firebase
           });
         });
-
         setBooks(getBooksFromFirebase);
-
-        setLoadingBooks(false);
+        console.log("stop here");
       });
   }
 
@@ -97,7 +82,12 @@ function TestClass() {
   // .. minst en av böckerna saknas, annars visar den grönt
   // .. visa t.ex. gult ifall eleven inte har någon bok (eller vitt/grått)
 
-  async function changeStatus(status, book) {
+  // man kanske kan lägga till en animation på showBooks eller något
+  // som gör så att animationen ex. opacity varar tillräckligt länge
+  // för att "buggen" inte ska visas.
+  // detta kommer däremot inte att fixa window resize problemet som
+  // tillkommer med denna "bug".
+  function changeStatus(status, book) {
     if (status == "green") {
       status = "red";
       db.collection("users")
@@ -140,6 +130,7 @@ function TestClass() {
           });
 
           setBooks(getBooksFromFirebase);
+
           if (books.length == 0) {
             db.collection("users")
               .doc("students")
@@ -169,6 +160,7 @@ function TestClass() {
             }
           }
         });
+      showBooks(user);
     }
   }
 
@@ -196,6 +188,7 @@ function TestClass() {
           <AiFillDelete className="class-deleteClass" size={35} />
         </Button>
       </div>
+      <CreateFakeUser />
       <div className="class-big-container">
         <div className="class-left-side">
           <div className="s-info">
@@ -210,13 +203,17 @@ function TestClass() {
                 <div className="s-name">
                   <div className="s-name-nr">{book.nr}</div>
                   <div className="s-name-name">{book.name}</div>
-                  <button
+                  <motion.button
+                    whileHover={{
+                      scale: 1.1,
+                      transition: { duration: 0.1 },
+                    }}
                     onClick={() => changeStatus(book.status, book.subj)}
                     style={{
                       backgroundColor: book.status,
                     }}
                     className="student-status"
-                  ></button>
+                  ></motion.button>
                 </div>
               ))
             ) : (
@@ -240,20 +237,22 @@ function TestClass() {
                   students.map((post) => (
                     <div className="w-cont">
                       <motion.div className="students">
-                        <p className="student-number-disp">{}</p>
-
-                        <p className="student">{post.name}</p>
+                        <p user={post.name} key={post.id} className="student">
+                          {post.name}
+                        </p>
                         <Button
                           onClick={() => showBooks(post.name)}
                           className="show-books"
                           size="small"
                           variant="contained"
                           style={{
-                            backgroundColor: "lightgray",
-                            width: "100px",
+                            backgroundColor: "white",
+                            borderRadius: "2rem",
+                            fontSize: "1.4rem",
+                            width: "20px",
                           }}
                         >
-                          visa
+                          <FaUserEdit />
                         </Button>
                         <button
                           style={{

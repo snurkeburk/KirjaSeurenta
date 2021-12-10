@@ -100,6 +100,28 @@ export class User {
     );
   }
 
+  addFakeUser(classid, name, id, email, status) {
+    // Adds user to database
+    //TODO Merge function with userExists() ???
+
+    nestedAdd(
+      "users",
+      //'usersTest',
+      "students",
+      classid,
+      name,
+      {
+        //'test': 'user.js l43'
+        id: id,
+        //'matte50004': 'User.js'
+
+        email: email,
+        name: name,
+        status: status,
+      }
+    );
+  }
+
   addUser() {
     // Adds user to database
     //TODO Merge function with userExists() ???

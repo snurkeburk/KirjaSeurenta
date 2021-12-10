@@ -139,12 +139,14 @@ html {
 }
 
 .student {
-  color: black;
+  color: rgb(82, 82, 82);
   font-size: 1.34rem;
   font-weight: 100;
   text-align: center;
   padding: 0rem 1rem;
-  width: 10rem;
+  width: 17rem;
+  margin-right: 5rem;
+  padding-left: 5rem;
 }
 
 .student-number-disp {

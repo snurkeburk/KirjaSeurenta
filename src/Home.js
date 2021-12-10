@@ -128,14 +128,13 @@ function Home() {
 
   useEffect(() => {
     async function sender() {
-      console.log("FUCKING SKITBÖCKER");
 
       const readCollection = db
         .collection("users")
         .doc("students")
         .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
-        .doc(username);
-      const doc = await readCollection.get();
+        .doc(username); // TODO: platsen för books har flyttats till .doc(username).collection("books");
+         const doc = await readCollection.get();
 
       if (!doc.exists) {
         console.log(username);
@@ -172,7 +171,6 @@ function Home() {
 
     if (userObject.status == "student") {
       sender().then(function (res) {
-        console.log("Active class: ");
 
         if (res.books != null || res.books != undefined) {
           // hela skiten här e knullad ska fixa det nån annan gång
