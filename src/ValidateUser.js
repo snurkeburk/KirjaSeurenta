@@ -23,8 +23,31 @@ function ValidateUser() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [classChosen, setClassChosen] = useState(false);
+  const [count, setCount] = useState([]);
 
-  function AddClassToUser(className) {
+  async function AddClassToUser(className) {
+    const ccollection = db
+      .collection("users")
+      .doc("students")
+      const doc = await ccollection.get();
+      console.log(doc.data());
+      let k = 1;
+      console.log(doc.length + " = lengthhhh")
+      for (let i = 0; i<doc.data().length; i++){
+        console.log(doc.data()[i])
+        if (doc.data()[i] == className){
+          console.log("its a baby")
+
+        }
+      }
+    const collection = db
+    .collection("users")
+    .doc("students")
+    .update({
+      TE19Dantal: k,
+    })
+      // return cleanup function
+
     userObject.className = className;
     setClassChosen(true);
     userObject.addBookToUser("matte50004", "123abc");

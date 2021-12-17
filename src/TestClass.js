@@ -22,7 +22,6 @@ function TestClass() {
   const { id } = useParams(); // id = klassnamnet
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
-
   // för elever i klassen:
   const getStudentsFromFirebase = [];
   useEffect(() => {
@@ -74,6 +73,7 @@ function TestClass() {
           });
         });
         setBooks(getBooksFromFirebase);
+        console.log(getBooksFromFirebase)
         console.log("stop here");
       });
   }
@@ -174,6 +174,7 @@ function TestClass() {
       <Sidebar />
       <div className="totalContainer">
         <h1 className="class-title">{id}</h1>
+        <h5 className="class-title">{students.length}</h5>
         <div className="innerTotalContainer">
           <div className="class-utdeladeContainer">
             <p className="class-utdelade">0</p>
