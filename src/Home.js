@@ -4,7 +4,7 @@
  * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
 
-import { Button } from "@material-ui/core";
+import { Button, createGenerateClassName } from "@material-ui/core";
 import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
@@ -28,6 +28,7 @@ import Footer from "./Footer";
 import { ar } from "date-fns/locale";
 import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
+import GetClassSize from "./GetClassSize";
 function Home() {
   //console.log("Home userObject: ");
   //console.log(userObject);
@@ -39,11 +40,12 @@ function Home() {
   const [loadingTeachers, setLoadingTeachers] = useState(true);
   const [students, setStudents] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [classCount, setClassCount] = useState([]);
   const [books, setBooks] = useState([]);
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-
+  
   let username = firebase.auth().currentUser.displayName;
   const containerVariants = {
     hidden: {
@@ -104,37 +106,17 @@ function Home() {
 
     // return cleanup function
     //return () => sender();
-  }, [loadingBooks]);
-
-  // för elever i klassen:
-  useEffect(() => {
-    const getStudentsFromFirebase = [];
-    const sender = db
-      .collection("users")
-      .doc("students")
-      .collection("TE19D")
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getStudentsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // id från firebase
-          });
-        });
-        setStudents(getStudentsFromFirebase);
-        setLoadingStudents(false);
-      });
-  }, [loadingBooks]);
-  // för böcker
+  }, [loadingStudents]);
 
   useEffect(() => {
     async function sender() {
-
       const readCollection = db
         .collection("users")
         .doc("students")
         .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
         .doc(username); // TODO: platsen för books har flyttats till .doc(username).collection("books");
-         const doc = await readCollection.get();
+      const doc = await readCollection.get();
+      const getStudentsFromFirebase = [];
 
       if (!doc.exists) {
         console.log(username);
@@ -143,7 +125,6 @@ function Home() {
         return doc.data();
       }
     }
-
     async function returnBookTitle(arr) {
       let bookTitleArray = [];
       let allBooksArray = [];
@@ -171,7 +152,6 @@ function Home() {
 
     if (userObject.status == "student") {
       sender().then(function (res) {
-
         if (res.books != null || res.books != undefined) {
           // hela skiten här e knullad ska fixa det nån annan gång
           const booksArray = Object.keys(res.books);
@@ -262,7 +242,7 @@ function Home() {
                         <p className="saknas">1</p>
                       </div>
                       <div className="klassEleverAntal">
-                        <p className="antalElever">{post.antal}</p>
+                      {post}
                       </div>
                     </div>
                   </motion.div>
