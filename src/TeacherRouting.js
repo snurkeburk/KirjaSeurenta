@@ -13,6 +13,7 @@ import { userObject } from "./App";
 import { Redirect } from "react-router";
 import firebase from "firebase";
 import TestClass from "./TestClass";
+import GetClassSize from "./GetClassSize";
 class TeacherRouting extends Component {
   render() {
     //firebase.auth().signOut();
@@ -63,7 +64,9 @@ class TeacherRouting extends Component {
               <Route path="/klass/:id">
                 <TestClass />
               </Route>
-
+              <Route path="/:id">
+                <TestClass /> 
+              </Route>
               <Route component={() => <div>404 Not found </div>} />
             </Switch>
           </span>
