@@ -3,6 +3,7 @@
 * Proprietary and confidential
 * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
 */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
 * {
   margin: 0;
@@ -11,6 +12,7 @@
 
 body,
 html {
+
 }
 
 .class-title {
@@ -176,6 +178,9 @@ html {
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
   min-width: 300px;
+
+  /* TEMPORARY DUE TO INFO BOX */
+  margin-top: -15rem;
 }
 
 .class-right-side ul li {
@@ -242,4 +247,30 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+}
+
+
+.class-important-info {
+    border-right-style: none;
+    border-width: 0.1px;
+    padding: 1rem 0rem;
+    border-color: rgba(0, 0, 0, 0.096);
+    width: 25vw;
+    background-color: rgba(0, 0, 0, 0.048);
+    margin-left: 9rem;
+    font-family: "Roboto", sans-serif;
+    border-style: solid;
+    border-radius: 2rem;
+    padding: 0.9rem 0.8rem;
+  }
+  .class-important-info h1 {
+    font-weight: 100;
+}
+
+.class-important-info p {
+  padding: 0.5rem 0.1rem;
+}
+
+.class-important-info .important {
+  font-style: italic;
 }

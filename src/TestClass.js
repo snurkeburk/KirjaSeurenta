@@ -45,46 +45,52 @@ function TestClass() {
             key: doc.id, // id från firebase
           });
         });
-        for (let i = 0; i < getPostsFromFirebase.length; i++){
+        for (let i = 0; i < getPostsFromFirebase.length; i++) {
           let mark = false;
-          console.log(getPostsFromFirebase.length)
+          console.log(getPostsFromFirebase.length);
           const getBookFromFirebase = [];
           db.collection("users")
-          .doc("students")
-          .collection(id)
-          .doc(getPostsFromFirebase[i].name)
-          .collection("items")
-          .onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              getBookFromFirebase.push({
-                ...doc.data(), //spread operator
-                key: doc.id, // id från firebase
+            .doc("students")
+            .collection(id)
+            .doc(getPostsFromFirebase[i].name)
+            .collection("items")
+            .onSnapshot((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                getBookFromFirebase.push({
+                  ...doc.data(), //spread operator
+                  key: doc.id, // id från firebase
+                });
               });
-              
-            })        
-            for (let k = 0; k < getBookFromFirebase.length; k++){
-              if (getBookFromFirebase[k].status == "red"){
-                console.log(getBookFromFirebase[k].name + " is red" + " (" + getPostsFromFirebase[i].name + ")");
-                mark = true;
-                k = getBookFromFirebase.length;
+              for (let k = 0; k < getBookFromFirebase.length; k++) {
+                if (getBookFromFirebase[k].status == "red") {
+                  console.log(
+                    getBookFromFirebase[k].name +
+                      " is red" +
+                      " (" +
+                      getPostsFromFirebase[i].name +
+                      ")"
+                  );
+                  mark = true;
+                  k = getBookFromFirebase.length;
+                } else {
+                  console.log(
+                    getBookFromFirebase[k].name +
+                      " is green" +
+                      " (" +
+                      getPostsFromFirebase[i].name +
+                      ")"
+                  );
+                }
               }
-              else {
-                console.log(getBookFromFirebase[k].name + " is green" + " (" + getPostsFromFirebase[i].name + ")");
+
+              if (mark) {
+                console.log(getPostsFromFirebase[i].name + " red!!!");
+                checkMarked(getPostsFromFirebase[i].name, true);
+              } else {
+                console.log(getPostsFromFirebase[i].name + " green!");
+                checkMarked(getPostsFromFirebase[i].name, false);
               }
-            
-            }
-          
-            if (mark){
-              console.log(getPostsFromFirebase[i].name + " red!!!");
-              checkMarked(getPostsFromFirebase[i].name, true)
-  
-            }
-            else {
-              console.log(getPostsFromFirebase[i].name + " green!")
-              checkMarked(getPostsFromFirebase[i].name, false)
-  
-            }
-          })
+            });
         }
         setPosts(getPostsFromFirebase);
         setLoadingStudents(false);
@@ -94,24 +100,23 @@ function TestClass() {
     return () => sender();
   }, [loadingStudents]);
 
-  function checkMarked(user, marked){
-    console.log(user + " marked: " + marked)
-    if (marked){
+  function checkMarked(user, marked) {
+    console.log(user + " marked: " + marked);
+    if (marked) {
       setMarkedUser(user);
-    }
-    else if (!marked){
+    } else if (!marked) {
       setUnMarkedUser(user);
     }
   }
 
-  function setMarkedUser(user){
-    console.log(user + " WAS MARKED!!")
+  function setMarkedUser(user) {
+    console.log(user + " WAS MARKED!!");
     db.collection("users").doc("students").collection(id).doc(user).update({
       marker: "red",
     });
   }
-  function setUnMarkedUser(user){
-    console.log(user + " WAS NOT MARKED!")
+  function setUnMarkedUser(user) {
+    console.log(user + " WAS NOT MARKED!");
 
     db.collection("users").doc("students").collection(id).doc(user).update({
       marker: "green",
@@ -131,7 +136,7 @@ function TestClass() {
           if (change.type === "modified") {
             console.log("Modified : ", change.doc.data());
             //showBooks("NONE")
-              setOpen(true);
+            setOpen(true);
           }
           if (change.type === "removed") {
             //console.log("Removed : ", change.doc.data());
@@ -236,8 +241,7 @@ function TestClass() {
           status: "green",
         });
     }
-      setOpen(true);
-  
+    setOpen(true);
   }
 
   // TODO: lägg till status brevid elev-namn som visar röd ifall
@@ -383,6 +387,42 @@ function TestClass() {
           </Button>
         </div>
         <CreateFakeUser />
+
+        <div className="class-important-info">
+          <h1>Viktig information!</h1>
+          <p>
+            Vid ändringar av status krävs det att sidan uppdateras för att
+            ändringar ska visas.
+          </p>
+          <Alert
+            variant="filled"
+            severity="info"
+            action={
+              <IconButton aria-label="close" color="inherit" size="small">
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            Sidan har uppdaterats -{" "}
+            <important>
+              <Link
+                style={{
+                  paddingRight: "0.2rem",
+                  color: "white",
+                }}
+              >
+                uppdatera sidan
+              </Link>
+              för att visa ändringar!
+            </important>
+          </Alert>
+          <p>
+            Om en blå "varning" dyker upp så behöver du uppdatera sidan, denna
+            kan dyka upp flera gånger i rad <important className="important">(sidan måste uppdateras varje gång
+            den kommer upp)</important>.
+          </p>
+          <p>Ändringar går fortfarande igenom men visas ej tills att sidan har uppdaterats.</p>
+        </div>
         <div className="class-big-container">
           <div className="class-left-side">
             <div className="s-info">
