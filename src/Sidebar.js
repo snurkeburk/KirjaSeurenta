@@ -41,11 +41,13 @@ import "@szhsin/react-menu/dist/transitions/slide.css";
 
 function Sidebar() {
   const [displayStatus, setDisplayStatus] = useState([]);
+  let username = firebase.auth().currentUser.displayName;
+
   getName();
   async function getName() {
     const mentorRef = db.collection("users").doc("mentors").collection("data");
 
-    const snapshot = await mentorRef.where("name", "==", "Isak Anderson").get();
+    const snapshot = await mentorRef.where("name", "==", username).get();
     if (snapshot.empty) {
       console.log("No matching documents.");
       return;
@@ -66,7 +68,7 @@ function Sidebar() {
       .collection("data");
 
     const ssnapshot = await teacherRef
-      .where("name", "==", "Isak Anderson")
+      .where("name", "==", username)
       .get();
     if (ssnapshot.empty) {
       console.log("No matching documents.");
