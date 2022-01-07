@@ -7,23 +7,56 @@
 import React, { useEffect, useState } from "react";
 import firebase from "firebase";
 import "./ValidateUser.css";
-import { db } from "./App";
+import { db, FieldValue } from "./App";
+import { add, update, remove, read, readOne } from "./Crud";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
 import User from "./User";
 import { userObject } from "./App";
 import { ContactlessOutlined } from "@material-ui/icons";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-
+import TestRouter from "./TestRouter";
+import Home from "./Home";
+import Sidebar from "./Sidebar";
 function ValidateUser() {
   let username = firebase.auth().currentUser.displayName;
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [classChosen, setClassChosen] = useState(false);
+  const [roleChosen, setRoleChosen] = useState(false);
   const [count, setCount] = useState([]);
+  const [redirect, setRedirect] = useState(false);
+
+  async function GetActiveUserStatus() {
+    let _id_teacher = userObject.id + "&teacher"
+    let _id_mentor = userObject.id + "&mentor"
+    let _id_student = userObject.id + "&student"
+    const read = await readOne("users", "ids");
+    if (read.ids.includes(_id_teacher)) {
+      console.log("teacher ID matched")
+    }
+    else if (read.ids.includes(_id_mentor)) {
+      console.log("mentor ID matched")
+    }
+    else if (read.ids.includes(_id_student)) {
+      console.log("student ID matched")
+    }
+  }
+  test();
+  async function test(){
+    const read = await readOne("users", "ids");
+    console.log("ID:s : ", read.ids);
+      if (read.ids.includes(userObject.id)){
+        console.log("redirect to home")
+      }else{
+          setRedirect(false);
+    }
+  
+    return read.ids;
+  }
 
   async function AddClassToUser(className) {
     const ccollection = db
@@ -37,15 +70,10 @@ function ValidateUser() {
         console.log(doc.data()[i])
         if (doc.data()[i] == className){
           console.log("its a baby")
-
         }
+     
       }
-    const collection = db
-    .collection("users")
-    .doc("students")
-    .update({
-      TE19Dantal: k,
-    })
+  
       // return cleanup function
 
     userObject.className = className;
@@ -54,25 +82,66 @@ function ValidateUser() {
     userObject.addBookToUser("ergofysik2", "abcdefg");
     userObject.addUser();
     userObject.firstLogin = false;
+   
   }
 
   useEffect(() => {
-    const getPostsFromFirebase = [];
-    const sender = db.collection("classes").onSnapshot((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        getPostsFromFirebase.push({
-          ...doc.data(), //spread operator
-          key: doc.id, // id från firebase
-        });
-      });
-      setPosts(getPostsFromFirebase);
-      setLoading(false);
-      console.log(getPostsFromFirebase[1])
-    });
+    if (userObject.status == "student"){
 
-    // return cleanup function
-    return () => sender();
+      const getPostsFromFirebase = [];
+      const sender = db.collection("classes").onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          getPostsFromFirebase.push({
+            ...doc.data(), //spread operator
+            key: doc.id, // id från firebase
+          });
+        });
+        setPosts(getPostsFromFirebase);
+        setLoading(false);
+        console.log(getPostsFromFirebase[1])
+      });
+      
+      // return cleanup function
+      return () => sender();
+    }else {
+      setLoading(false);
+    }
   }, [loading]);
+
+  async function AddAuthoritarian(role){
+    console.log("Adding " + username + " as " + role)
+    let _status;
+    if (role == "mentors"){
+       _status = "mentor";
+    }else if (role == "teachers"){
+       _status = "teacher";
+    }
+    // add teacher to database
+    const sender = db
+    .collection("users")
+    .doc(role)
+    .collection("data")
+    .doc(firebase.auth().currentUser.uid)
+    .set({
+      name: username,
+      status: _status,
+      createdAt: new Date(),
+      classes: [],
+      email: userObject.email,
+    })
+    
+    // add ID to database
+    const read = await readOne("users", "ids");
+    console.log("ID:s : ", read.ids);
+    let id_pos = read.ids.lenght + 1;
+    setRoleChosen(true);
+    GetActiveUserStatus();
+    db.collection('users').doc('ids').update({
+      'ids': FieldValue.arrayUnion(userObject.id + "&"+_status)
+    }).then(()=> window.location.reload(true));
+  }
+
+
 
   if (loading) {
     return (
@@ -81,7 +150,35 @@ function ValidateUser() {
       </div>
     );
   }
-  if (classChosen == false) {
+  if (userObject.status == "teacher-mentor" && !roleChosen){
+    return (
+      <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1, duration: 2 }}
+      className="authoritarian-div"
+      >
+        <h1 className="validate-promt">Välkommen {username}</h1>
+        <p className="validate-question">Skapa konto som</p>
+        <div className="validate-klasser-container" layout>
+          <Button
+          onClick={() => AddAuthoritarian("teachers")}
+          variant="contained"
+          style={{backgroundColor: "purple", color: "white", width: "5rem"}}
+          size="large"
+          >lärare</Button>
+          <Button
+          onClick={() => AddAuthoritarian("mentors")}
+          variant="contained"
+          style={{backgroundColor: "lightblue", color: "white", width: "5rem"}}
+
+          >mentor</Button>
+        </div>
+      </motion.div>
+    )
+  }
+
+  if (classChosen == false && userObject.status == "student") {
     console.log(classChosen);
     return (
       <div className="valUser">
@@ -117,8 +214,12 @@ function ValidateUser() {
     );
   }
   if (classChosen == true) {
-    return <Redirect to="/" />;
+    return <CircularProgress />;
   }
+  if (roleChosen == true) {
+     return <CircularProgress />;
+  }
+
 }
 
 export default ValidateUser;

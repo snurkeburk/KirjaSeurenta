@@ -11,17 +11,24 @@ body,html {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    float: right;
     align-items: center;
-    position: absolute;
-    margin-top: 0rem;
-    margin-left: 65vw;
-    margin-top: -4rem;
+    position: relative;
     border-style: none;
     border-width: 0.1px;
+    width: 9rem;
     border-color: lightgray;
-    padding: 0.5rem 5rem;
+    z-index: 0;
 }
 .c-fake-container p {
     font-size: 0.7rem;
     color: rgb(88, 88, 88);
+}
+
+@media screen and (max-width: 1000px) {
+    .c-fake-container{
+        position: relative;
+        margin-top: 0rem;
+    }
+
 }

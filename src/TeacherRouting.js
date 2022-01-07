@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./Search";
 import Books from "./Books";
+import { add, update, remove, read, readOne } from "./Crud";
 import Login from "./Login";
 import Home from "./Home";
 import Add from "./Add";
@@ -16,6 +17,8 @@ import TestClass from "./TestClass";
 import GetClassSize from "./GetClassSize";
 class TeacherRouting extends Component {
   render() {
+    console.log("loading teacherrouter")
+  
     //firebase.auth().signOut();
     //const auth = userObject.status;
     //console.log("THANK YOU LORD JESUS CHECK CONFIRMED")
@@ -28,7 +31,7 @@ class TeacherRouting extends Component {
       .doc("students")
       .collection("TE19D") // fixa den här routen så att den kollar efter typ id eller något annat
       .doc(username);
-    if (collection.id.length > 0) {
+    if (collection.id.length == username) {
       console.log(
         "TEACHERROUTING - User exists : " +
           collection.id +
@@ -38,7 +41,10 @@ class TeacherRouting extends Component {
     } else if (collection.id.length == 0) {
       console.log("TEACHERROUTING - User (student) does not exist!");
     }
-    if (collection.id.length > 0) {
+
+    
+    if (collection.id.length == 0) {
+      console.log("Loading teacher router...")
       return (
         <Router>
           <span>
@@ -72,7 +78,7 @@ class TeacherRouting extends Component {
           </span>
         </Router>
       );
-    } else if (collection.id.length == 0) {
+    } else if (collection.id.length > 0) {
       return (
         <Router>
           <span>
@@ -88,7 +94,22 @@ class TeacherRouting extends Component {
           </span>
         </Router>
       );
-    }
+    } else if (collection.id.length > 0){
+      return (
+        <Router>
+          <span>
+            <Switch>
+              <Route path="/hb4w7n5vb034vf3q4vtq34vtqv34tv3q4tvv87vw34">
+                <ValidateUser />
+              </Route>
+              <Route path="/">
+                <ValidateUser />
+              </Route>
+              <Route component={() => <Redirect to="/" />} />
+            </Switch>
+          </span>
+        </Router>
+      )}
   }
 }
 

@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import { Button } from "@material-ui/core";
 import Footer from "./Footer";
 import "./Class.css";
-import { AiFillDelete, AiOutlineConsoleSql } from "react-icons/ai";
+import { AiFillDelete, AiOutlineConsoleSql,AiFillCloseCircle, AiFillInfoCircle} from "react-icons/ai";
 import CreateFakeUser from "./CreateFakeUser";
 import { FaUserEdit } from "react-icons/fa";
 import Alert from "@material-ui/lab/Alert";
@@ -29,9 +29,10 @@ function TestClass() {
   const [open, setOpen] = useState(false);
   const { id } = useParams(); // id = klassnamnet
   const [students, setStudents] = useState([]);
-  const [marked, setMarked] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [infoDisplay, setInfoDisplay] = useState(true);
+  const [ReverseInfoDisplay,setReverseInfoDisplay] = useState(false);
   useEffect(() => {
     const getPostsFromFirebase = [];
     const sender = db
@@ -328,6 +329,18 @@ function TestClass() {
     }
   }
 
+  function funcInfoDisplay(){
+    if (infoDisplay){
+      setInfoDisplay(false);
+      setReverseInfoDisplay(true);
+    }
+    else {
+      setInfoDisplay(true);
+      setReverseInfoDisplay(false);
+    }
+  }
+
+
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -371,7 +384,7 @@ function TestClass() {
 
         <div className="totalContainer">
           <h1 className="class-title">{id}</h1>
-          <h5 className="class-title">{students.length}</h5>
+          <h5 className="class-title-size">{students.length}</h5>
           <div className="innerTotalContainer">
             <div className="class-utdeladeContainer">
               <p className="class-utdelade">0</p>
@@ -382,13 +395,36 @@ function TestClass() {
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
+        <CreateFakeUser />
           <Button size={"small"}>
             <AiFillDelete className="class-deleteClass" size={35} />
           </Button>
         </div>
-        <CreateFakeUser />
 
-        <div className="class-important-info">
+        <div className="class-big-container">
+          <div className="class-left-side">
+        <Collapse in={ReverseInfoDisplay}>
+        <motion.button
+             whileHover={{
+              scale: 1.2,
+              transition: { duration: 0.1 },
+            }}
+            onClick={() => funcInfoDisplay()}
+            className="button-info-open">
+              <AiFillInfoCircle size={40} className="info-open" />
+            </motion.button>
+        </Collapse>
+        <Collapse in={infoDisplay}>
+          <div className="class-important-info">
+            <motion.button
+             whileHover={{
+              scale: 1.2,
+              transition: { duration: 0.1 },
+            }}
+            onClick={() => funcInfoDisplay()}
+            className="button-info-close">
+              <AiFillCloseCircle size={30} className="info-close" />
+            </motion.button>
           <h1>Viktig information!</h1>
           <p>
             Vid ändringar av status krävs det att sidan uppdateras för att
@@ -423,20 +459,22 @@ function TestClass() {
           </p>
           <p>Ändringar går fortfarande igenom men visas ej tills att sidan har uppdaterats.</p>
         </div>
-        <div className="class-big-container">
-          <div className="class-left-side">
-            <div className="s-info">
-              <p>NR</p>
-              <p className="s-info-margin">BOK</p>
-              <p>STATUS</p>
-            </div>
+        </Collapse>
             <div className="student-books-container" layout>
               {books.length > 0 ? (
                 books.map((book) => (
                   /*<motion.div className="books" key={post.id}>*/
                   <div className="s-name" key={book.key}>
-                    <div className="s-name-nr">{book.id}</div>
-                    <div className="s-name-name">{book.name}</div>
+                    <div className="s-name-nr">
+                      <p className="info-bp">NR</p>
+                      {book.id}
+                      </div>
+                    <div className="s-name-name">
+                      <p className="info-bp">BOK</p>
+                      {book.name}
+                      </div>
+                      <div>
+                      <p className="info-bp">STATUS</p>
                     <motion.button
                       whileHover={{
                         scale: 1.1,
@@ -448,6 +486,7 @@ function TestClass() {
                       }}
                       className="student-status"
                     ></motion.button>
+                    </div>
                   </div>
                 ))
               ) : (

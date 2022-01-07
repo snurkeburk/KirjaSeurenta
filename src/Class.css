@@ -15,12 +15,24 @@ html {
 
 }
 
-.class-title {
+.class-title , .class-title-size {
   font-weight: 100;
   font-size: 2rem;
   margin-bottom: 4px;
 }
 
+.class-title-size {
+  text-align: center;
+  padding: 0.3rem;
+  font-weight: 400;
+  background-color: rgb(134, 169, 233);
+  border-radius: 50%;
+  width: 45px;
+  text-align: center;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+}
 .class-deleteClass {
   color: rgb(0, 0, 0);
   border-color: white;
@@ -33,7 +45,7 @@ html {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 25rem;
+  width: 40rem;
   margin: auto;
   margin-top: 2rem;
   border-radius: 2rem;
@@ -42,13 +54,13 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 6rem;
+  width: 5rem;
   border-right-style: solid;
   border-color: white;
   border-width: 2px;
   padding: 4px 0px;
-  padding-left: 4rem;
-  padding-right: 2rem;
+  padding-left: 2rem;
+  padding-right: 1rem;
 }
 .class-saknas,
 .class-utdelade,
@@ -78,6 +90,7 @@ html {
 .class-saknas-desc,
 .class-utdelade-desc {
   font-size: 0.8rem;
+  margin-right: 0.4rem;
 }
 
 .class-big-container {
@@ -179,8 +192,6 @@ html {
   border-color: rgba(0, 0, 0, 0.096);
   min-width: 300px;
 
-  /* TEMPORARY DUE TO INFO BOX */
-  margin-top: -15rem;
 }
 
 .class-right-side ul li {
@@ -208,6 +219,7 @@ html {
 }
 .s-name-name {
   text-align: left;
+  padding-left: 2rem;
   width: 100%;
 }
 
@@ -243,7 +255,7 @@ html {
 }
 
 .student-button {
-  width: 100%;
+  width: 100%tot;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -253,11 +265,10 @@ html {
 .class-important-info {
     border-right-style: none;
     border-width: 0.1px;
-    padding: 1rem 0rem;
     border-color: rgba(0, 0, 0, 0.096);
-    width: 25vw;
+    width: 23vw;
+    margin-bottom: 3rem;
     background-color: rgba(0, 0, 0, 0.048);
-    margin-left: 9rem;
     font-family: "Roboto", sans-serif;
     border-style: solid;
     border-radius: 2rem;
@@ -273,4 +284,94 @@ html {
 
 .class-important-info .important {
   font-style: italic;
+}
+.info-bp {
+  padding-bottom:2rem;
+  font-size: 1.1rem;
+  font-weight:300;
+}
+
+.button-info-close {
+  border-style: none;
+  float: right;
+}
+.button-info-open {
+  border-style: none;
+  color: rgb(117, 153, 200);
+  float: right;
+}
+.info-close {
+  color: rgba(39, 39, 39, 0.911);
+}
+
+@media screen and (max-width: 1000px) {
+.student {
+  width: 10rem;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+}
+
+  .s-name {
+    width: 70vw;
+    font-size: 1.5rem;
+    font-weight:500;
+  }
+  .info-bp {
+    padding-bottom:2rem;
+    font-size: 1.5rem;
+    font-weight:300;
+  }
+  .student-status {
+    width: 73.7px;
+    height: 2rem;
+  }
+  .totalContainer {
+    background-color: rgba(128, 128, 128, 0.179);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 30rem;
+    margin: auto;
+    margin-top: 2rem;
+  }
+  .student-books-container {
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.6rem;
+    padding: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.897);
+    padding: 2rem 0rem;
+    z-index: 1000;
+    left: 0;
+    width: 100vw;
+
+  }
+  .class-important-info {
+    width: 95%;
+
+  }
+  .class-big-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .class-left-side {
+    width: 80vw;
+  }
+
+  .w-cont {
+    width: 80vw;
+  }
+  .class-right-side {
+    width: 85%;
+    justify-content: center;
+    align-items: center;
+    border-style: none;
+  }
+
 }

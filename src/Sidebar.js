@@ -1,8 +1,8 @@
 /* Copyright (C) Nils Blomberg & Isak Anderson - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-* Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
-*/
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
+ */
 
 import React, { useEffect, useState } from "react";
 import firebase from "firebase";
@@ -24,9 +24,9 @@ import "./Sidebar.css";
 import "./SidebarOption.css";
 import App from "./App";
 import { motion } from "framer-motion";
-
+import { role } from "./ValidateUser";
 import { AiOutlineMenu } from "react-icons/ai";
-import { userObject } from "./App";
+import { userObject, db } from "./App";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import {
   DatePicker,
@@ -40,6 +40,48 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
 function Sidebar() {
+  const [displayStatus, setDisplayStatus] = useState([]);
+  getName();
+  async function getName() {
+    const mentorRef = db.collection("users").doc("mentors").collection("data");
+
+    const snapshot = await mentorRef.where("name", "==", "Isak Anderson").get();
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      console.log(userObject.email == doc.email);
+      console.log(doc.data().email + " " + userObject.email);
+      if (doc.data().email == userObject.email) {
+        setDisplayStatus("Mentor");
+      }
+    });
+
+    const teacherRef = db
+      .collection("users")
+      .doc("teachers")
+      .collection("data");
+
+    const ssnapshot = await teacherRef
+      .where("name", "==", "Isak Anderson")
+      .get();
+    if (ssnapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+
+    ssnapshot.forEach((docc) => {
+      console.log(docc.id, "=>", docc.data());
+      console.log(userObject.email == docc.data().email);
+      if (docc.data().email == userObject.email) {
+        setDisplayStatus("Lärare");
+      }
+    });
+  }
+
   return (
     <div className="big-sidebar">
       <div className="sidebar">
@@ -71,7 +113,9 @@ function Sidebar() {
             />
             <p className="username">
               {firebase.auth().currentUser.displayName}
+              <p className="status">{displayStatus}</p>
             </p>
+            <p className="status">{}</p>
             <Button
               style={{ backgroundColor: "#FFF" }}
               variant="contained"

@@ -18,37 +18,61 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import firebase from "firebase";
 import { FieldValue } from "./App";
-
-async function AddClassToTeacher(formData) {
-  let username = firebase.auth().currentUser.displayName;
-  const collection = db
-    .collection("users")
-    .doc("teachers")
-    .collection(username)
-    .doc("data");
-
-  if (formData.includes("te")) {
-    //lägger till en teknikklass, samma för de under.
-
-    const addClass = await collection.update({
-      classes: FieldValue.arrayUnion(formData),
-    });
-  } else if (formData.includes("es")) {
-    const addClass = await collection.update({
-      classes: FieldValue.arrayUnion(formData),
-    });
-  } else if (formData.includes("ee")) {
-    const addClass = await collection.update({
-      classes: FieldValue.arrayUnion(formData),
-    });
-
-    console.log("formdata: " + formData);
-  } else {
-    console.log("Invalid classname!");
-  }
-}
+import { AlertTitle } from "@material-ui/lab";
 
 function Add() {
+  const [open, setOpen] = React.useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertTitleText, setAlertTitleText] = useState("");
+  const [alertResultText, setAlertResultText] = useState("Klassen har lagts till!")
+  const [expectedError, setExpectedError] = useState([]);
+  async function AddClassToTeacher(formData) {
+    let username = firebase.auth().currentUser.displayName;
+    let _id = firebase.auth().currentUser.uid;
+    console.log("adding to doc: " + _id);
+    const collection = db
+      .collection("users")
+      .doc("teachers")
+      .collection("data")
+      .doc(_id);
+
+    const collectionMentor = db
+      .collection("users")
+      .doc("mentors")
+      .collection("data")
+      .doc(_id);
+
+    if (
+      formData.includes("TE") ||
+      formData.includes("ES") ||
+      formData.includes("EE")
+    ) {
+      //lägger till en teknikklass, samma för de under.
+      const addClass = await collection
+        .update({
+          classes: FieldValue.arrayUnion(formData),
+        })
+        .then(() => setOpen(true))
+        .catch((err) => setExpectedError(err));
+
+      if (expectedError) {
+        const addClassMentor = await collectionMentor
+          .update({
+            classes: FieldValue.arrayUnion(formData),
+          })
+          .then(() => setOpen(true));
+      }
+      setAlertType("success");
+      setAlertTitleText("");
+      setAlertResultText("Klassen har lagts till!")
+    } else {
+      setAlertType("error")
+      setAlertTitleText("Error")
+      setAlertResultText("Ett fel uppstod, försök igen!")
+      setOpen(true);
+      console.log("Invalid classname!");
+    }
+  }
   const sparaKlass = (event) => {
     event.preventDefault();
     const elementsArray = [...event.target.elements];
@@ -66,11 +90,6 @@ function Add() {
     console.log(formDataClassName);
 
     AddClassToTeacher(formDataClassName);
-
-    setTimeout(() => {
-      setOpen(true);
-    }, 500);
-    setOpen(false);
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -83,12 +102,13 @@ function Add() {
   }));
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   return (
     <div className="add">
       <Sidebar />
       <Collapse in={open}>
         <Alert
+          severity={alertType}
+          variant="filled"
           action={
             <IconButton
               aria-label="close"
@@ -102,7 +122,8 @@ function Add() {
             </IconButton>
           }
         >
-          Klassen har lagts till!
+          <AlertTitle>{alertTitleText}</AlertTitle>
+          {alertResultText}
         </Alert>
       </Collapse>
 

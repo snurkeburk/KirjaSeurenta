@@ -27,7 +27,6 @@ export class User {
     this.email = email;
     this.className = className;
     this.classes = classes;
-
     this.books = {};
     this.setUserStatus();
     this.userExists();
@@ -54,9 +53,9 @@ export class User {
       //student
       this.status = "student";
       //this.status = "teacher";
-    } else if (splitEmail.includes("ntig.se")) {
+    } else if (splitEmail.includes("ntig.se") || splitEmail.includes("gmail.com")) {
       //teacher
-      this.status = "teacher";
+      this.status = "teacher-mentor";
       //this.status = "student";
     } else {
       this.status = "unauthorized";
@@ -134,16 +133,18 @@ export class User {
       this.name,
       {
         //'test': 'user.js l43'
-        id: this.id,
+        id: this.id+"&"+this.status,
         //'matte50004': 'User.js'
 
         email: this.email,
         name: this.name,
         status: this.status,
         books: this.books,
-        nr: "1",
-      }
-    );
+      },
+     {
+
+     }
+    ).then(()=>window.location.reload(true));
 
     add(
       "users",
@@ -169,22 +170,23 @@ export class User {
     console.log("ID:s : ", read.ids);
     console.log("Current user id: " + this.id);
 
-    if (/*read.ids === undefined ||*/ !read.ids.includes(this.id)) {
+    if (/*read.ids === undefined ||*/ !read.ids.includes(this.id+"&"+this.status)) {
       console.log("User does not exist yet");
       this.allIds = read.ids;
       this.allIds.push(this.id);
       this.firstLogin = true;
-      console.log("User does not exist, creating now");
 
       //console.log(this.allIds);
 
       if (this.status == "teacher") {
-        this.AddTeacher();
+        //this.AddTeacher();
       }
+
 
       //this.addUser();
     } else {
       console.log("User does exist");
+      
       this.firstLogin = false;
       //console.log("Firstlogin in class: " + this.firstLogin);
     }

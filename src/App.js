@@ -6,6 +6,7 @@
 
 import React, { Component } from "react";
 import firebase from "firebase";
+import TestRouter from "./TestRouter"
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./App.css";
 import Sidebar from "./Sidebar";
@@ -60,17 +61,21 @@ class App extends Component {
   };
 
   componentDidMount = () => {
+    console.log("user")
     firebase.auth().onAuthStateChanged((user) => {
+      console.log("user", user)
       this.setState({ isSignedIn: !!user });
-      //console.log("user", user)
       if (user !== null) {
+        console.log("adding user")
         //adds user to database if logged in
         userObject = new User(
           user.displayName,
           user.uid,
           user.email,
-          user.status
+          user.status,
+          user.marker
         );
+
       }
     });
   };
@@ -78,7 +83,7 @@ class App extends Component {
     if (this.state.isSignedIn) {
       return (
         <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
-          <TeacherRouting />
+          <TestRouter />
         </motion.div>
       );
     } else {
@@ -115,7 +120,9 @@ class App extends Component {
   }
 
   render() {
-    return <div className="app">{this.getContent()}</div>;
+    return (
+    <div className="app">{this.getContent()}</div>
+    );
   }
 }
 

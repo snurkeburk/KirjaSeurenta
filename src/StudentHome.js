@@ -31,21 +31,15 @@ import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
 
 function Home() {
-  console.log("loading home...")
+  console.log("loading student home...")
   console.log(userObject.status)
+
   //console.log("Home userObject: ");
   //console.log(userObject);
   const controller = new AbortController();
   const signal = controller.signal;
   const [loading, setLoading] = useState(true);
-  const [loadingBooks, setLoadingBooks] = useState(true);
-  const [loadingStudents, setLoadingStudents] = useState(true);
-  const [loadingTeachers, setLoadingTeachers] = useState(true);
-  const [students, setStudents] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [classCount, setClassCount] = useState([]);
   const [books, setBooks] = useState([]);
-  const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
   
@@ -79,44 +73,6 @@ function Home() {
       opacity: 1,
     },
   };
-
-  useEffect(() => {
-    async function GetTeachersClasses() {
-      const getPostsFromFirebase = [];
-      const collection = db
-        .collection("users")
-        .doc("teachers")
-        .collection("data")
-        .doc(firebase.auth().currentUser.uid);
-
-      const doc = await collection.get();
-
-      if (!doc.exists) {
-        console.log("Error!");
-        const getPostsFromFirebase = [];
-        const collection = db
-          .collection("users")
-          .doc("mentors")
-          .collection("data")
-          .doc(firebase.auth().currentUser.uid);
-  
-          const doc = await collection.get();
-        return doc.data();
-      } else {
-        return doc.data();
-      }
-    }
-
-      GetTeachersClasses().then(function (res) {
-        let classes = res.classes;
-        setPosts(classes);
-        setLoadingBooks(false);
-      });
-
-    // return cleanup function
-    //return () => sender();
-  }, [loadingStudents]);
-
   useEffect(() => {
     async function sender() {
       const readCollection = db
@@ -182,107 +138,83 @@ function Home() {
           });
 
           setIds(idsArray);
-          setStudent(false);
-          setLoadingBooks(false);
+          setLoading(false);
         } else {
           console.log("res.books är null");
         }
       });
-    }else {setLoadingBooks(false)}
-  }, [loadingBooks]);
+    }else {setLoading(false)}
+  }, [loading]);
 
-  signal.addEventListener("abort", () => {
-    console.log("aborted!");
-  });
 
-  if (loadingBooks) {
+ 
+
+  if (loading) {
     return (
       <div>
-        <Sidebar />
+        <SidebarStudent />
         <CircularProgress className="loading" />
       </div>
     );
   }
 
- 
-    //teacher view
     return (
-      <div className="home">
-        <Sidebar />
-        <div className="upper-container">
-          <div className="total">
-            <p>Totalt:</p>
-          </div>
-          <SmallAdd />
-        </div>
-        <motion.div
-          className="home-container"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <div className="left-side">
-            <p>Sök efter bok</p>
-          </div>
-          <motion.div className="right-side">
-            <motion.div
-              className="klasser-container"
-              initial="hidden"
-              animate="visible"
-              variants={containerVariants}
-              layout
-            >
-              {posts.length > 0 ? (
-                posts.map((post) => (
-                  <motion.div
-                    variants={childVariants}
-                    className="klasser"
-                    key={post.key}
-                    whileHover={{
-                      scale: 1.03,
-                      transition: { duration: 0.1 },
-                    }}
-                  >
-                    <Link className="klass" to={"klass/" + post}>
-                      {post}
-                    </Link>
-
-                    <div className="klassEleverContainer">
-                      <div className="klassEleverStatus">
-                        <p className="utdelade">30</p>
-                        <p className="saknas">1</p>
-                      </div>
-                      <div className="klassEleverAntal">
-                      {post}
-                      </div>
+      <div className="student-home-container">
+        <SidebarStudent />
+        <div className="student-s-container">
+          <motion.div className="student-left-side">
+            <motion.div className="böcker-container" layout>
+              {books.length > 0 ? (
+                books.map((post, index) => (
+                  <motion.div className="bokContainer">
+                    <motion.div
+                      className="böcker"
+                      style={{ backgroundImage: bookImages[index] }}
+                      style={{
+                        backgroundImage: bookImages[index],
+                        backgroundSize: "cover",
+                        /*backgroundSize: 'cover' */
+                      }}
+                      key={post.key}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.1 },
+                      }}
+                    >
+                      <a
+                        className="bok"
+                        href="#" /* style={{backgroundColor: 'green'}} */
+                      >
+                        {post}
+                      </a>
+                    </motion.div>
+                    <div className="bokId">
+                      <p>id: {bookIds[index]} </p>
                     </div>
                   </motion.div>
                 ))
               ) : (
                 <div className="not-found">
-                  <h4>Inga klasser tillagda</h4>
-                  <Link className="link" to="/add">
-                    Lägg till en klass
-                  </Link>
+                  <h4>Inga böcker tillagda</h4>
                 </div>
               )}
 
               {/*
                         klasser.map(klass=>{
-                        return(
+                          return(
                             <div className="blog-container">
                             <h4>{klass.namn}</h4>
-
+                            
                             </div>
-                        )
-                        })
-                    */}
+                            )
+                          })
+                        */}
             </motion.div>
-            <Footer />
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     );
-  
-}
+  } 
+
 
 export default Home;
