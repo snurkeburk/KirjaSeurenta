@@ -12,10 +12,10 @@
 
 body,
 html {
-
 }
 
-.class-title , .class-title-size {
+.class-title,
+.class-title-size {
   font-weight: 100;
   font-size: 2rem;
   margin-bottom: 4px;
@@ -31,7 +31,6 @@ html {
   text-align: center;
   color: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-
 }
 .class-deleteClass {
   color: rgb(0, 0, 0);
@@ -191,7 +190,6 @@ html {
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
   min-width: 300px;
-
 }
 
 .class-right-side ul li {
@@ -261,21 +259,20 @@ html {
   justify-content: space-evenly;
 }
 
-
 .class-important-info {
-    border-right-style: none;
-    border-width: 0.1px;
-    border-color: rgba(0, 0, 0, 0.096);
-    width: 23vw;
-    margin-bottom: 3rem;
-    background-color: rgba(0, 0, 0, 0.048);
-    font-family: "Roboto", sans-serif;
-    border-style: solid;
-    border-radius: 2rem;
-    padding: 0.9rem 0.8rem;
-  }
-  .class-important-info h1 {
-    font-weight: 100;
+  border-right-style: none;
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  width: 23vw;
+  margin-bottom: 3rem;
+  background-color: rgba(0, 0, 0, 0.048);
+  font-family: "Roboto", sans-serif;
+  border-style: solid;
+  border-radius: 2rem;
+  padding: 0.9rem 0.8rem;
+}
+.class-important-info h1 {
+  font-weight: 100;
 }
 
 .class-important-info p {
@@ -286,9 +283,9 @@ html {
   font-style: italic;
 }
 .info-bp {
-  padding-bottom:2rem;
+  padding-bottom: 2rem;
   font-size: 1.1rem;
-  font-weight:300;
+  font-weight: 300;
 }
 
 .button-info-close {
@@ -304,23 +301,33 @@ html {
   color: rgba(39, 39, 39, 0.911);
 }
 
-@media screen and (max-width: 1000px) {
-.student {
-  width: 10rem;
-  padding-left: 0;
-  padding-right: 0;
-  margin: 0;
+.all-books-sel {
+  border-style: none;
+  width: 200px;
+  font-weight: 100;
+  font-size: 1.3rem;
+  background-color: rgba(194, 194, 194, 0.361);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
 }
+
+@media screen and (max-width: 1000px) {
+  .student {
+    width: 10rem;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+  }
 
   .s-name {
     width: 70vw;
     font-size: 1.5rem;
-    font-weight:500;
+    font-weight: 500;
   }
   .info-bp {
-    padding-bottom:2rem;
+    padding-bottom: 2rem;
     font-size: 1.5rem;
-    font-weight:300;
+    font-weight: 300;
   }
   .student-status {
     width: 73.7px;
@@ -348,11 +355,9 @@ html {
     z-index: 1000;
     left: 0;
     width: 100vw;
-
   }
   .class-important-info {
     width: 95%;
-
   }
   .class-big-container {
     width: 100%;
@@ -373,5 +378,4 @@ html {
     align-items: center;
     border-style: none;
   }
-
 }
