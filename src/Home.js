@@ -29,6 +29,7 @@ import { ar } from "date-fns/locale";
 import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
+import { AddBookToStudent } from "./AddBook";
 
 function Home() {
   console.log("loading home...")
@@ -111,6 +112,7 @@ function Home() {
         let classes = res.classes;
         setPosts(classes);
         setLoadingBooks(false);
+        //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
       });
 
     // return cleanup function
