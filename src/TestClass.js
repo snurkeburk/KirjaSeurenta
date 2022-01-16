@@ -33,6 +33,7 @@ import TeacherRouting from "./TeacherRouting";
 import { AddBookToStudent } from "./AddBook";
 import { useCookies, getCookie } from "react-cookie";
 import { collection, query, where, getDocs } from "firebase";
+import { RemoveClassFromTeacher } from "./DeleteClass";
 
 function TestClass() {
   const [open, setOpen] = useState(false);
@@ -531,7 +532,15 @@ function TestClass() {
             </div>
           </div>
           <CreateFakeUser />
-          <Button size={"small"}>
+          <Button
+            size={"small"}
+            onClick={() =>
+              RemoveClassFromTeacher(
+                firebase.auth().currentUser.displayName,
+                id
+              )
+            }
+          >
             <AiFillDelete className="class-deleteClass" size={35} />
           </Button>
         </div>
