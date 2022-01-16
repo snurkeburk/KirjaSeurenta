@@ -78,17 +78,39 @@ function Home() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D") // måste ändras så den kollar på ex active_class elr något
-        .doc(username); // TODO: platsen för books har flyttats till .doc(username).collection("books");
-      const doc = await readCollection.get();
+        .collection("TE19D") 
+        .doc("Nils Blomberg")
+        .collection('items')
+
+      const snapshot = await readCollection.get();
+
+      if (snapshot.empty) {
+        console.log("wallah det här borde inte vara så här")
+        return;
+      }
+
+      let bookArray = [];
+
+      snapshot.forEach(doc =>{
+        console.log(doc.id, '=>', doc.data())
+        bookArray.push(doc.data());
+      })
+
+      return bookArray;
+
       const getStudentsFromFirebase = [];
+
+      /*
+      console.log(doc);
 
       if (!doc.exists) {
         console.log(username);
         console.log("Error");
       } else {
+        console.log(doc.data());
         return doc.data();
       }
+      */
     }
     async function returnBookTitle(arr) {
       let bookTitleArray = [];
@@ -118,12 +140,24 @@ function Home() {
     
     if (userObject.status == "student") {
       sender().then(function (res) {
-        if (res.books != null && res.books != undefined) {
+        if (res != null && res != undefined) {
           // hela skiten här e knullad ska fixa det nån annan gång
-          const booksArray = Object.keys(res.books);
+          //const booksArray = Object.keys(res.books);
+          let booksArray = [];
+          let idsArray = []
 
-          const idsArray = Object.values(res.books);
+          res.forEach(book => {
+            booksArray.push(book.name);
+            idsArray.push(book.nr);
+          });
 
+          //const idsArray = Object.values(res.books);
+          //const idsArray  = res.nr;
+
+          console.log(booksArray);
+          console.log(idsArray);
+
+          
           let bookTitleArray = [];
           let bookImageArray = [];
 

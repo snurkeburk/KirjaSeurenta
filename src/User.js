@@ -39,11 +39,27 @@ export class User {
     return Object.entries(this.books);
   }
 
+  /*
   addBookToUser(book, id) {
     // Adds a book to a user
     this.books[book] = id;
     updateField("users", this.className, this.name, "books", this.books);
   }
+  */
+
+  /*
+  async addBookToUser(book, id) {
+    const data = {
+      id: id,
+      name: book,
+      status: 'green',
+      type: 'book'
+    }
+
+    await db.collection('users').doc('students').collection(this.className).doc(this.name).collection('items').set(data);
+
+  }
+  */
 
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
@@ -139,7 +155,7 @@ export class User {
         email: this.email,
         name: this.name,
         status: this.status,
-        books: this.books,
+        /*books: this.books,*/
       },
      {
 
