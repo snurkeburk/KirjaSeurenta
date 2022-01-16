@@ -24,6 +24,7 @@ import Collapse from "@material-ui/core/Collapse";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
 import TeacherRouting from "./TeacherRouting";
+import { RemoveClassFromTeacher } from './DeleteClass';
 
 function TestClass() {
   const [open, setOpen] = useState(false);
@@ -396,7 +397,9 @@ function TestClass() {
             </div>
           </div>
         <CreateFakeUser />
-          <Button size={"small"}>
+          <Button size={"small"}
+          onClick = {() => RemoveClassFromTeacher(firebase.auth().currentUser.displayName, id)}>
+            
             <AiFillDelete className="class-deleteClass" size={35} />
           </Button>
         </div>
