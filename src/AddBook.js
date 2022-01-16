@@ -1,23 +1,18 @@
-import {db} from './App';
-
+import { db } from "./App";
 
 export async function AddBookToStudent(book, id, className, student) {
+  const res = await db
+    .collection("users")
+    .doc("students")
+    .collection(className)
+    .doc(student)
+    .collection("items")
+    .add({
+      nr: id,
+      name: book,
+      status: "green",
+      type: "book",
+    });
 
-    const res = await db
-        .collection("users")
-        .doc("students")
-        .collection(className)
-        .doc(student)
-        .collection("items")
-        .add({
-           id: id ,
-           name: book,
-           status: 'green',
-           type: 'book'
-
-        })
-       
-
-    //console.log(res);
-
+  //console.log(res);
 }

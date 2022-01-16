@@ -4,7 +4,7 @@
  * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
 
-import { CircularProgress } from "@material-ui/core";
+import { Checkbox, CircularProgress } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
 import firebase from "firebase";
 import Crud from "./Crud";
@@ -21,6 +21,7 @@ import {
   AiFillCloseCircle,
   AiFillInfoCircle,
 } from "react-icons/ai";
+import { BiBookAdd, BiBookAlt } from "react-icons/bi";
 import CreateFakeUser from "./CreateFakeUser";
 import { FaUserEdit } from "react-icons/fa";
 import Alert from "@material-ui/lab/Alert";
@@ -29,6 +30,9 @@ import Collapse from "@material-ui/core/Collapse";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
 import TeacherRouting from "./TeacherRouting";
+import { AddBookToStudent } from "./AddBook";
+import { useCookies, getCookie } from "react-cookie";
+import { collection, query, where, getDocs } from "firebase";
 
 function TestClass() {
   const [open, setOpen] = useState(false);
@@ -41,7 +45,39 @@ function TestClass() {
   const [allBooks, setAllBooks] = useState([]);
   const [userSel, setUserSel] = useState([]);
   const [showID, setShowID] = useState("none");
+  const [count, setCount] = useState([]);
   const [showAllBooks, setShowAllBooks] = useState("block");
+  const [selBook, setSelBook] = useState([]);
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [timerDisplay, setTimerDisplay] = useState([]);
+  const [counter, setCounter] = useState([]);
+  const [_c, set_c] = useState(false);
+  let username = firebase.auth().currentUser.displayName;
+  useEffect(() => {
+    if (cookies.user) {
+      let c = cookies.user;
+      let _c = c.split("%")[1];
+      console.log("---PRINTING SPLIT COOKIE---");
+      console.log(_c);
+      if (_c == "notseeninfo") {
+        setInfoDisplay(true);
+        setReverseInfoDisplay(false);
+        set_c(false);
+      } else {
+        setInfoDisplay(false);
+        setReverseInfoDisplay(true);
+        set_c(true);
+      }
+    }
+  });
+  useEffect(() => {
+    if (cookies.user == username) {
+      console.log("COOKIE EXISTS");
+    } else {
+      console.log("Cookie does not exist");
+    }
+  });
+
   useEffect(() => {
     setShowID("none");
     const getPostsFromFirebase = [];
@@ -72,6 +108,7 @@ function TestClass() {
                   key: doc.id, // id från firebase
                 });
               });
+              console.log(getBookFromFirebase.length);
               for (let k = 0; k < getBookFromFirebase.length; k++) {
                 if (getBookFromFirebase[k].status == "red") {
                   console.log(
@@ -99,7 +136,11 @@ function TestClass() {
                 checkMarked(getPostsFromFirebase[i].name, true);
               } else {
                 console.log(getPostsFromFirebase[i].name + " green!");
-                checkMarked(getPostsFromFirebase[i].name, false);
+                checkMarked(
+                  getPostsFromFirebase[i].name,
+                  false,
+                  getBookFromFirebase.length
+                );
               }
             });
         }
@@ -111,12 +152,12 @@ function TestClass() {
     return () => sender();
   }, [loadingStudents]);
 
-  function checkMarked(user, marked) {
-    console.log(user + " marked: " + marked);
+  function checkMarked(user, marked, count) {
+    console.log(user + " marked: " + marked + count);
     if (marked) {
       setMarkedUser(user);
     } else if (!marked) {
-      setUnMarkedUser(user);
+      setUnMarkedUser(user, count);
     }
   }
 
@@ -126,12 +167,19 @@ function TestClass() {
       marker: "red",
     });
   }
-  function setUnMarkedUser(user) {
-    console.log(user + " WAS NOT MARKED!");
+  function setUnMarkedUser(user, count) {
+    if (count > 0) {
+      console.log(user + " WAS NOT MARKED!");
+      db.collection("users").doc("students").collection(id).doc(user).update({
+        marker: "green",
+      });
+    } else {
+      console.log(user + " WAS MARKED YELLOW!");
 
-    db.collection("users").doc("students").collection(id).doc(user).update({
-      marker: "green",
-    });
+      db.collection("users").doc("students").collection(id).doc(user).update({
+        marker: "yellow",
+      });
+    }
   }
   useEffect(() => {
     const sender = db
@@ -306,7 +354,6 @@ function TestClass() {
           });
 
           setBooks(getBooksFromFirebase);
-
           if (books.length == 0) {
             db.collection("users")
               .doc("students")
@@ -353,17 +400,54 @@ function TestClass() {
     let formDataID = formData.namn.toUpperCase();
 
     console.log(formDataID);
+    AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
 
   function funcInfoDisplay() {
-    if (infoDisplay) {
+    if (cookies.user && !_c) {
+      console.log("cookie exists");
+      setCookie("user", username + "%" + "seeninfo", {
+        path: "/",
+      });
+    } else if (cookies.user && _c) {
+      console.log("cookie exists");
+      setCookie("user", username + "%" + "notseeninfo", {
+        path: "/",
+      });
+    } else {
+      console.log("cookie doesnt exist");
+
+      if (infoDisplay) {
+        setInfoDisplay(false);
+        setReverseInfoDisplay(true);
+      } else {
+        setInfoDisplay(true);
+        setReverseInfoDisplay(false);
+      }
+    }
+    /*if (infoDisplay) {
       setInfoDisplay(false);
       setReverseInfoDisplay(true);
     } else {
       setInfoDisplay(true);
       setReverseInfoDisplay(false);
-    }
+    }*/
   }
+
+  async function getSelected() {
+    let amountSel = 0;
+    const citiesRef = db
+      .collection("users")
+      .doc("students")
+      .collection("TE19D");
+    const snapshots = await citiesRef.where("selected", "==", true).get();
+    snapshots.forEach((selDoc) => {
+      console.log(selDoc.data());
+      amountSel++;
+    });
+    console.log(amountSel);
+  }
+
   function addBookDropdown(user) {
     const sender = db.collection("books").onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -379,10 +463,18 @@ function TestClass() {
     });
   }
 
+  function checkBox(name) {
+    console.log(name);
+    db.collection("users").doc("students").collection(id).doc(name).update({
+      selected: true,
+    });
+  }
+
   function addBookID(title) {
     console.log(title + userSel);
     setShowID("block");
     setShowAllBooks("none");
+    setSelBook(title);
   }
   if (loadingStudents) {
     <Sidebar />;
@@ -469,6 +561,7 @@ function TestClass() {
                   className="button-info-close"
                 >
                   <AiFillCloseCircle size={30} className="info-close" />
+                  <p>{timerDisplay}</p>
                 </motion.button>
                 <h1>Viktig information!</h1>
                 <p>
@@ -511,21 +604,57 @@ function TestClass() {
                 </p>
               </div>
             </Collapse>
+            <motion.div className="all-books-container">
+              {allBooks.length > 0 ? (
+                allBooks.map((book) => (
+                  /*<motion.div className="books" key={post.id}>*/
+                  <motion.div
+                    className="s-all-books"
+                    key={book.key}
+                    style={{ display: showAllBooks }}
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                  >
+                    <button
+                      className="all-books-sel"
+                      onClick={() => addBookID(book.title)}
+                    >
+                      {book.title}
+                    </button>
+                  </motion.div>
+                ))
+              ) : (
+                <p></p>
+              )}
+              <div className="sel-ID" style={{ display: showID }}>
+                <p>Ange boknummer:</p>
+                <form onSubmit={sparaID} autocomplete="off">
+                  <motion.input
+                    className="input"
+                    type="text"
+                    id="namn"
+                    required
+                    placeholder="Skriv här..."
+                    whileFocus={{ scale: 1.2 }}
+                  ></motion.input>
+
+                  <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
+                </form>
+              </div>
+            </motion.div>
             <div className="student-books-container" layout>
+              <div className="info-bp-container">
+                <p className="info-bp">NR</p>
+                <p className="info-bp">BOK</p>
+                <p className="info-bp">STATUS</p>
+              </div>
               {books.length > 0 ? (
                 books.map((book) => (
                   /*<motion.div className="books" key={post.id}>*/
                   <div className="s-name" key={book.key}>
-                    <div className="s-name-nr">
-                      <p className="info-bp">NR</p>
-                      {book.nr}
-                    </div>
-                    <div className="s-name-name">
-                      <p className="info-bp">BOK</p>
-                      {book.name}
-                    </div>
+                    <div className="s-name-nr">{book.nr}</div>
+                    <div className="s-name-name">{book.name}</div>
                     <div>
-                      <p className="info-bp">STATUS</p>
                       <motion.button
                         whileHover={{
                           scale: 1.1,
@@ -554,42 +683,6 @@ function TestClass() {
           </div>
 
           <div className="class-right-side">
-            <div className="all-books-container">
-              {allBooks.length > 0 ? (
-                allBooks.map((book) => (
-                  /*<motion.div className="books" key={post.id}>*/
-                  <div
-                    className="s-all-books"
-                    key={book.key}
-                    style={{ display: showAllBooks }}
-                  >
-                    <button
-                      className="all-books-sel"
-                      onClick={() => addBookID(book.title, user)}
-                    >
-                      {book.title}
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <h1>Inga böcker</h1>
-              )}
-              <div className="sel-ID" style={{ display: showID }}>
-                <p>Ange boknummer:</p>
-                <form onSubmit={sparaID} autocomplete="off">
-                  <motion.input
-                    className="input"
-                    type="text"
-                    id="namn"
-                    required
-                    placeholder="Skriv här..."
-                    whileFocus={{ scale: 1.2 }}
-                  ></motion.input>
-
-                  <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
-                </form>
-              </div>
-            </div>
             <ul>
               <li>
                 <motion.div className="cont">
@@ -597,10 +690,6 @@ function TestClass() {
                     students.map((post) => (
                       <div className="w-cont">
                         <motion.div className="students">
-                          <Button onClick={() => addBookDropdown(post.name)}>
-                            Lägg till
-                          </Button>
-
                           <p
                             user={post.name}
                             key={post.key}
@@ -608,20 +697,42 @@ function TestClass() {
                           >
                             {post.name}
                           </p>
-
+                          <Button
+                            onClick={() => addBookDropdown(post.name)}
+                            className="show-books"
+                            size="small"
+                            variant=""
+                            style={{
+                              backgroundColor: "white",
+                              borderRadius: "2rem",
+                              fontSize: "1.1rem",
+                              width: "20px",
+                              padding: "0",
+                            }}
+                          >
+                            <BiBookAdd />
+                            <Checkbox
+                              label="checkbox"
+                              value={post.key}
+                              key={post.key}
+                              onChange={() => checkBox(post.name)}
+                            />
+                          </Button>
                           <Button
                             onClick={() => showBooks(post.name)}
                             className="show-books"
                             size="small"
-                            variant="contained"
+                            variant=""
                             style={{
                               backgroundColor: "white",
                               borderRadius: "2rem",
-                              fontSize: "1.4rem",
+                              fontSize: "1.1em",
                               width: "20px",
+                              marginRight: "50px",
+                              padding: "0",
                             }}
                           >
-                            <FaUserEdit />
+                            <BiBookAlt />
                           </Button>
                           <button
                             style={{
