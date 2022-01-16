@@ -4,7 +4,7 @@
  * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
  */
 
-import { Button, createGenerateClassName } from "@material-ui/core";
+import { Button, Collapse, createGenerateClassName } from "@material-ui/core";
 import { db, username } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
@@ -18,6 +18,10 @@ import { add, update, remove, read, readOne } from "./Crud";
 import { Dock, SettingsInputCompositeTwoTone } from "@material-ui/icons";
 import { AnimateSharedLayout } from "framer-motion";
 import { CircularProgress } from "@material-ui/core";
+import Popup from "reactjs-popup";
+import { CookiesProvider } from "react-cookie";
+import { useCookies, getCookie } from "react-cookie";
+
 import Add from "./Add";
 import { userExists } from "./User";
 import randomColor from "randomcolor";
@@ -30,15 +34,17 @@ import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
 import { AddBookToStudent } from "./AddBook";
+import "reactjs-popup/dist/index.css";
 
 function Home() {
-  console.log("loading home...")
-  console.log(userObject.status)
+  console.log("loading home...");
+  console.log(userObject.status);
   //console.log("Home userObject: ");
   //console.log(userObject);
   const controller = new AbortController();
   const signal = controller.signal;
   const [loading, setLoading] = useState(true);
+  const [chosenNoCookies, setChosenNoCookies] = useState(false);
   const [loadingBooks, setLoadingBooks] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [loadingTeachers, setLoadingTeachers] = useState(true);
@@ -49,8 +55,19 @@ function Home() {
   const [student, setStudent] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-  
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [showCookies, setShowCookies] = useState(false);
+  const [cookieStyle, setCookieStyle] = useState([]);
   let username = firebase.auth().currentUser.displayName;
+
+  useEffect(() => {
+    console.log(cookies.user);
+  });
+  function handleCookie() {
+    setCookie("user", username + "%" + "notseeninfo", {
+      path: "/",
+    });
+  }
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -100,20 +117,20 @@ function Home() {
           .doc("mentors")
           .collection("data")
           .doc(firebase.auth().currentUser.uid);
-  
-          const doc = await collection.get();
+
+        const doc = await collection.get();
         return doc.data();
       } else {
         return doc.data();
       }
     }
 
-      GetTeachersClasses().then(function (res) {
-        let classes = res.classes;
-        setPosts(classes);
-        setLoadingBooks(false);
-        //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
-      });
+    GetTeachersClasses().then(function (res) {
+      let classes = res.classes;
+      setPosts(classes);
+      setLoadingBooks(false);
+      //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
+    });
 
     // return cleanup function
     //return () => sender();
@@ -160,8 +177,7 @@ function Home() {
 
       return [bookTitleArray, bookImageArray];
     }
-    
-    
+
     if (userObject.status == "student") {
       sender().then(function (res) {
         if (res.books != null && res.books != undefined) {
@@ -190,12 +206,35 @@ function Home() {
           console.log("res.books är null");
         }
       });
-    }else {setLoadingBooks(false)}
+    } else {
+      setLoadingBooks(false);
+    }
   }, [loadingBooks]);
 
   signal.addEventListener("abort", () => {
     console.log("aborted!");
   });
+
+  useEffect(() => {
+    if (cookies.user) {
+      return showCookies;
+    } else {
+      if (!chosenNoCookies) {
+        setShowCookies(true);
+      }
+    }
+  });
+
+  function closeCookies() {
+    setChosenNoCookies(true);
+    setShowCookies(false);
+    setCookieStyle({
+      backgroundColor: "white",
+    });
+  }
+  function consentCookies() {
+    handleCookie();
+  }
 
   if (loadingBooks) {
     return (
@@ -206,69 +245,123 @@ function Home() {
     );
   }
 
- 
-    //teacher view
-    return (
-      <div className="home">
-        <Sidebar />
-        <div className="upper-container">
-          <div className="total">
-            <p>Totalt:</p>
-          </div>
-          <SmallAdd />
-        </div>
+  //teacher view
+  return (
+    <div className="home">
+      <Collapse in={showCookies}>
         <motion.div
-          className="home-container"
+          className="cookies-container"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ ease: "easeOut", duration: 1, delay: 1 }}
         >
-          <div className="left-side">
-            <p>Sök efter bok</p>
-          </div>
-          <motion.div className="right-side">
+          <CookiesProvider>
             <motion.div
-              className="klasser-container"
-              initial="hidden"
-              animate="visible"
-              variants={containerVariants}
-              layout
+              className="modal"
+              initial={{ y: 500 }}
+              animate={{ y: 0 }}
+              transition={{ ease: "easeOut", duration: 1, delay: 1 }}
             >
-              {posts.length > 0 ? (
-                posts.map((post) => (
-                  <motion.div
-                    variants={childVariants}
-                    className="klasser"
-                    key={post.key}
-                    whileHover={{
-                      scale: 1.03,
-                      transition: { duration: 0.1 },
-                    }}
-                  >
-                    <Link className="klass" to={"klass/" + post}>
-                      {post}
-                    </Link>
+              <div className="header">Cookies</div>
+              <div className="content">
+                {" "}
+                Kirjan Seuranta använder cookies för att förbättra din
+                upplevelse på vår webbplats och för att visa dig relevant
+                information.
+                <br />
+                För att veta mer, läs om cookies [här] och [här]
+              </div>
+              <div
+                className="actions"
+                style={{ display: "flex", justifyContent: "space-evenly" }}
+              >
+                <Button
+                  onClick={() => {
+                    consentCookies();
+                    closeCookies();
+                  }}
+                  className="button"
+                  variant="contained"
+                  style={{
+                    backgroundColor: "lightgreen",
+                    width: "max-content",
+                  }}
+                >
+                  Godkänn
+                </Button>
+                <Button
+                  className="button"
+                  variant="contained"
+                  onClick={() => {
+                    console.log("modal closed ");
+                    closeCookies();
+                  }}
+                >
+                  Stäng
+                </Button>
+              </div>
+            </motion.div>
+          </CookiesProvider>
+        </motion.div>
+      </Collapse>
+      <Sidebar />
 
-                    <div className="klassEleverContainer">
-                      <div className="klassEleverStatus">
-                        <p className="utdelade">30</p>
-                        <p className="saknas">1</p>
-                      </div>
-                      <div className="klassEleverAntal">
-                      {post}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))
-              ) : (
-                <div className="not-found">
-                  <h4>Inga klasser tillagda</h4>
-                  <Link className="link" to="/add">
-                    Lägg till en klass
+      <div className="upper-container">
+        <div className="total">
+          <p>Totalt:</p>
+        </div>
+        <SmallAdd />
+      </div>
+      <motion.div
+        className="home-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="left-side">
+          <p>Sök efter bok</p>
+        </div>
+        <motion.div className="right-side">
+          <motion.div
+            className="klasser-container"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            layout
+          >
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <motion.div
+                  variants={childVariants}
+                  className="klasser"
+                  key={post.key}
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.1 },
+                  }}
+                >
+                  <Link className="klass" to={"klass/" + post}>
+                    {post}
                   </Link>
-                </div>
-              )}
 
-              {/*
+                  <div className="klassEleverContainer">
+                    <div className="klassEleverStatus">
+                      <p className="utdelade">30</p>
+                      <p className="saknas">1</p>
+                    </div>
+                    <div className="klassEleverAntal">{post}</div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="not-found">
+                <h4>Inga klasser tillagda</h4>
+                <Link className="link" to="/add">
+                  Lägg till en klass
+                </Link>
+              </div>
+            )}
+
+            {/*
                         klasser.map(klass=>{
                         return(
                             <div className="blog-container">
@@ -278,13 +371,12 @@ function Home() {
                         )
                         })
                     */}
-            </motion.div>
-            <Footer />
           </motion.div>
+          <Footer />
         </motion.div>
-      </div>
-    );
-  
+      </motion.div>
+    </div>
+  );
 }
 
 export default Home;
