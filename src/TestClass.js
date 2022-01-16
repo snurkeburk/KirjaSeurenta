@@ -15,7 +15,12 @@ import { motion } from "framer-motion";
 import { Button } from "@material-ui/core";
 import Footer from "./Footer";
 import "./Class.css";
-import { AiFillDelete, AiOutlineConsoleSql,AiFillCloseCircle, AiFillInfoCircle} from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiOutlineConsoleSql,
+  AiFillCloseCircle,
+  AiFillInfoCircle,
+} from "react-icons/ai";
 import CreateFakeUser from "./CreateFakeUser";
 import { FaUserEdit } from "react-icons/fa";
 import Alert from "@material-ui/lab/Alert";
@@ -33,8 +38,13 @@ function TestClass() {
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [posts, setPosts] = useState([]);
   const [infoDisplay, setInfoDisplay] = useState(true);
-  const [ReverseInfoDisplay,setReverseInfoDisplay] = useState(false);
+  const [ReverseInfoDisplay, setReverseInfoDisplay] = useState(false);
+  const [allBooks, setAllBooks] = useState([]);
+  const [userSel, setUserSel] = useState([]);
+  const [showID, setShowID] = useState("none");
+  const [showAllBooks, setShowAllBooks] = useState("block");
   useEffect(() => {
+    setShowID("none");
     const getPostsFromFirebase = [];
     const sender = db
       .collection("users")
@@ -329,19 +339,52 @@ function TestClass() {
         });
     }
   }
+  const sparaID = (event) => {
+    event.preventDefault();
+    const elementsArray = [...event.target.elements];
+    const formData = elementsArray.reduce((accumulator, currentValue) => {
+      if (currentValue.id) {
+        accumulator[currentValue.id] = currentValue.value;
+      }
+      return accumulator;
+    }, {});
 
-  function funcInfoDisplay(){
-    if (infoDisplay){
+    let username = firebase.auth().currentUser.displayName;
+
+    let formDataID = formData.namn.toUpperCase();
+
+    console.log(formDataID);
+  };
+
+  function funcInfoDisplay() {
+    if (infoDisplay) {
       setInfoDisplay(false);
       setReverseInfoDisplay(true);
-    }
-    else {
+    } else {
       setInfoDisplay(true);
       setReverseInfoDisplay(false);
     }
   }
+  function addBookDropdown(user) {
+    const sender = db.collection("books").onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        getBooksFromFirebase.push({
+          ...doc.data(), //spread operator
+          key: doc.id, // id från firebase
+        });
+      });
+      setUserSel(user);
+      setShowAllBooks("block");
+      setShowID("none");
+      setAllBooks(getBooksFromFirebase);
+    });
+  }
 
-
+  function addBookID(title) {
+    console.log(title + userSel);
+    setShowID("block");
+    setShowAllBooks("none");
+  }
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -406,63 +449,71 @@ function TestClass() {
 
         <div className="class-big-container">
           <div className="class-left-side">
-        <Collapse in={ReverseInfoDisplay}>
-        <motion.button
-             whileHover={{
-              scale: 1.2,
-              transition: { duration: 0.1 },
-            }}
-            onClick={() => funcInfoDisplay()}
-            className="button-info-open">
-              <AiFillInfoCircle size={40} className="info-open" />
-            </motion.button>
-        </Collapse>
-        <Collapse in={infoDisplay}>
-          <div className="class-important-info">
-            <motion.button
-             whileHover={{
-              scale: 1.2,
-              transition: { duration: 0.1 },
-            }}
-            onClick={() => funcInfoDisplay()}
-            className="button-info-close">
-              <AiFillCloseCircle size={30} className="info-close" />
-            </motion.button>
-          <h1>Viktig information!</h1>
-          <p>
-            Vid ändringar av status krävs det att sidan uppdateras för att
-            ändringar ska visas.
-          </p>
-          <Alert
-            variant="filled"
-            severity="info"
-            action={
-              <IconButton aria-label="close" color="inherit" size="small">
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            Sidan har uppdaterats -{" "}
-            <important>
-              <Link
-                style={{
-                  paddingRight: "0.2rem",
-                  color: "white",
+            <Collapse in={ReverseInfoDisplay}>
+              <motion.button
+                whileHover={{
+                  scale: 1.2,
+                  transition: { duration: 0.1 },
                 }}
+                onClick={() => funcInfoDisplay()}
+                className="button-info-open"
               >
-                uppdatera sidan
-              </Link>
-              för att visa ändringar!
-            </important>
-          </Alert>
-          <p>
-            Om en blå "varning" dyker upp så behöver du uppdatera sidan, denna
-            kan dyka upp flera gånger i rad <important className="important">(sidan måste uppdateras varje gång
-            den kommer upp)</important>.
-          </p>
-          <p>Ändringar går fortfarande igenom men visas ej tills att sidan har uppdaterats.</p>
-        </div>
-        </Collapse>
+                <AiFillInfoCircle size={40} className="info-open" />
+              </motion.button>
+            </Collapse>
+            <Collapse in={infoDisplay}>
+              <div className="class-important-info">
+                <motion.button
+                  whileHover={{
+                    scale: 1.2,
+                    transition: { duration: 0.1 },
+                  }}
+                  onClick={() => funcInfoDisplay()}
+                  className="button-info-close"
+                >
+                  <AiFillCloseCircle size={30} className="info-close" />
+                </motion.button>
+                <h1>Viktig information!</h1>
+                <p>
+                  Vid ändringar av status krävs det att sidan uppdateras för att
+                  ändringar ska visas.
+                </p>
+                <Alert
+                  variant="filled"
+                  severity="info"
+                  action={
+                    <IconButton aria-label="close" color="inherit" size="small">
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                >
+                  Sidan har uppdaterats -{" "}
+                  <important>
+                    <Link
+                      style={{
+                        paddingRight: "0.2rem",
+                        color: "white",
+                      }}
+                    >
+                      uppdatera sidan
+                    </Link>
+                    för att visa ändringar!
+                  </important>
+                </Alert>
+                <p>
+                  Om en blå "varning" dyker upp så behöver du uppdatera sidan,
+                  denna kan dyka upp flera gånger i rad{" "}
+                  <important className="important">
+                    (sidan måste uppdateras varje gång den kommer upp)
+                  </important>
+                  .
+                </p>
+                <p>
+                  Ändringar går fortfarande igenom men visas ej tills att sidan
+                  har uppdaterats.
+                </p>
+              </div>
+            </Collapse>
             <div className="student-books-container" layout>
               {books.length > 0 ? (
                 books.map((book) => (
@@ -470,25 +521,25 @@ function TestClass() {
                   <div className="s-name" key={book.key}>
                     <div className="s-name-nr">
                       <p className="info-bp">NR</p>
-                      {book.id}
-                      </div>
+                      {book.nr}
+                    </div>
                     <div className="s-name-name">
                       <p className="info-bp">BOK</p>
                       {book.name}
-                      </div>
-                      <div>
+                    </div>
+                    <div>
                       <p className="info-bp">STATUS</p>
-                    <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        transition: { duration: 0.1 },
-                      }}
-                      onClick={() => setStatus(book.status, book.key)}
-                      style={{
-                        backgroundColor: book.status,
-                      }}
-                      className="student-status"
-                    ></motion.button>
+                      <motion.button
+                        whileHover={{
+                          scale: 1.1,
+                          transition: { duration: 0.1 },
+                        }}
+                        onClick={() => setStatus(book.status, book.key)}
+                        style={{
+                          backgroundColor: book.status,
+                        }}
+                        className="student-status"
+                      ></motion.button>
                     </div>
                   </div>
                 ))
@@ -506,6 +557,42 @@ function TestClass() {
           </div>
 
           <div className="class-right-side">
+            <div className="all-books-container">
+              {allBooks.length > 0 ? (
+                allBooks.map((book) => (
+                  /*<motion.div className="books" key={post.id}>*/
+                  <div
+                    className="s-all-books"
+                    key={book.key}
+                    style={{ display: showAllBooks }}
+                  >
+                    <button
+                      className="all-books-sel"
+                      onClick={() => addBookID(book.title, user)}
+                    >
+                      {book.title}
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <h1>Inga böcker</h1>
+              )}
+              <div className="sel-ID" style={{ display: showID }}>
+                <p>Ange boknummer:</p>
+                <form onSubmit={sparaID} autocomplete="off">
+                  <motion.input
+                    className="input"
+                    type="text"
+                    id="namn"
+                    required
+                    placeholder="Skriv här..."
+                    whileFocus={{ scale: 1.2 }}
+                  ></motion.input>
+
+                  <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
+                </form>
+              </div>
+            </div>
             <ul>
               <li>
                 <motion.div className="cont">
@@ -513,20 +600,9 @@ function TestClass() {
                     students.map((post) => (
                       <div className="w-cont">
                         <motion.div className="students">
-                          <Link
-                            to={
-                              "/" +
-                              post.id +
-                              "&" +
-                              post.name +
-                              "&" +
-                              post.marker +
-                              "&" +
-                              id
-                            }
-                          >
-                            Ändra
-                          </Link>
+                          <Button onClick={() => addBookDropdown(post.name)}>
+                            Lägg till
+                          </Button>
 
                           <p
                             user={post.name}
