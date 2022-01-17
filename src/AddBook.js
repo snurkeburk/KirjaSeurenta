@@ -2,7 +2,7 @@ import { db } from "./App";
 export async function AddBookToStudent(book, id, className, student) {
   let amountSel = 0;
   console.log(book, id, className, student);
-  const citiesRef = db.collection("users").doc("students").collection("TE19D");
+  const citiesRef = db.collection("users").doc("students").collection(className);
   const snapshots = await citiesRef.where("selected", "==", true).get();
   snapshots.forEach((selDoc) => {
     const res = db

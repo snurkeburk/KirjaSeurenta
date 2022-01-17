@@ -20,6 +20,8 @@ import {
   AiOutlineConsoleSql,
   AiFillCloseCircle,
   AiFillInfoCircle,
+  AiFillEye,
+  AiOutlineEye,
 } from "react-icons/ai";
 import { BiBookAdd, BiBookAlt } from "react-icons/bi";
 import CreateFakeUser from "./CreateFakeUser";
@@ -161,7 +163,7 @@ function TestClass() {
     const sender = db
       .collection("users")
       .doc("students")
-      .collection("TE19D")
+      .collection(id)
       .where("status", "==", "student")
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
@@ -169,10 +171,12 @@ function TestClass() {
             //.log("New : ", change.doc.data());
           }
           if (change.type === "modified") {
-            console.log("Modified : ", change.doc.data());
-            //showBooks("NONE")
-            setOpen(true);
-          }
+              console.log("Modified : ", change.doc.data());
+              //showBooks("NONE")
+              if (!change.doc.data().selected){
+                setOpen(true);        
+              }
+            }
           if (change.type === "removed") {
           }
         });
@@ -189,6 +193,7 @@ function TestClass() {
       .collection("users")
       .doc("students")
       .collection(id) // här ska det vara klasserna som läraren har
+      .orderBy('name')
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getStudentsFromFirebase.push({
@@ -386,20 +391,23 @@ function TestClass() {
     }*/
   }
 
-
-  useEffect(() => {
-    if (window.performance) {
-      if (performance.navigation.type == 1) {
-        
-      } else {
-        
-      }
+  async function addBookDropdown() {
+    async function getSelectedStudentsToArr() {
+      let array = [];
+      let amountSel = 0;
+      const citiesRef = db
+        .collection("users")
+        .doc("students")
+        .collection("TE19D");
+      const snapshots = await citiesRef.where("selected", "==", true).get();
+      snapshots.forEach((selDoc) => {
+        array[amountSel] = selDoc.data().name + ", ";
+        amountSel++;
+      });
+      setArr(array);
     }
-   
-  }, [])
-
-
-  function addBookDropdown() {
+  
+    getSelectedStudentsToArr();
     const sender = db.collection("books").onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         getBooksFromFirebase.push({
@@ -415,27 +423,36 @@ function TestClass() {
   }
 
   async function checkBox(name) {
-    const c = await db.collection("users").doc("students").collection(id).doc(name).get();
+    const c = await db
+      .collection("users")
+      .doc("students")
+      .collection(id)
+      .doc(name)
+      .get();
     let selected = c.data().selected;
-    console.log(selected)
-    if (selected){
+    console.log(selected);
+    if (selected) {
       db.collection("users").doc("students").collection(id).doc(name).update({
         selected: false,
       });
-    }
-    else if (!selected)
-    {
+    } else if (!selected) {
       db.collection("users").doc("students").collection(id).doc(name).update({
         selected: true,
       });
     }
   }
 
+   function deSelect(name){
+     db.collection("users").doc("students").collection(id).doc(name).update({
+      selected: false,
+    })
+  }
+
   function addBookID(title) {
     //setShowID("block");
     //setShowAllBooks("none");
     setSelBook(title);
-    AddBookToStudent(title, "ID", id, arr);
+    AddBookToStudent(title, "ID", id);
   }
   if (loadingStudents) {
     <Sidebar />;
@@ -574,6 +591,7 @@ function TestClass() {
               </div>
             </Collapse>
             <motion.div className="all-books-container">
+              <p>Välj bok:</p>
               {allBooks.length > 0 ? (
                 allBooks.map((book) => (
                   /*<motion.div className="books" key={post.id}>*/
@@ -584,12 +602,13 @@ function TestClass() {
                     initial={{ y: -100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                   >
-                    <button
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
                       className="all-books-sel"
                       onClick={() => addBookID(book.title)}
                     >
                       {book.title}
-                    </button>
+                    </motion.button>
                   </motion.div>
                 ))
               ) : (
@@ -666,7 +685,9 @@ function TestClass() {
                           >
                             {post.name}
                           </p>
-                          <Button
+                          {post.selected ? (
+                            deSelect(post.name),
+                            <Button
                             onClick={() => addBookDropdown()}
                             className="show-books"
                             size="small"
@@ -679,14 +700,35 @@ function TestClass() {
                               padding: "0",
                             }}
                           >
-                            <BiBookAdd />
-                            <Checkbox
-                              label="checkbox"
-                              value={post.key}
-                              key={post.key}
-                              onChange={() => checkBox(post.name)}
-                            />
+                              <Checkbox
+                                label="checkbox"
+                                value={post.key}
+                                key={post.key}
+                                onChange={() => checkBox(post.name)}
+                              />
                           </Button>
+                            ) : (
+                              <Button
+                            onClick={() => addBookDropdown()}
+                            className="show-books"
+                            size="small"
+                            variant=""
+                            style={{
+                              backgroundColor: "white",
+                              borderRadius: "2rem",
+                              fontSize: "1.1rem",
+                              width: "20px",
+                              padding: "0",
+                            }}
+                          >
+                              <Checkbox
+                                label="checkbox"
+                                value={post.key}
+                                key={post.key}
+                                onChange={() => checkBox(post.name)}
+                              />
+                          </Button>
+                            )}
                           <Button
                             onClick={() => showBooks(post.name)}
                             className="show-books"
@@ -695,13 +737,13 @@ function TestClass() {
                             style={{
                               backgroundColor: "white",
                               borderRadius: "2rem",
-                              fontSize: "1.1em",
+                              fontSize: "1.5em",
                               width: "20px",
                               marginRight: "50px",
                               padding: "0",
                             }}
                           >
-                            <BiBookAlt />
+                            <AiOutlineEye />
                           </Button>
                           <button
                             style={{

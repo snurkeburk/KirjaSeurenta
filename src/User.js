@@ -21,7 +21,7 @@ import { db } from "./App";
 
 export class User {
   constructor(name, id, email, className, classes) {
-    this.name = name;
+    this.name = name.split(" ")[1] + " " + name.split(" ")[0];
     this.id = id;
     this.allIds = [];
     this.email = email;

@@ -23,18 +23,18 @@ function CreateFakeUser() {
   const [status, setStatus] = useState([]);
 
   const arr_names = [
-    "Gustav Svensson",
-    "Ivar Wirgén",
-    "Viktor Karlsson",
-    "Erik Roslund",
-    "Wiggo Bergman",
-    "Tuva Axelsson",
-    "David Runevall",
-    "Samuel Broman",
-    "Sixten Forsling",
-    "Ida Lindgren",
-    "Malte Samuelberg",
-    "Olof Öhrn",
+    "Svensson Gustav",
+    "Wirgén Ivar",
+    "Karlsson Viktor",
+    "Roslund Erik",
+    "Bergman Wiggo",
+    "Axelsson Tuva",
+    "Runevall David",
+    "Broman Samuel",
+    "Forsling Sixten",
+    "Lindgren Ida",
+    "Samuelberg Malte",
+    "Öhrn Olof",
   ];
 
   function makeid(length) {
