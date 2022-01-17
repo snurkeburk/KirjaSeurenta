@@ -386,20 +386,18 @@ function TestClass() {
     }*/
   }
 
-  async function getSelected() {
-    let amountSel = 0;
-    let array = [];
-    const citiesRef = db
-      .collection("users")
-      .doc("students")
-      .collection("TE19D");
-    const snapshots = await citiesRef.where("selected", "==", true).get();
-    snapshots.forEach((selDoc) => {
-      array[amountSel] = selDoc.data().name;
-      amountSel++;
-    });
-    setArr(amountSel);
-  }
+
+  useEffect(() => {
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        
+      } else {
+        
+      }
+    }
+   
+  }, [])
+
 
   function addBookDropdown() {
     const sender = db.collection("books").onSnapshot((querySnapshot) => {
@@ -416,12 +414,21 @@ function TestClass() {
     });
   }
 
-  function checkBox(name) {
-    //gör här så den kollar om selected = true eller false och om den e true byter den till false
-    db.collection("users").doc("students").collection(id).doc(name).update({
-      selected: true,
-    });
-    getSelected();
+  async function checkBox(name) {
+    const c = await db.collection("users").doc("students").collection(id).doc(name).get();
+    let selected = c.data().selected;
+    console.log(selected)
+    if (selected){
+      db.collection("users").doc("students").collection(id).doc(name).update({
+        selected: false,
+      });
+    }
+    else if (!selected)
+    {
+      db.collection("users").doc("students").collection(id).doc(name).update({
+        selected: true,
+      });
+    }
   }
 
   function addBookID(title) {

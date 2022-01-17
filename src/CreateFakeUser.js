@@ -52,7 +52,7 @@ function CreateFakeUser() {
   function createFake() {
     console.log("--------F_U GEN----------");
 
-    var r = Math.floor(Math.random() * (arr_names.length - 0 + 1)) + 0;
+    var r = Math.floor(Math.random() * (arr_names.length - 0 + 0)) + 0;
     setName(arr_names[r]);
     if (name == undefined) {
       console.log("undefined");
@@ -90,7 +90,7 @@ function CreateFakeUser() {
       console.log(id);
       console.log(tmail);
       console.log(sstatus);
-      userObject.addFakeUser(fclassid, name, id, tmail, sstatus);
+      userObject.addFakeUser(fclassid, name, "JHADSUhuh7Z8hfdsfh", tmail, sstatus);
     }
   }
 

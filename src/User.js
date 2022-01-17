@@ -133,6 +133,8 @@ export class User {
         email: email,
         name: name,
         status: status,
+        selected: false,
+        marked: false,
       }
     );
   }
@@ -155,6 +157,10 @@ export class User {
         email: this.email,
         name: this.name,
         status: this.status,
+        selected: false,
+        marked: false,
+        createdAt: new Date(),
+
         /*books: this.books,*/
       },
      {

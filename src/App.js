@@ -39,10 +39,18 @@ import {
 
 import { User, setUserStatus } from "./User";
 firebase.initializeApp({
+  // NYA
+  apiKey: "AIzaSyAJu2XN6VMQakYDSpGucuO1jqBOd_KixPE",
+  authDomain: "kirjanseuranta-2.firebaseapp.com",
+  projectId: "kirjanseuranta-2",
+  storageBucket: "kirjanseuranta-2.firebaseapp.com",
+
+  /* GAMLA / ORIGINAL 
   apiKey: "AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs",
   authDomain: "kirjanseuranta.firebaseapp.com",
   projectId: "kirjanseuranta",
   storageBucket: "kirjanseuranta.firebaseapp.com",
+  */
 });
 export const db = firebase.firestore();
 export const FieldValue = firebase.firestore.FieldValue;
