@@ -21,7 +21,7 @@ function CreateFakeUser() {
   const [id, setId] = useState([]);
   const [email, setEmail] = useState([]);
   const [status, setStatus] = useState([]);
-
+  const [ffCount, setFfCount] = useState([])
   const arr_names = [
     "Svensson Gustav",
     "Wirgén Ivar",
@@ -90,12 +90,22 @@ function CreateFakeUser() {
       console.log(id);
       console.log(tmail);
       console.log(sstatus);
+      db.collection("classes").doc(fclassid).set({
+        count: firebase.firestore.FieldValue.increment(1),
+      }, {merge: true})
+      .then(() => {
+        return null
+      })
+      .catch(() => {
+        return null
+      })
       userObject.addFakeUser(fclassid, name, "JHADSUhuh7Z8hfdsfh", tmail, sstatus);
     }
   }
 
   return (
     <div>
+    <p>f: {ffCount}</p>
       <div className="c-fake-container">
         <Button
           size="small"

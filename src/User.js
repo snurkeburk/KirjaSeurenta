@@ -18,7 +18,9 @@ import {
 import firebase from "firebase";
 import { userObject } from "./App";
 import { db } from "./App";
-
+function ClassCountIncr(classid){
+  const sender = db.collection("classes").doc(classid).update({count: +1})
+}
 export class User {
   constructor(name, id, email, className, classes) {
     this.name = name.split(" ")[1] + " " + name.split(" ")[0];
@@ -60,6 +62,7 @@ export class User {
 
   }
   */
+
 
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
@@ -166,7 +169,7 @@ export class User {
      {
 
      }
-    ).then(()=>window.location.reload(true));
+    ).then(()=>window.location.reload(true), ClassCountIncr(this.className));
 
     add(
       "users",

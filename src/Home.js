@@ -21,7 +21,7 @@ import { CircularProgress } from "@material-ui/core";
 import Popup from "reactjs-popup";
 import { CookiesProvider } from "react-cookie";
 import { useCookies, getCookie } from "react-cookie";
-
+import { GetClassSize, greenCounter, redCounter } from "./GetClassSize";
 import Add from "./Add";
 import { userExists } from "./User";
 import randomColor from "randomcolor";
@@ -32,7 +32,6 @@ import Footer from "./Footer";
 import { ar } from "date-fns/locale";
 import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
-import GetClassSize from "./GetClassSize";
 import { AddBookToStudent } from "./AddBook";
 import "reactjs-popup/dist/index.css";
 
@@ -59,6 +58,7 @@ function Home() {
   const [showCookies, setShowCookies] = useState(false);
   const [cookieStyle, setCookieStyle] = useState([]);
   let username = firebase.auth().currentUser.displayName;
+  const [size, setSize] = useState([]);
 
   useEffect(() => {
     console.log(cookies.user);
@@ -108,7 +108,7 @@ function Home() {
         .doc(firebase.auth().currentUser.uid);
 
       const doc = await collection.get();
-
+      console.log(doc.data().classes);
       if (!doc.exists) {
         console.log("Error!");
         const getPostsFromFirebase = [];
@@ -127,6 +127,22 @@ function Home() {
 
     GetTeachersClasses().then(function (res) {
       let classes = res.classes;
+      const shit = [];
+      let _red = 0;
+      classes.forEach((dox) => {
+        db.collection("users")
+          .doc("students")
+          .collection(dox)
+          .onSnapshot((querySnapshot) => {
+            console.log(querySnapshot.size);
+            shit.push({
+              size: querySnapshot.size,
+            });
+          });
+      });
+
+      console.log(shit);
+      setClassCount(shit);
       setPosts(classes);
       setLoadingBooks(false);
       //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
@@ -216,6 +232,7 @@ function Home() {
   });
 
   useEffect(() => {
+    console.log(classCount);
     if (cookies.user) {
       return showCookies;
     } else {
@@ -342,14 +359,25 @@ function Home() {
                   <Link className="klass" to={"klass/" + post}>
                     {post}
                   </Link>
-
-                  <div className="klassEleverContainer">
-                    <div className="klassEleverStatus">
-                      <p className="utdelade">30</p>
-                      <p className="saknas">1</p>
+                  {classCount.length > 0 ? (
+                    classCount.map((count) => (
+                      <div className="klassEleverContainer">
+                      <div className="klassEleverStatus">
+                        <p className="utdelade">{count.size}</p>
+                        <p className="saknas">1</p>
+                      </div>
+                      <div className="klassEleverAntal">{post}</div>
                     </div>
-                    <div className="klassEleverAntal">{post}</div>
-                  </div>
+                      ))
+                  ) : (
+                    <div className="klassEleverContainer">
+                      <div className="klassEleverStatus">
+                        <p className="utdelade"></p>
+                        <p className="saknas">1</p>
+                      </div>
+                      <div className="klassEleverAntal">{post}</div>
+                    </div>
+                  )}
                 </motion.div>
               ))
             ) : (

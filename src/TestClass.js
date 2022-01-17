@@ -56,6 +56,8 @@ function TestClass() {
   const [counter, setCounter] = useState([]);
   const [_c, set_c] = useState(false);
   const [arr, setArr] = useState([]);
+  const [greenCounter, setGreenCounter] = useState([]);
+  const [redCounter, setRedCounter] = useState([]);
   let username = firebase.auth().currentUser.displayName;
   useEffect(() => {
     if (cookies.user) {
@@ -364,6 +366,30 @@ function TestClass() {
     //AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
 
+
+  async function getAmountMissing() {
+    let _green = 0;
+    let _red = 0;
+    const greenRef = db
+      .collection("users")
+      .doc("students")
+      .collection("TE19D");
+    const snapshots = await greenRef.where("marker", "==", "green").get();
+    snapshots.forEach((selDoc) => {
+      _green++;
+    });
+    const redRef = db
+      .collection("users")
+      .doc("students")
+      .collection("TE19D");
+    const snapshot = await redRef.where("marker", "==", "red").get();
+    snapshot.forEach((selDocc) => {
+      _red++;
+    });
+    setGreenCounter(_green);
+    setRedCounter(_red);
+  }
+  getAmountMissing();
   function funcInfoDisplay() {
     if (cookies.user && !_c) {
       setCookie("user", username + "%" + "seeninfo", {
@@ -500,11 +526,11 @@ function TestClass() {
           <h5 className="class-title-size">{students.length}</h5>
           <div className="innerTotalContainer">
             <div className="class-utdeladeContainer">
-              <p className="class-utdelade">0</p>
+              <p className="class-utdelade">{greenCounter}</p>
               <p className="class-utdelade-desc">utdelade</p>
             </div>
             <div className="class-saknasContainer">
-              <p className="class-saknas">0</p>
+              <p className="class-saknas">{redCounter}</p>
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
