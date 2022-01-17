@@ -54,9 +54,6 @@ function Sidebar() {
     }
 
     snapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
-      console.log(userObject.email == doc.email);
-      console.log(doc.data().email + " " + userObject.email);
       if (doc.data().email == userObject.email) {
         setDisplayStatus("Mentor");
       }
@@ -67,17 +64,13 @@ function Sidebar() {
       .doc("teachers")
       .collection("data");
 
-    const ssnapshot = await teacherRef
-      .where("name", "==", username)
-      .get();
+    const ssnapshot = await teacherRef.where("name", "==", username).get();
     if (ssnapshot.empty) {
       console.log("No matching documents.");
       return;
     }
 
     ssnapshot.forEach((docc) => {
-      console.log(docc.id, "=>", docc.data());
-      console.log(userObject.email == docc.data().email);
       if (docc.data().email == userObject.email) {
         setDisplayStatus("Lärare");
       }

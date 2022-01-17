@@ -53,13 +53,12 @@ function TestClass() {
   const [timerDisplay, setTimerDisplay] = useState([]);
   const [counter, setCounter] = useState([]);
   const [_c, set_c] = useState(false);
+  const [arr, setArr] = useState([]);
   let username = firebase.auth().currentUser.displayName;
   useEffect(() => {
     if (cookies.user) {
       let c = cookies.user;
       let _c = c.split("%")[1];
-      console.log("---PRINTING SPLIT COOKIE---");
-      console.log(_c);
       if (_c == "notseeninfo") {
         setInfoDisplay(true);
         setReverseInfoDisplay(false);
@@ -73,7 +72,6 @@ function TestClass() {
   });
   useEffect(() => {
     if (cookies.user == username) {
-      console.log("COOKIE EXISTS");
     } else {
       console.log("Cookie does not exist");
     }
@@ -95,7 +93,6 @@ function TestClass() {
         });
         for (let i = 0; i < getPostsFromFirebase.length; i++) {
           let mark = false;
-          console.log(getPostsFromFirebase.length);
           const getBookFromFirebase = [];
           db.collection("users")
             .doc("students")
@@ -109,34 +106,17 @@ function TestClass() {
                   key: doc.id, // id från firebase
                 });
               });
-              console.log(getBookFromFirebase.length);
               for (let k = 0; k < getBookFromFirebase.length; k++) {
                 if (getBookFromFirebase[k].status == "red") {
-                  console.log(
-                    getBookFromFirebase[k].name +
-                      " is red" +
-                      " (" +
-                      getPostsFromFirebase[i].name +
-                      ")"
-                  );
                   mark = true;
                   k = getBookFromFirebase.length;
                 } else {
-                  console.log(
-                    getBookFromFirebase[k].name +
-                      " is green" +
-                      " (" +
-                      getPostsFromFirebase[i].name +
-                      ")"
-                  );
                 }
               }
 
               if (mark) {
-                console.log(getPostsFromFirebase[i].name + " red!!!");
                 checkMarked(getPostsFromFirebase[i].name, true);
               } else {
-                console.log(getPostsFromFirebase[i].name + " green!");
                 checkMarked(
                   getPostsFromFirebase[i].name,
                   false,
@@ -154,7 +134,6 @@ function TestClass() {
   }, [loadingStudents]);
 
   function checkMarked(user, marked, count) {
-    console.log(user + " marked: " + marked + count);
     if (marked) {
       setMarkedUser(user);
     } else if (!marked) {
@@ -163,20 +142,16 @@ function TestClass() {
   }
 
   function setMarkedUser(user) {
-    console.log(user + " WAS MARKED!!");
     db.collection("users").doc("students").collection(id).doc(user).update({
       marker: "red",
     });
   }
   function setUnMarkedUser(user, count) {
     if (count > 0) {
-      console.log(user + " WAS NOT MARKED!");
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "green",
       });
     } else {
-      console.log(user + " WAS MARKED YELLOW!");
-
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "yellow",
       });
@@ -199,7 +174,6 @@ function TestClass() {
             setOpen(true);
           }
           if (change.type === "removed") {
-            //console.log("Removed : ", change.doc.data());
           }
         });
       });
@@ -224,23 +198,7 @@ function TestClass() {
         });
         // TODO om sidan märker en change i firebase så kommer det en POPUP
         // som tillåter användaren att "uppdatera sidan" eller "X".
-        for (let i = 0; i < getStudentsFromFirebase.length; i++) {
-          if (getStudentsFromFirebase[i].marker == "green") {
-            console.log(
-              "green: " +
-                getStudentsFromFirebase[i].name +
-                "|" +
-                getStudentsFromFirebase[i].marker
-            );
-          } else if (getStudentsFromFirebase[i].marker == "red") {
-            console.log(
-              "red: " +
-                getStudentsFromFirebase[i].name +
-                "|" +
-                getStudentsFromFirebase[i].marker
-            );
-          }
-        }
+
         setStudents(getStudentsFromFirebase);
         setLoadingStudents(false);
         sender();
@@ -269,13 +227,11 @@ function TestClass() {
           });
         });
         setBooks(getBooksFromFirebase);
-        console.log(getBooksFromFirebase);
         stop();
       });
   }
 
   function setStatus(status, key) {
-    console.log("current status: " + status + ". key: " + key);
     if (status == "green") {
       db.collection("users")
         .doc("students")
@@ -400,24 +356,19 @@ function TestClass() {
 
     let formDataID = formData.namn.toUpperCase();
 
-    console.log(formDataID);
-    AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
+    //AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
 
   function funcInfoDisplay() {
     if (cookies.user && !_c) {
-      console.log("cookie exists");
       setCookie("user", username + "%" + "seeninfo", {
         path: "/",
       });
     } else if (cookies.user && _c) {
-      console.log("cookie exists");
       setCookie("user", username + "%" + "notseeninfo", {
         path: "/",
       });
     } else {
-      console.log("cookie doesnt exist");
-
       if (infoDisplay) {
         setInfoDisplay(false);
         setReverseInfoDisplay(true);
@@ -437,19 +388,20 @@ function TestClass() {
 
   async function getSelected() {
     let amountSel = 0;
+    let array = [];
     const citiesRef = db
       .collection("users")
       .doc("students")
       .collection("TE19D");
     const snapshots = await citiesRef.where("selected", "==", true).get();
     snapshots.forEach((selDoc) => {
-      console.log(selDoc.data());
+      array[amountSel] = selDoc.data().name;
       amountSel++;
     });
-    console.log(amountSel);
+    setArr(amountSel);
   }
 
-  function addBookDropdown(user) {
+  function addBookDropdown() {
     const sender = db.collection("books").onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         getBooksFromFirebase.push({
@@ -459,23 +411,24 @@ function TestClass() {
       });
       setUserSel(user);
       setShowAllBooks("block");
-      setShowID("none");
+      //setShowID("none");
       setAllBooks(getBooksFromFirebase);
     });
   }
 
   function checkBox(name) {
-    console.log(name);
+    //gör här så den kollar om selected = true eller false och om den e true byter den till false
     db.collection("users").doc("students").collection(id).doc(name).update({
       selected: true,
     });
+    getSelected();
   }
 
   function addBookID(title) {
-    console.log(title + userSel);
-    setShowID("block");
-    setShowAllBooks("none");
+    //setShowID("block");
+    //setShowAllBooks("none");
     setSelBook(title);
+    AddBookToStudent(title, "ID", id, arr);
   }
   if (loadingStudents) {
     <Sidebar />;
@@ -707,7 +660,7 @@ function TestClass() {
                             {post.name}
                           </p>
                           <Button
-                            onClick={() => addBookDropdown(post.name)}
+                            onClick={() => addBookDropdown()}
                             className="show-books"
                             size="small"
                             variant=""
