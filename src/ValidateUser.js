@@ -78,9 +78,14 @@ function ValidateUser() {
 
     userObject.className = className;
     setClassChosen(true);
-    userObject.addBookToUser("matte50004", "123abc");
-    userObject.addBookToUser("ergofysik2", "abcdefg");
+
+    //! Adds defaiult books to user 
+    //userObject.addBookToUser("matte50004", "123abc");
+    //userObject.addBookToUser("ergofysik2", "abcdefg");
     userObject.addUser();
+
+    //userObject.addBookToUser('svenskaimpulser3')
+
     userObject.firstLogin = false;
    
   }
