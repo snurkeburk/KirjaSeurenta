@@ -46,18 +46,19 @@ function TestClass() {
   const [infoDisplay, setInfoDisplay] = useState(true);
   const [ReverseInfoDisplay, setReverseInfoDisplay] = useState(false);
   const [allBooks, setAllBooks] = useState([]);
-  const [userSel, setUserSel] = useState([]);
   const [showID, setShowID] = useState("none");
-  const [count, setCount] = useState([]);
   const [showAllBooks, setShowAllBooks] = useState("block");
   const [selBook, setSelBook] = useState([]);
   const [cookies, setCookie] = useCookies(["user"]);
   const [timerDisplay, setTimerDisplay] = useState([]);
-  const [counter, setCounter] = useState([]);
   const [_c, set_c] = useState(false);
   const [arr, setArr] = useState([]);
+  const [korv, setKorv] = useState([]);
   const [greenCounter, setGreenCounter] = useState([]);
   const [redCounter, setRedCounter] = useState([]);
+  const [buttonDisplay, setButtonDisplay] = useState(false);
+  const [classListDisplay, setClassListDisplay] = useState(false);
+  const [butter, setButter] = useState([]);
   let username = firebase.auth().currentUser.displayName;
   useEffect(() => {
     if (cookies.user) {
@@ -173,12 +174,9 @@ function TestClass() {
             //.log("New : ", change.doc.data());
           }
           if (change.type === "modified") {
-              console.log("Modified : ", change.doc.data());
-              //showBooks("NONE")
-              if (!change.doc.data().selected){
-                setOpen(true);        
-              }
-            }
+            console.log("Modified : ", change.doc.data());
+            setOpen(true);
+          }
           if (change.type === "removed") {
           }
         });
@@ -195,7 +193,7 @@ function TestClass() {
       .collection("users")
       .doc("students")
       .collection(id) // här ska det vara klasserna som läraren har
-      .orderBy('name')
+      .orderBy("name")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getStudentsFromFirebase.push({
@@ -207,6 +205,7 @@ function TestClass() {
         // som tillåter användaren att "uppdatera sidan" eller "X".
 
         setStudents(getStudentsFromFirebase);
+        console.log(getStudentsFromFirebase);
         setLoadingStudents(false);
         sender();
       });
@@ -276,79 +275,6 @@ function TestClass() {
   // för att buggen inte ska visas.
   // detta kommer däremot inte att fixa window resize problemet
 
-  function changeStatus(status, book) {
-    if (status == "green") {
-      status = "red";
-      db.collection("users")
-        .doc("students")
-        .collection(id)
-        .doc(user)
-        .collection("items")
-        .doc(book)
-        .update({
-          status: "red",
-        });
-
-      db.collection("users").doc("students").collection(id).doc(user).update({
-        marker: "red",
-      });
-    } else if (status == "red") {
-      status = "green";
-      db.collection("users")
-        .doc("students")
-        .collection(id)
-        .doc(user)
-        .collection("items")
-        .doc(book)
-        .update({
-          status: "green",
-        });
-      const sender = db
-        .collection("users")
-        .doc("students")
-        .collection(id)
-        .doc(user)
-        .collection("items")
-        .onSnapshot((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            getBooksFromFirebase.push({
-              ...doc.data(), //spread operator
-              key: doc.id, // id från firebase
-            });
-          });
-
-          setBooks(getBooksFromFirebase);
-          if (books.length == 0) {
-            db.collection("users")
-              .doc("students")
-              .collection(id)
-              .doc(user)
-              .update({
-                marker: "yellow",
-              });
-          }
-          for (let i = 0; i < books.length; i++) {
-            if (books[i].status == "red") {
-              db.collection("users")
-                .doc("students")
-                .collection(id)
-                .doc(user)
-                .update({
-                  marker: "red",
-                });
-            } else {
-              db.collection("users")
-                .doc("students")
-                .collection(id)
-                .doc(user)
-                .update({
-                  marker: "green",
-                });
-            }
-          }
-        });
-    }
-  }
   const sparaID = (event) => {
     event.preventDefault();
     const elementsArray = [...event.target.elements];
@@ -366,30 +292,6 @@ function TestClass() {
     //AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
 
-
-  async function getAmountMissing() {
-    let _green = 0;
-    let _red = 0;
-    const greenRef = db
-      .collection("users")
-      .doc("students")
-      .collection("TE19D");
-    const snapshots = await greenRef.where("marker", "==", "green").get();
-    snapshots.forEach((selDoc) => {
-      _green++;
-    });
-    const redRef = db
-      .collection("users")
-      .doc("students")
-      .collection("TE19D");
-    const snapshot = await redRef.where("marker", "==", "red").get();
-    snapshot.forEach((selDocc) => {
-      _red++;
-    });
-    setGreenCounter(_green);
-    setRedCounter(_red);
-  }
-  getAmountMissing();
   function funcInfoDisplay() {
     if (cookies.user && !_c) {
       setCookie("user", username + "%" + "seeninfo", {
@@ -417,23 +319,7 @@ function TestClass() {
     }*/
   }
 
-  async function addBookDropdown() {
-    async function getSelectedStudentsToArr() {
-      let array = [];
-      let amountSel = 0;
-      const citiesRef = db
-        .collection("users")
-        .doc("students")
-        .collection("TE19D");
-      const snapshots = await citiesRef.where("selected", "==", true).get();
-      snapshots.forEach((selDoc) => {
-        array[amountSel] = selDoc.data().name + ", ";
-        amountSel++;
-      });
-      setArr(array);
-    }
-  
-    getSelectedStudentsToArr();
+  useEffect(() => {
     const sender = db.collection("books").onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         getBooksFromFirebase.push({
@@ -441,39 +327,63 @@ function TestClass() {
           key: doc.id, // id från firebase
         });
       });
-      setUserSel(user);
-      setShowAllBooks("block");
-      //setShowID("none");
       setAllBooks(getBooksFromFirebase);
     });
+    return () => sender();
+  }, [loadingStudents]);
+
+  function saveCheckbox(name) {
+    for (let i = 0; i < korv.length; i++) {
+      if (korv[i].name == name) {
+        console.log(name + " " + "exists");
+        console.log("remove 1 at index " + i);
+        korv.splice(i, 1);
+        console.log(korv);
+        return name;
+      }
+    }
+    setKorv([
+      ...korv,
+      {
+        name: name,
+      },
+    ]);
   }
 
-  async function checkBox(name) {
-    const c = await db
-      .collection("users")
-      .doc("students")
-      .collection(id)
-      .doc(name)
-      .get();
-    let selected = c.data().selected;
-    console.log(selected);
-    if (selected) {
-      db.collection("users").doc("students").collection(id).doc(name).update({
-        selected: false,
-      });
-    } else if (!selected) {
-      db.collection("users").doc("students").collection(id).doc(name).update({
-        selected: true,
-      });
+  useEffect(() => {
+    console.log(korv);
+  });
+  function saveBookCheckbox(title) {
+    console.log(title);
+    for (let i = 0; i < butter.length; i++) {
+      if (butter[i].title == title) {
+        console.log(title + " " + "exists");
+        console.log("remove 1 at index " + i);
+        butter.splice(i, 1);
+        console.log(butter);
+        return title;
+      }
+    }
+    setButter([
+      ...butter,
+      {
+        title: title,
+      },
+    ]);
+  }
+
+  useEffect(() => {
+    console.log(butter);
+  });
+
+  function uploadBooksToStudent() {
+    for (let i = 0; i < korv.length; i++) {
+      for (let k = 0; k < butter.length; k++) {
+        AddBookToStudent(butter[k].title, "ID", id, korv[i].name);
+        console.log("Adding " + butter[k].title + " to " + korv[i].name);
+      }
     }
   }
-
-   function deSelect(name){
-     db.collection("users").doc("students").collection(id).doc(name).update({
-      selected: false,
-    })
-  }
-
   function addBookID(title) {
     //setShowID("block");
     //setShowAllBooks("none");
@@ -616,46 +526,7 @@ function TestClass() {
                 </p>
               </div>
             </Collapse>
-            <motion.div className="all-books-container">
-              <p>Välj bok:</p>
-              {allBooks.length > 0 ? (
-                allBooks.map((book) => (
-                  /*<motion.div className="books" key={post.id}>*/
-                  <motion.div
-                    className="s-all-books"
-                    key={book.key}
-                    style={{ display: showAllBooks }}
-                    initial={{ y: -100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                  >
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      className="all-books-sel"
-                      onClick={() => addBookID(book.title)}
-                    >
-                      {book.title}
-                    </motion.button>
-                  </motion.div>
-                ))
-              ) : (
-                <p></p>
-              )}
-              <div className="sel-ID" style={{ display: showID }}>
-                <p>Ange boknummer:</p>
-                <form onSubmit={sparaID} autocomplete="off">
-                  <motion.input
-                    className="input"
-                    type="text"
-                    id="namn"
-                    required
-                    placeholder="Skriv här..."
-                    whileFocus={{ scale: 1.2 }}
-                  ></motion.input>
 
-                  <motion.button whileHover={{ scale: 1.1 }}> + </motion.button>
-                </form>
-              </div>
-            </motion.div>
             <div className="student-books-container" layout>
               <div className="info-bp-container">
                 <p className="info-bp">NR</p>
@@ -697,95 +568,139 @@ function TestClass() {
           </div>
 
           <div className="class-right-side">
+            <Button variant="outlined" onClick={() => setButtonDisplay(true)}>
+              +
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => setClassListDisplay(true)}
+            >
+              KLAR
+            </Button>
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "lightgreen" }}
+              onClick={() => uploadBooksToStudent()}
+            >
+              SISTA
+            </Button>
             <ul>
               <li>
-                <motion.div className="cont">
-                  {students.length > 0 ? (
-                    students.map((post) => (
-                      <div className="w-cont">
-                        <motion.div className="students">
-                          <p
-                            user={post.name}
-                            key={post.key}
-                            className="student"
-                          >
-                            {post.name}
-                          </p>
-                          {post.selected ? (
-                            deSelect(post.name),
-                            <Button
-                            onClick={() => addBookDropdown()}
-                            className="show-books"
-                            size="small"
-                            variant=""
-                            style={{
-                              backgroundColor: "white",
-                              borderRadius: "2rem",
-                              fontSize: "1.1rem",
-                              width: "20px",
-                              padding: "0",
-                            }}
-                          >
-                              <Checkbox
-                                label="checkbox"
-                                value={post.key}
-                                key={post.key}
-                                onChange={() => checkBox(post.name)}
-                              />
-                          </Button>
-                            ) : (
+                <Collapse in={!classListDisplay}>
+                  <motion.div className="cont">
+                    {students.length > 0 ? (
+                      students.map((post) => (
+                        <div className="w-cont">
+                          <motion.div className="students">
+                            <p
+                              user={post.name}
+                              key={post.key}
+                              className="student"
+                            >
+                              {post.name}
+                            </p>
+                            <Collapse in={buttonDisplay}>
                               <Button
-                            onClick={() => addBookDropdown()}
-                            className="show-books"
-                            size="small"
-                            variant=""
-                            style={{
-                              backgroundColor: "white",
-                              borderRadius: "2rem",
-                              fontSize: "1.1rem",
-                              width: "20px",
-                              padding: "0",
-                            }}
+                                onClick={() => console.log("click")}
+                                className="show-books"
+                                size="small"
+                                variant=""
+                                style={{
+                                  backgroundColor: "white",
+                                  borderRadius: "2rem",
+                                  fontSize: "1.1rem",
+                                  width: "20px",
+                                  padding: "0",
+                                  mariginRight: "2rem",
+                                }}
+                              >
+                                <Checkbox
+                                  label="checkbox"
+                                  value={post.key}
+                                  key={post.key}
+                                  onChange={() => saveCheckbox(post.name)}
+                                />
+                              </Button>
+                            </Collapse>
+                            <Button
+                              onClick={() => showBooks(post.name)}
+                              className="show-books"
+                              size="small"
+                              variant=""
+                              style={{
+                                backgroundColor: "white",
+                                borderRadius: "2rem",
+                                fontSize: "1.5em",
+                                width: "20px",
+                                padding: "0",
+                              }}
+                            >
+                              <AiOutlineEye />
+                            </Button>
+                            <button
+                              style={{
+                                backgroundColor: post.marker,
+                              }}
+                              className="student-status-marker"
+                            ></button>
+                          </motion.div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="not-found">
+                        <h4>Inga elever tillagda</h4>
+                      </div>
+                    )}
+                  </motion.div>
+                </Collapse>
+                <Collapse in={classListDisplay}>
+                  <div>
+                    <motion.div className="all-books-container">
+                      <p>Välj bok:</p>
+                      {allBooks.length > 0 ? (
+                        allBooks.map((book) => (
+                          /*<motion.div className="books" key={post.id}>*/
+                          <motion.div
+                            className="s-all-books"
+                            key={book.key}
+                            initial={{ y: -100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
                           >
+                            <div className="book">
+                              <p>{book.title}</p>
                               <Checkbox
                                 label="checkbox"
-                                value={post.key}
-                                key={post.key}
-                                onChange={() => checkBox(post.name)}
+                                value={book.key}
+                                key={book.key}
+                                onChange={() => saveBookCheckbox(book.title)}
                               />
-                          </Button>
-                            )}
-                          <Button
-                            onClick={() => showBooks(post.name)}
-                            className="show-books"
-                            size="small"
-                            variant=""
-                            style={{
-                              backgroundColor: "white",
-                              borderRadius: "2rem",
-                              fontSize: "1.5em",
-                              width: "20px",
-                              marginRight: "50px",
-                              padding: "0",
-                            }}
-                          >
-                            <AiOutlineEye />
-                          </Button>
-                          <button
-                            style={{
-                              backgroundColor: post.marker,
-                            }}
-                            className="student-status-marker"
-                          ></button>
-                        </motion.div>
+                            </div>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <p></p>
+                      )}
+                      <div className="sel-ID" style={{ display: showID }}>
+                        <p>Ange boknummer:</p>
+                        <form onSubmit={sparaID} autocomplete="off">
+                          <motion.input
+                            className="input"
+                            type="text"
+                            id="namn"
+                            required
+                            placeholder="Skriv här..."
+                            whileFocus={{ scale: 1.2 }}
+                          ></motion.input>
+
+                          <motion.button whileHover={{ scale: 1.1 }}>
+                            {" "}
+                            +{" "}
+                          </motion.button>
+                        </form>
                       </div>
-                    ))
-                  ) : (
-                    <div className="not-found">
-                      <h4>Inga elever tillagda</h4>
-                    </div>
-                  )}
-                </motion.div>
+                    </motion.div>
+                  </div>
+                </Collapse>
               </li>
             </ul>
             <Footer />

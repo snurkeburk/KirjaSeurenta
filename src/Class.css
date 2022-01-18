@@ -38,6 +38,14 @@ html {
   height: 3rem;
 }
 
+.book {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  width: 20rem;
+}
+
 .totalContainer {
   background-color: rgba(128, 128, 128, 0.179);
   display: flex;
@@ -315,7 +323,7 @@ html {
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.096);
   border-width: 1px;
-  margin-right:5rem;
+  margin-right: 5rem;
 }
 
 .s-all-books {
@@ -336,13 +344,12 @@ html {
   height: 30px;
   width: 12rem;
   transition: 0.4s;
- color: rgba(82, 82, 82, 0.74);
+  color: rgba(82, 82, 82, 0.74);
 
   border-color: rgba(82, 82, 82, 0.74);
-
 }
 
-.all-books-sel:hover{
+.all-books-sel:hover {
   color: black;
   border-color: black;
 }

@@ -359,25 +359,14 @@ function Home() {
                   <Link className="klass" to={"klass/" + post}>
                     {post}
                   </Link>
-                  {classCount.length > 0 ? (
-                    classCount.map((count) => (
-                      <div className="klassEleverContainer">
-                      <div className="klassEleverStatus">
-                        <p className="utdelade">{count.size}</p>
-                        <p className="saknas">1</p>
-                      </div>
-                      <div className="klassEleverAntal">{post}</div>
+
+                  <div className="klassEleverContainer">
+                    <div className="klassEleverStatus">
+                      <p className="utdelade">2</p>
+                      <p className="saknas">1</p>
                     </div>
-                      ))
-                  ) : (
-                    <div className="klassEleverContainer">
-                      <div className="klassEleverStatus">
-                        <p className="utdelade"></p>
-                        <p className="saknas">1</p>
-                      </div>
-                      <div className="klassEleverAntal">{post}</div>
-                    </div>
-                  )}
+                    <div className="klassEleverAntal">{post}</div>
+                  </div>
                 </motion.div>
               ))
             ) : (

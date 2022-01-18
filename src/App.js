@@ -6,7 +6,7 @@
 
 import React, { Component } from "react";
 import firebase from "firebase";
-import TestRouter from "./TestRouter"
+import TestRouter from "./TestRouter";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./App.css";
 import Sidebar from "./Sidebar";
@@ -40,17 +40,17 @@ import {
 import { User, setUserStatus } from "./User";
 firebase.initializeApp({
   // NYA
+  /*
   apiKey: "AIzaSyAJu2XN6VMQakYDSpGucuO1jqBOd_KixPE",
   authDomain: "kirjanseuranta-2.firebaseapp.com",
   projectId: "kirjanseuranta-2",
   storageBucket: "kirjanseuranta-2.firebaseapp.com",
-
-  /* GAMLA / ORIGINAL 
+*/
+  /* GAMLA / ORIGINAL */
   apiKey: "AIzaSyB1pNriNplYWbyRUVUgfy29Wlc2C0-PLvs",
   authDomain: "kirjanseuranta.firebaseapp.com",
   projectId: "kirjanseuranta",
   storageBucket: "kirjanseuranta.firebaseapp.com",
-  */
 });
 export const db = firebase.firestore();
 export const FieldValue = firebase.firestore.FieldValue;
@@ -69,12 +69,12 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    console.log("user")
+    console.log("user");
     firebase.auth().onAuthStateChanged((user) => {
-      console.log("user", user)
+      console.log("user", user);
       this.setState({ isSignedIn: !!user });
       if (user !== null) {
-        console.log("adding user")
+        console.log("adding user");
         //adds user to database if logged in
         userObject = new User(
           user.displayName,
@@ -83,7 +83,6 @@ class App extends Component {
           user.status,
           user.marker
         );
-
       }
     });
   };
@@ -128,9 +127,7 @@ class App extends Component {
   }
 
   render() {
-    return (
-    <div className="app">{this.getContent()}</div>
-    );
+    return <div className="app">{this.getContent()}</div>;
   }
 }
 

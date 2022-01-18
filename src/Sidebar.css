@@ -6,8 +6,6 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
-
-
 .sidebar {
   display: flex;
   flex-direction: row;
@@ -17,9 +15,7 @@
   border-width: 0.1px;
   border-color: var(--faded-color);
   font-family: "Roboto", sans-serif;
-  box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
-  -webkit-box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
-  -moz-box-shadow: 1px -2px 30px 8px rgba(0,0,0,0.19);
+
   z-index: 2;
 }
 
@@ -69,7 +65,6 @@
   color: var(--highlight-color);
   color: #a13fa8;
 }
-
 
 .profilePic {
   width: 2.5rem;
@@ -137,7 +132,7 @@
   display: none;
 }
 .trashDropdownContainer {
-  display:none
+  display: none;
 }
 .sidebar-upper-960px-container {
   display: flex;
@@ -145,50 +140,48 @@
   justify-content: space-between;
 }
 @media screen and (max-width: 960px) {
-    .sidebar__mid {
-      display: none;
-    }
-    .big-sidebar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 98%;
-    }
+  .sidebar__mid {
+    display: none;
+  }
+  .big-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 98%;
+  }
 
-    .sidebar {
-      width: auto;
-      box-shadow: none;
-      border-style: none;
-    }
-    .sidebar-upper-960px-container {
-      display: flex;
-      width: 80vw;
-      justify-content: space-between;
-    }
-  
-    .sidebar__mid_lower{
-      border-bottom-style: solid;
-      border-top-style: none;
-      margin-top: 0px;
-      width: 100%;
-      padding-bottom: 5px;
-      border-bottom-width: 0.1px;
-      border-color: var(--faded-color);
-      font-family: "Roboto", sans-serif;
-      display: flex;
-      justify-content: center;
-    }
-    .lower_inner {
-      display: flex;
-      width: 50%;
-    
-    }
+  .sidebar {
+    width: auto;
+    box-shadow: none;
+    border-style: none;
+  }
+  .sidebar-upper-960px-container {
+    display: flex;
+    width: 80vw;
+    justify-content: space-between;
+  }
+
+  .sidebar__mid_lower {
+    border-bottom-style: solid;
+    border-top-style: none;
+    margin-top: 0px;
+    width: 100%;
+    padding-bottom: 5px;
+    border-bottom-width: 0.1px;
+    border-color: var(--faded-color);
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  .lower_inner {
+    display: flex;
+    width: 50%;
+  }
 }
 
-@media screen and (max-width: 695px){
-
+@media screen and (max-width: 695px) {
   .trashDropdownContainer {
-    display:block
+    display: block;
   }
   .name {
     font-size: 1rem;
@@ -197,11 +190,11 @@
   .sidebar__right .signout {
     display: none;
   }
-  .sidebar__mid_lower{
+  .sidebar__mid_lower {
     display: none;
   }
- 
-  .dropdown-links-container{
+
+  .dropdown-links-container {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -210,14 +203,12 @@
     position: relative;
     z-index: 1000;
   }
-  
-  .Link-drop {
-  font-weight: 200;
-  text-decoration: none;
-  color: black;
-  font-size: 25px;
-  padding: 12px 10px;
-}
 
- 
+  .Link-drop {
+    font-weight: 200;
+    text-decoration: none;
+    color: black;
+    font-size: 25px;
+    padding: 12px 10px;
+  }
 }

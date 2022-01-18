@@ -18,8 +18,11 @@ import {
 import firebase from "firebase";
 import { userObject } from "./App";
 import { db } from "./App";
-function ClassCountIncr(classid){
-  const sender = db.collection("classes").doc(classid).update({count: +1})
+function ClassCountIncr(classid) {
+  const sender = db
+    .collection("classes")
+    .doc(classid)
+    .update({ count: +1 });
 }
 export class User {
   constructor(name, id, email, className, classes) {
@@ -63,7 +66,6 @@ export class User {
   }
   */
 
-
   setUserStatus() {
     let splitEmail = this.email.split("@")[1];
     let username = firebase.auth().currentUser.displayName;
@@ -72,7 +74,10 @@ export class User {
       //student
       this.status = "student";
       //this.status = "teacher";
-    } else if (splitEmail.includes("ntig.se") || splitEmail.includes("gmail.com")) {
+    } else if (
+      splitEmail.includes("ntig.se") ||
+      splitEmail.includes("gmail.com")
+    ) {
       //teacher
       this.status = "teacher-mentor";
       //this.status = "student";
@@ -136,7 +141,6 @@ export class User {
         email: email,
         name: name,
         status: status,
-        selected: false,
         marked: false,
       }
     );
@@ -154,22 +158,19 @@ export class User {
       this.name,
       {
         //'test': 'user.js l43'
-        id: this.id+"&"+this.status,
+        id: this.id + "&" + this.status,
         //'matte50004': 'User.js'
 
         email: this.email,
         name: this.name,
         status: this.status,
-        selected: false,
-        marked: false,
+        marker: "yellow",
         createdAt: new Date(),
 
         /*books: this.books,*/
       },
-     {
-
-     }
-    ).then(()=>window.location.reload(true), ClassCountIncr(this.className));
+      {}
+    ).then(() => window.location.reload(true), ClassCountIncr(this.className));
 
     add(
       "users",
@@ -195,7 +196,11 @@ export class User {
     console.log("ID:s : ", read.ids);
     console.log("Current user id: " + this.id);
 
-    if (/*read.ids === undefined ||*/ !read.ids.includes(this.id+"&"+this.status)) {
+    if (
+      /*read.ids === undefined ||*/ !read.ids.includes(
+        this.id + "&" + this.status
+      )
+    ) {
       console.log("User does not exist yet");
       this.allIds = read.ids;
       this.allIds.push(this.id);
@@ -207,11 +212,10 @@ export class User {
         //this.AddTeacher();
       }
 
-
       //this.addUser();
     } else {
       console.log("User does exist");
-      
+
       this.firstLogin = false;
       //console.log("Firstlogin in class: " + this.firstLogin);
     }
