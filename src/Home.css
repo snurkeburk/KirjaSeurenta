@@ -116,6 +116,14 @@
   border-bottom-right-radius: 2rem;
 }
 
+.klassEleverStatus-text {
+  margin-top: 0.4rem;
+  font-family: "Roboto", sans-serif;
+  color:rgba(17, 17, 17, 0.692);
+  font-weight: 500;
+}
+
+
 .klassEleverStatus {
   display: flex;
   justify-content: space-around;
@@ -127,12 +135,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 1000;
+  font-size: 2.1rem;
+  color:rgba(20, 20, 20, 0.774)
 }
 
 .saknas,
 .utdelade {
   padding: 5px;
   width: 30px;
+  margin-left: 0.4rem;
   height: 30px;
   border-radius: 50%;
   font-size: 1.6rem;
@@ -146,10 +158,10 @@
 }
 
 .utdelade {
-  background-color: rgb(52, 209, 52);
+  background-color: rgb(118, 175, 118);
 }
 .saknas {
-  background-color: rgb(252, 72, 72);
+  background-color: rgb(180, 83, 83);
 }
 .klasser-container {
   display: grid;

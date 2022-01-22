@@ -36,7 +36,7 @@ import { AddBookToStudent } from "./AddBook";
 import { useCookies, getCookie } from "react-cookie";
 import { collection, query, where, getDocs } from "firebase";
 import { RemoveClassFromTeacher } from "./DeleteClass";
-
+import StudentBooks from "./StudentBooks";
 function TestClass() {
   const [open, setOpen] = useState(false);
   const { id } = useParams(); // id = klassnamnet
@@ -59,6 +59,8 @@ function TestClass() {
   const [buttonDisplay, setButtonDisplay] = useState(false);
   const [classListDisplay, setClassListDisplay] = useState(false);
   const [butter, setButter] = useState([]);
+  const [statusChange, setStatusChange] = useState(false);
+  const [displayBooks, setDisplayBooks] = useState(false);
   let username = firebase.auth().currentUser.displayName;
   useEffect(() => {
     if (cookies.user) {
@@ -150,18 +152,22 @@ function TestClass() {
     db.collection("users").doc("students").collection(id).doc(user).update({
       marker: "red",
     });
+
   }
   function setUnMarkedUser(user, count) {
     if (count > 0) {
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "green",
       });
+
     } else {
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "yellow",
       });
     }
   }
+
+  
   useEffect(() => {
     const sender = db
       .collection("users")
@@ -205,7 +211,6 @@ function TestClass() {
         // som tillåter användaren att "uppdatera sidan" eller "X".
 
         setStudents(getStudentsFromFirebase);
-        console.log(getStudentsFromFirebase);
         setLoadingStudents(false);
         sender();
       });
@@ -216,8 +221,9 @@ function TestClass() {
   const [books, setBooks] = useState([]);
   const getBooksFromFirebase = [];
   const [user, SetUser] = useState([]);
-
-  async function showBooks(user) {
+  const [showUser, setShowUser] = useState([]);
+  const [orange, setOrange] = useState([])
+    async function showBooks(user) {
     SetUser(user);
     const stop = db
       .collection("users")
@@ -233,25 +239,26 @@ function TestClass() {
           });
         });
         setBooks(getBooksFromFirebase);
-        stop();
       });
+      const timer = setTimeout(() => {
+      console.log("setdisplaybooks to true")
+       setDisplayBooks(true);
+      }, 700);
   }
 
   function setStatus(status, key) {
+    setDisplayBooks(false);
     if (status == "green") {
       db.collection("users")
-        .doc("students")
-        .collection(id)
-        .doc(user)
-        .collection("items")
-        .doc(key)
-        .update({
-          status: "red",
-        });
-      // update user_status to red
-      db.collection("users").doc("students").collection(id).doc(user).update({
-        marker: "red",
-      });
+      .doc("students")
+      .collection(id)
+      .doc(user)
+      .collection("items")
+      .doc(key)
+      .update({
+        status: "red",
+      }).then( db.collection("users").doc("students").collection(id).doc(user).update({ marker: "red",})
+      ).then(showBooks(user));
     } else if (status == "red") {
       db.collection("users")
         .doc("students")
@@ -261,10 +268,11 @@ function TestClass() {
         .doc(key)
         .update({
           status: "green",
-        });
-    }
-    setOpen(true);
+        }).then(showBooks(user).then(setOpen(true)));
+      }
   }
+
+
 
   // TODO: lägg till status brevid elev-namn som visar röd ifall
   // .. minst en av böckerna saknas, annars visar den grönt
@@ -291,6 +299,8 @@ function TestClass() {
 
     //AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
+
+
 
   function funcInfoDisplay() {
     if (cookies.user && !_c) {
@@ -335,10 +345,7 @@ function TestClass() {
   function saveCheckbox(name) {
     for (let i = 0; i < korv.length; i++) {
       if (korv[i].name == name) {
-        console.log(name + " " + "exists");
-        console.log("remove 1 at index " + i);
         korv.splice(i, 1);
-        console.log(korv);
         return name;
       }
     }
@@ -349,18 +356,10 @@ function TestClass() {
       },
     ]);
   }
-
-  useEffect(() => {
-    console.log(korv);
-  });
   function saveBookCheckbox(title) {
-    console.log(title);
     for (let i = 0; i < butter.length; i++) {
       if (butter[i].title == title) {
-        console.log(title + " " + "exists");
-        console.log("remove 1 at index " + i);
         butter.splice(i, 1);
-        console.log(butter);
         return title;
       }
     }
@@ -372,15 +371,11 @@ function TestClass() {
     ]);
   }
 
-  useEffect(() => {
-    console.log(butter);
-  });
 
   function uploadBooksToStudent() {
     for (let i = 0; i < korv.length; i++) {
       for (let k = 0; k < butter.length; k++) {
         AddBookToStudent(butter[k].title, "ID", id, korv[i].name);
-        console.log("Adding " + butter[k].title + " to " + korv[i].name);
       }
     }
   }
@@ -408,7 +403,6 @@ function TestClass() {
                 size="small"
                 onClick={() => {
                   setOpen(false);
-                  showBooks("NONE");
                 }}
               >
                 <CloseIcon fontSize="inherit" />
@@ -526,17 +520,17 @@ function TestClass() {
                 </p>
               </div>
             </Collapse>
-
             <div className="student-books-container" layout>
               <div className="info-bp-container">
                 <p className="info-bp">NR</p>
                 <p className="info-bp">BOK</p>
                 <p className="info-bp">STATUS</p>
               </div>
+              <Collapse in={displayBooks}>
               {books.length > 0 ? (
-                books.map((book) => (
-                  /*<motion.div className="books" key={post.id}>*/
-                  <div className="s-name" key={book.key}>
+                books.map((book, index) => (
+                  <motion.div className="books" key={index}>
+                  <div className="s-name">
                     <div className="s-name-nr">{book.nr}</div>
                     <div className="s-name-name">{book.name}</div>
                     <div>
@@ -553,6 +547,7 @@ function TestClass() {
                       ></motion.button>
                     </div>
                   </div>
+                  </motion.div>
                 ))
               ) : (
                 <div className="not-found">
@@ -564,9 +559,12 @@ function TestClass() {
                   </p>
                 </div>
               )}
+              </Collapse>
             </div>
-          </div>
+           
 
+
+          </div>
           <div className="class-right-side">
             <Button variant="outlined" onClick={() => setButtonDisplay(true)}>
               +
@@ -589,12 +587,12 @@ function TestClass() {
                 <Collapse in={!classListDisplay}>
                   <motion.div className="cont">
                     {students.length > 0 ? (
-                      students.map((post) => (
+                      students.map((post, index) => (
                         <div className="w-cont">
                           <motion.div className="students">
                             <p
                               user={post.name}
-                              key={post.key}
+                              key={index}
                               className="student"
                             >
                               {post.name}
@@ -658,11 +656,11 @@ function TestClass() {
                     <motion.div className="all-books-container">
                       <p>Välj bok:</p>
                       {allBooks.length > 0 ? (
-                        allBooks.map((book) => (
+                        allBooks.map((book, index) => (
                           /*<motion.div className="books" key={post.id}>*/
                           <motion.div
                             className="s-all-books"
-                            key={book.key}
+                            key={index}
                             initial={{ y: -100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                           >
@@ -671,7 +669,6 @@ function TestClass() {
                               <Checkbox
                                 label="checkbox"
                                 value={book.key}
-                                key={book.key}
                                 onChange={() => saveBookCheckbox(book.title)}
                               />
                             </div>

@@ -187,6 +187,8 @@ html {
   border-right-style: none;
   border-width: 0.1px;
   padding: 1rem 0rem;
+  margin-right: 2rem;
+  padding-top: 0;
   border-color: rgba(0, 0, 0, 0.096);
   width: 30vw;
   background-color: rgba(0, 0, 0, 0);
@@ -212,7 +214,7 @@ html {
   text-align: left;
   display: flex;
   align-items: top;
-  width: 25vw;
+  width: 26vw;
   justify-content: space-between;
   font-weight: 100;
   font-size: 1.2rem;
@@ -220,7 +222,6 @@ html {
   border-color: lightgray;
   border-bottom-left-radius: 2rem;
   padding-left: 2rem;
-  margin-left: -2rem;
 }
 .s-name-nr {
   width: 50px;
@@ -244,6 +245,13 @@ html {
 .e-book-nf {
   margin-top: 2rem;
   font-size: 0.8rem;
+}
+
+.confirm-status-change {
+  position: relative;
+  margin: auto;
+  width: 50%;
+  align-self: center;
 }
 .student-status {
   border-radius: 0;
@@ -356,7 +364,7 @@ html {
 
 .info-bp-container {
   display: flex;
-  width: 85%;
+  width: 92%;
   justify-content: space-between;
 }
 
@@ -421,6 +429,8 @@ html {
   }
   .class-left-side {
     width: 80vw;
+    margin-right: 0rem;
+
   }
 
   .w-cont {

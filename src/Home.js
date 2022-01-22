@@ -57,8 +57,16 @@ function Home() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [showCookies, setShowCookies] = useState(false);
   const [cookieStyle, setCookieStyle] = useState([]);
+  const [apple, setApple] = useState([]);
+  const [orange, setOrange] = useState([]);
+  const [loadingSize, setLoadingSize] = useState(true);
+  const [loadingMissingSize, setLoadingMissingSize] = useState(true);
+  const [loadingTotalSize, setLoadingTotalSize] = useState(true);
+  const [banana, setBanana] = useState([]);
   let username = firebase.auth().currentUser.displayName;
   const [size, setSize] = useState([]);
+
+
 
   useEffect(() => {
     console.log(cookies.user);
@@ -127,32 +135,74 @@ function Home() {
 
     GetTeachersClasses().then(function (res) {
       let classes = res.classes;
-      const shit = [];
       let _red = 0;
+      let counter = 0;
       classes.forEach((dox) => {
+        counter++;
         db.collection("users")
           .doc("students")
           .collection(dox)
           .onSnapshot((querySnapshot) => {
-            console.log(querySnapshot.size);
-            shit.push({
-              size: querySnapshot.size,
-            });
+            console.log(querySnapshot.size)
+             apple.push(
+              [
+               querySnapshot.size,
+              ])
+              console.log()
+              console.log(apple.length + " " + counter)
+              if (apple.length == counter){
+                setLoadingTotalSize(false);
+              }
           });
-      });
+          // för "saknade" användare
+          db.collection("users")
+          .doc("students")
+          .collection(dox)
+          .where("marker", "==", "red")
+          .onSnapshot((querySnapshot) => {
+            orange.push(
+              [
+                querySnapshot.size,
+              ]
+            )
+            if (orange.length == counter){
+              setLoadingMissingSize(false);
+            }
+          });
+          db.collection("users")
+          .doc("students")
+          .collection(dox)
+          .where("marker", "==", "green")
+          .onSnapshot((querySnapshot) => {
+            banana.push(
+              [
+                querySnapshot.size,
+              ]
+            )
+            if (banana.length == counter){
+              setLoadingSize(false);
+            }
+            console.log(banana + " " + banana.length + " " + counter)
 
-      console.log(shit);
-      setClassCount(shit);
+          })
+      },[loadingTotalSize]);
+   
+      console.log(apple)
+      setClassCount(apple);
       setPosts(classes);
       setLoadingBooks(false);
       //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
     });
-
+    
     // return cleanup function
     //return () => sender();
   }, [loadingStudents]);
 
+  const [kiwi, setKiwi] = useState([]);
+ 
+    
   useEffect(() => {
+    console.log(apple);
     async function sender() {
       const readCollection = db
         .collection("users")
@@ -346,7 +396,7 @@ function Home() {
             layout
           >
             {posts.length > 0 ? (
-              posts.map((post) => (
+              posts.map((post,index) => (
                 <motion.div
                   variants={childVariants}
                   className="klasser"
@@ -362,10 +412,32 @@ function Home() {
 
                   <div className="klassEleverContainer">
                     <div className="klassEleverStatus">
-                      <p className="utdelade">2</p>
-                      <p className="saknas">1</p>
+                      {loadingSize ? (
+                          <p className="utdelade"></p>
+                      ):(
+                        <div>
+                          <p className="utdelade">{banana[index]}</p>
+                          <p className="klassEleverStatus-text">utdelade</p>
+                        </div>
+                      )}
+                     {loadingMissingSize ? (
+                      <p className="saknas"></p>
+                     ):(
+                       <div>
+                        <p className="saknas">{orange[index]}</p>
+                        <p className="klassEleverStatus-text">saknas</p>
+                      </div>
+                     )}
                     </div>
-                    <div className="klassEleverAntal">{post}</div>
+                    {loadingTotalSize ? (
+                    <div className="klassEleverAntal"></div>
+                    ):(
+                      <div>
+                        <div className="klassEleverAntal">{apple[index]}</div>
+                        <p className="klassEleverStatus-text">totalt</p>
+                      </div>
+                    )}
+                  
                   </div>
                 </motion.div>
               ))
