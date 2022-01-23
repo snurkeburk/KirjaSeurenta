@@ -31,8 +31,8 @@ import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
 
 function Home() {
-  console.log("loading student home...")
-  console.log(userObject.status)
+  console.log("loading student home...");
+  console.log(userObject.status);
 
   //console.log("Home userObject: ");
   //console.log(userObject);
@@ -42,7 +42,7 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-  
+
   let username = firebase.auth().currentUser.displayName;
   const containerVariants = {
     hidden: {
@@ -78,23 +78,23 @@ function Home() {
       const readCollection = db
         .collection("users")
         .doc("students")
-        .collection("TE19D") 
+        .collection("TE19D")
         .doc("Nils Blomberg")
-        .collection('items')
+        .collection("items");
 
       const snapshot = await readCollection.get();
 
       if (snapshot.empty) {
-        console.log("wallah det här borde inte vara så här")
+        console.log("wallah det här borde inte vara så här");
         return;
       }
 
       let bookArray = [];
 
-      snapshot.forEach(doc =>{
-        console.log(doc.id, '=>', doc.data())
+      snapshot.forEach((doc) => {
+        console.log(doc.id, "=>", doc.data());
         bookArray.push(doc.data());
-      })
+      });
 
       return bookArray;
 
@@ -136,17 +136,16 @@ function Home() {
 
       return [bookTitleArray, bookImageArray];
     }
-    
-    
+
     if (userObject.status == "student") {
       sender().then(function (res) {
         if (res != null && res != undefined) {
           // hela skiten här e knullad ska fixa det nån annan gång
           //const booksArray = Object.keys(res.books);
           let booksArray = [];
-          let idsArray = []
+          let idsArray = [];
 
-          res.forEach(book => {
+          res.forEach((book) => {
             booksArray.push(book.name);
             idsArray.push(book.nr);
           });
@@ -157,7 +156,6 @@ function Home() {
           console.log(booksArray);
           console.log(idsArray);
 
-          
           let bookTitleArray = [];
           let bookImageArray = [];
 
@@ -177,11 +175,10 @@ function Home() {
           console.log("res.books är null");
         }
       });
-    }else {setLoading(false)}
+    } else {
+      setLoading(false);
+    }
   }, [loading]);
-
-
- 
 
   if (loading) {
     return (
@@ -192,63 +189,61 @@ function Home() {
     );
   }
 
-    return (
-      <div className="student-home-container">
-        <SidebarStudent />
-        <div className="student-s-container">
-          <motion.div className="student-left-side">
-            <motion.div className="böcker-container" layout>
-              {books.length > 0 ? (
-                books.map((post, index) => (
-                  <motion.div className="bokContainer">
-                    <motion.div
-                      className="böcker"
-                      style={{ backgroundImage: bookImages[index] }}
-                      style={{
-                        backgroundImage: bookImages[index],
-                        backgroundSize: "cover",
-                        /*backgroundSize: 'cover' */
-                      }}
-                      key={post.key}
-                      whileHover={{
-                        scale: 1.03,
-                        transition: { duration: 0.1 },
-                      }}
-                    >
-                      <a
-                        className="bok"
-                        href="#" /* style={{backgroundColor: 'green'}} */
-                      >
-                        {post}
-                      </a>
-                    </motion.div>
-                    <div className="bokId">
-                      <p>id: {bookIds[index]} </p>
-                    </div>
+  return (
+    <div className="student-home-container">
+      <SidebarStudent />
+      <motion.div 
+          initial={{opacity:0}}
+         animate={{ opacity: 1 }}
+         transition={{ ease: "easeOut", duration: 2, delay: 0.2}}
+      className="student-welcome-container">
+      <h1 className="student-welcome-msg">Välkommen {username}</h1>
+        <h3>
+          Du har <important>{books.length}</important> böcker
+        </h3>
+      </motion.div>
+      <div className="student-s-container">
+        <motion.div className="student-left-side">
+          <motion.div className="böcker-container" layout
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+            transition={{ease:"easeOut", duration: 1, delay: 1}}
+          >
+            {books.length > 0 ? (
+              books.map((post, index) => (
+                <motion.div className="bokContainer">
+                  <motion.div   whileHover={{
+                      scale: 1.03,
+                      transition: { duration: 0.1 },
+                    }}>
+                  <motion.div
+                    className="böcker"
+                    style={{ backgroundImage: bookImages[index] }}
+                    style={{
+                      backgroundImage: bookImages[index],
+                      backgroundSize: "cover",
+                      /*backgroundSize: 'cover' */
+                    }}
+                    key={post.key}                  
+                  >
                   </motion.div>
-                ))
-              ) : (
-                <div className="not-found">
-                  <h4>Inga böcker tillagda</h4>
-                </div>
-              )}
-
-              {/*
-                        klasser.map(klass=>{
-                          return(
-                            <div className="blog-container">
-                            <h4>{klass.namn}</h4>
-                            
-                            </div>
-                            )
-                          })
-                        */}
-            </motion.div>
+                  <div className="bokId">
+                    <p>{post}</p>
+                    <p>{bookIds[index]} </p>
+                  </div>
+                  </motion.div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="not-found">
+                <h4>Inga böcker tillagda</h4>
+              </div>
+            )}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
-    );
-  } 
-
+    </div>
+  );
+}
 
 export default Home;

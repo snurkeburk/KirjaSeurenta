@@ -24,7 +24,9 @@ function Add() {
   const [open, setOpen] = React.useState(false);
   const [alertType, setAlertType] = useState("success");
   const [alertTitleText, setAlertTitleText] = useState("");
-  const [alertResultText, setAlertResultText] = useState("Klassen har lagts till!")
+  const [alertResultText, setAlertResultText] = useState(
+    "Klassen har lagts till!"
+  );
   const [expectedError, setExpectedError] = useState([]);
   async function AddClassToTeacher(formData) {
     let username = firebase.auth().currentUser.displayName;
@@ -43,9 +45,10 @@ function Add() {
       .doc(_id);
 
     if (
-      formData.includes("TE") ||
-      formData.includes("ES") ||
-      formData.includes("EE")
+      (formData.includes("TE") ||
+        formData.includes("ES") ||
+        formData.includes("EE")) &&
+      formData.length == 5
     ) {
       //lägger till en teknikklass, samma för de under.
       const addClass = await collection
@@ -64,14 +67,31 @@ function Add() {
       }
       setAlertType("success");
       setAlertTitleText("");
-      setAlertResultText("Klassen har lagts till!")
-    } else {
-      setAlertType("error")
-      setAlertTitleText("Error")
-      setAlertResultText("Ett fel uppstod, försök igen!")
+      setAlertResultText("Klassen har lagts till!");
+    } else if (
+      !(formData.includes("TE") ||
+      formData.includes("ES") ||
+      formData.includes("EE"))
+      && formData.length == 5
+    ) {
+      console.log(formData.length);
+      setAlertType("error");
+      setAlertTitleText("Error");
+      setAlertResultText("Ett fel uppstod, försök igen!");
       setOpen(true);
       console.log("Invalid classname!");
-    }
+    } else if (
+      (formData.includes("TE") ||
+      formData.includes("ES") ||
+      formData.includes("EE") )&&
+      formData.length != 5
+    ){
+      setAlertType("error");
+      setAlertTitleText("Error");
+      setAlertResultText("Klassnamn får endast innehålla 5 karaktärer!");
+      setOpen(true);
+      console.log("Invalid classname!");
+    } // TODO: anti-cross-site-scripting
   }
   const sparaKlass = (event) => {
     event.preventDefault();

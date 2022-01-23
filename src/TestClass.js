@@ -375,11 +375,11 @@ function TestClass() {
   function uploadBooksToStudent() {
     for (let i = 0; i < korv.length; i++) {
       for (let k = 0; k < butter.length; k++) {
-        AddBookToStudent(butter[k].title, "ID", id, korv[i].name);
+        AddBookToStudent(butter[k].title, "ID", id, korv[i].name, new Date());
       }
     }
   }
-  function addBookID(title) {
+  function addBookID(title) { 
     //setShowID("block");
     //setShowAllBooks("none");
     setSelBook(title);
@@ -438,7 +438,6 @@ function TestClass() {
               <p className="class-saknas-desc">saknas</p>
             </div>
           </div>
-          <CreateFakeUser />
           <Button
             size={"small"}
             onClick={() =>

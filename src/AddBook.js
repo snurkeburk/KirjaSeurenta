@@ -1,5 +1,5 @@
 import { db } from "./App";
-export async function AddBookToStudent(book, id, className, student) {
+export async function AddBookToStudent(book, id, className, student, datum) {
   console.log(book, id, className, student);
 
   const res = await db
@@ -13,6 +13,7 @@ export async function AddBookToStudent(book, id, className, student) {
       name: book,
       status: "green",
       type: "book",
+      addedAt: datum,
     });
   //console.log(res);
 }

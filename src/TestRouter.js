@@ -106,9 +106,6 @@ const TestRouter = () => {
               <Route path="/klass/:id">
                 <TestClass />
               </Route>
-              <Route path="/:id">
-                <TestClass /> 
-              </Route>
               <Route component={() => <div>404 Not found </div>} />
               </Switch>
             ) : (

@@ -105,7 +105,6 @@ function CreateFakeUser() {
 
   return (
     <div>
-    <p>f: {ffCount}</p>
       <div className="c-fake-container">
         <Button
           size="small"
