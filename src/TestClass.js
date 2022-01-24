@@ -41,7 +41,7 @@ function TestClass() {
   const [open, setOpen] = useState(false);
   const { id } = useParams(); // id = klassnamnet
   const [students, setStudents] = useState([]);
-  const [loadingStudents, setLoadingStudents] = useState(false);
+  const [loadingStudents, setLoadingStudents] = useState(true);
   const [posts, setPosts] = useState([]);
   const [infoDisplay, setInfoDisplay] = useState(true);
   const [ReverseInfoDisplay, setReverseInfoDisplay] = useState(false);
@@ -62,6 +62,37 @@ function TestClass() {
   const [statusChange, setStatusChange] = useState(false);
   const [displayBooks, setDisplayBooks] = useState(false);
   let username = firebase.auth().currentUser.displayName;
+
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      x: "0",
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        mass: 0.1,
+        damping: 8,
+        staggerChildren: 0.06,
+        delay: 0,
+        when: "beforeChildren",
+      },
+    },
+  };
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    },
+  };
+
   useEffect(() => {
     if (cookies.user) {
       let c = cookies.user;
@@ -133,12 +164,11 @@ function TestClass() {
             });
         }
         setPosts(getPostsFromFirebase);
-        setLoadingStudents(false);
       });
 
     // return cleanup function
     return () => sender();
-  }, [loadingStudents]);
+  }, []);
 
   function checkMarked(user, marked, count) {
     if (marked) {
@@ -152,14 +182,12 @@ function TestClass() {
     db.collection("users").doc("students").collection(id).doc(user).update({
       marker: "red",
     });
-
   }
   function setUnMarkedUser(user, count) {
     if (count > 0) {
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "green",
       });
-
     } else {
       db.collection("users").doc("students").collection(id).doc(user).update({
         marker: "yellow",
@@ -167,7 +195,6 @@ function TestClass() {
     }
   }
 
-  
   useEffect(() => {
     const sender = db
       .collection("users")
@@ -222,8 +249,8 @@ function TestClass() {
   const getBooksFromFirebase = [];
   const [user, SetUser] = useState([]);
   const [showUser, setShowUser] = useState([]);
-  const [orange, setOrange] = useState([])
-    async function showBooks(user) {
+  const [orange, setOrange] = useState([]);
+  async function showBooks(user) {
     SetUser(user);
     const stop = db
       .collection("users")
@@ -240,25 +267,33 @@ function TestClass() {
         });
         setBooks(getBooksFromFirebase);
       });
-      const timer = setTimeout(() => {
-      console.log("setdisplaybooks to true")
-       setDisplayBooks(true);
-      }, 700);
+    const timer = setTimeout(() => {
+      console.log("setdisplaybooks to true");
+      setDisplayBooks(true);
+    }, 700);
   }
 
   function setStatus(status, key) {
     setDisplayBooks(false);
     if (status == "green") {
       db.collection("users")
-      .doc("students")
-      .collection(id)
-      .doc(user)
-      .collection("items")
-      .doc(key)
-      .update({
-        status: "red",
-      }).then( db.collection("users").doc("students").collection(id).doc(user).update({ marker: "red",})
-      ).then(showBooks(user));
+        .doc("students")
+        .collection(id)
+        .doc(user)
+        .collection("items")
+        .doc(key)
+        .update({
+          status: "red",
+        })
+        .then(
+          db
+            .collection("users")
+            .doc("students")
+            .collection(id)
+            .doc(user)
+            .update({ marker: "red" })
+        )
+        .then(showBooks(user));
     } else if (status == "red") {
       db.collection("users")
         .doc("students")
@@ -268,11 +303,10 @@ function TestClass() {
         .doc(key)
         .update({
           status: "green",
-        }).then(showBooks(user).then(setOpen(true)));
-      }
+        })
+        .then(showBooks(user).then(setOpen(true)));
+    }
   }
-
-
 
   // TODO: lägg till status brevid elev-namn som visar röd ifall
   // .. minst en av böckerna saknas, annars visar den grönt
@@ -299,8 +333,6 @@ function TestClass() {
 
     //AddBookToStudent(selBook, formDataID, id, userSel).then(setOpen(true));
   };
-
-
 
   function funcInfoDisplay() {
     if (cookies.user && !_c) {
@@ -340,7 +372,7 @@ function TestClass() {
       setAllBooks(getBooksFromFirebase);
     });
     return () => sender();
-  }, [loadingStudents]);
+  }, []);
 
   function saveCheckbox(name) {
     for (let i = 0; i < korv.length; i++) {
@@ -371,7 +403,6 @@ function TestClass() {
     ]);
   }
 
-
   function uploadBooksToStudent() {
     for (let i = 0; i < korv.length; i++) {
       for (let k = 0; k < butter.length; k++) {
@@ -379,7 +410,7 @@ function TestClass() {
       }
     }
   }
-  function addBookID(title) { 
+  function addBookID(title) {
     //setShowID("block");
     //setShowAllBooks("none");
     setSelBook(title);
@@ -526,43 +557,40 @@ function TestClass() {
                 <p className="info-bp">STATUS</p>
               </div>
               <Collapse in={displayBooks}>
-              {books.length > 0 ? (
-                books.map((book, index) => (
-                  <motion.div className="books" key={index}>
-                  <div className="s-name">
-                    <div className="s-name-nr">{book.nr}</div>
-                    <div className="s-name-name">{book.name}</div>
-                    <div>
-                      <motion.button
-                        whileHover={{
-                          scale: 1.1,
-                          transition: { duration: 0.1 },
-                        }}
-                        onClick={() => setStatus(book.status, book.key)}
-                        style={{
-                          backgroundColor: book.status,
-                        }}
-                        className="student-status"
-                      ></motion.button>
-                    </div>
+                {books.length > 0 ? (
+                  books.map((book, index) => (
+                    <motion.div className="books" key={index}>
+                      <div className="s-name">
+                        <div className="s-name-nr">{book.nr}</div>
+                        <div className="s-name-name">{book.name}</div>
+                        <div>
+                          <motion.button
+                            whileHover={{
+                              scale: 1.1,
+                              transition: { duration: 0.1 },
+                            }}
+                            onClick={() => setStatus(book.status, book.key)}
+                            style={{
+                              backgroundColor: book.status,
+                            }}
+                            className="student-status"
+                          ></motion.button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="not-found">
+                    <h4>Ingen elev har valts</h4>
+                    <p>Tryck på elev från klasslistan</p>
+                    <p className="e-book-nf">
+                      Detta kan även bero på att eleven inte har någon bok för
+                      tillfället
+                    </p>
                   </div>
-                  </motion.div>
-                ))
-              ) : (
-                <div className="not-found">
-                  <h4>Ingen elev har valts</h4>
-                  <p>Tryck på elev från klasslistan</p>
-                  <p className="e-book-nf">
-                    Detta kan även bero på att eleven inte har någon bok för
-                    tillfället
-                  </p>
-                </div>
-              )}
+                )}
               </Collapse>
             </div>
-           
-
-
           </div>
           <div className="class-right-side">
             <Button variant="outlined" onClick={() => setButtonDisplay(true)}>
@@ -584,16 +612,17 @@ function TestClass() {
             <ul>
               <li>
                 <Collapse in={!classListDisplay}>
-                  <motion.div className="cont">
+                  <motion.div
+                    className="cont"
+                    initial="hidden"
+                    animate="visible"
+                    variants={containerVariants}
+                  >
                     {students.length > 0 ? (
                       students.map((post, index) => (
-                        <div className="w-cont">
+                        <motion.div className="w-cont" variants={childVariants}>
                           <motion.div className="students">
-                            <p
-                              user={post.name}
-                              key={index}
-                              className="student"
-                            >
+                            <p user={post.name} key={index} className="student">
                               {post.name}
                             </p>
                             <Collapse in={buttonDisplay}>
@@ -641,7 +670,7 @@ function TestClass() {
                               className="student-status-marker"
                             ></button>
                           </motion.div>
-                        </div>
+                        </motion.div>
                       ))
                     ) : (
                       <div className="not-found">
