@@ -191,6 +191,7 @@ function Home() {
       setClassCount(apple);
       setPosts(classes);
       setLoadingBooks(false);
+      setLoadingStudents(false);
       //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
     });
     
@@ -303,7 +304,7 @@ function Home() {
     handleCookie();
   }
 
-  if (loadingBooks) {
+  if (loadingStudents) {
     return (
       <div>
         <Sidebar />
