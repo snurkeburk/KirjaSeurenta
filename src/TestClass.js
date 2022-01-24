@@ -625,11 +625,11 @@ function TestClass() {
                               size="small"
                               variant=""
                               style={{
-                                backgroundColor: "white",
+                                backgroundColor: "rgba(128, 128, 128, 0.04)",
                                 borderRadius: "2rem",
                                 fontSize: "1.5em",
-                                width: "20px",
-                                padding: "0",
+                                width: "0",
+                                padding: "0.1px",
                               }}
                             >
                               <AiOutlineEye />

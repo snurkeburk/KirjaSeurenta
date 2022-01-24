@@ -142,6 +142,10 @@ html {
   margin: 0;
 }
 
+.students:hover {
+  background-color: rgba(128, 128, 128, 0.075);
+}
+
 .form-submit {
   border-style: solid;
   padding: 0 10px;
