@@ -672,15 +672,19 @@ function TestClass() {
                       </div>
                     </motion.div>
                   ))
-                ) : (
+                ) : user.length == 0 ?(
                   <div className="not-found">
                     <h4>Ingen elev har valts</h4>
                     <p>Tryck på elev från klasslistan</p>
-                    <p className="e-book-nf">
-                      Detta kan även bero på att eleven inte har någon bok för
-                      tillfället
+                    <p className="e-book-nf" style={{color: "gray"}}>
+                      (Detta kan även bero på att eleven inte har någon bok för
+                      tillfället)
                     </p>
                   </div>
+                ):(
+                  <div className="not-found">
+                  <p style={{color: "rgba(0,0,0,0.7)"}}>Eleven har inte blivit tillldelad några böcker!</p>
+                </div>
                 )}
               </Collapse>
             </div>
@@ -736,7 +740,7 @@ function TestClass() {
                       color: "rgb(65, 123, 199)",
                     }}
                   >
-                    <ImUpload2 style={{ fontSize: "1.6rem" }} />
+                    <ImUpload2 style={{ fontSize: "1.6rem", paddingRight: "0.5rem" }} />
                     <p>Lägg till</p>
                   </Button>
                 </Collapse>
