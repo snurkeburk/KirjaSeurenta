@@ -25,7 +25,7 @@ import "./SidebarOption.css";
 import App from "./App";
 import { motion } from "framer-motion";
 import { role } from "./ValidateUser";
-import { AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineLogout, AiFillLock } from "react-icons/ai";
 import { userObject, db } from "./App";
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import {
@@ -88,16 +88,16 @@ function Sidebar() {
           </div>
           <div className="sidebar__mid">
             <Link className="Link" to="/">
-              hem
+              Hem
             </Link>
             <Link className="Link" to="/böcker">
-              böcker
+              Böcker
             </Link>
             <Link className="Link" to="/sök">
-              sök{" "}
+              Sök{" "}
             </Link>
             <Link className="Link" to="/add">
-              lägg till{" "}
+              Lägg till{" "}
             </Link>
           </div>
           <div className="sidebar__right">
@@ -112,12 +112,17 @@ function Sidebar() {
             </p>
             <p className="status">{}</p>
             <Button
-              style={{ backgroundColor: "#FFF" }}
+              style={{
+                backgroundColor: "#FFF",
+                borderRadius: "10rem",
+                padding: "0",
+                width: "max-content",
+              }}
               variant="contained"
               className="signout"
               onClick={() => firebase.auth().signOut()}
             >
-              <ExitToAppIcon style={{ color: "black" }} fontSize="small" />
+              <AiOutlineLogout style={{ color: "black" }} fontSize="1.5rem" />
             </Button>
           </div>
           <div className="trashDropdownContainer">
@@ -133,16 +138,16 @@ function Sidebar() {
             >
               <div className="dropdown-links-container">
                 <Link className="Link-drop" to="/">
-                  hem
+                  Hem
                 </Link>
                 <Link className="Link-drop" to="/böcker">
-                  böcker
+                  Böcker
                 </Link>
                 <Link className="Link-drop" to="/sök">
-                  sök{" "}
+                  Sök{" "}
                 </Link>
                 <Link className="Link-drop" to="/add">
-                  lägg till{" "}
+                  Lägg till{" "}
                 </Link>
                 <Button
                   variant="contained"

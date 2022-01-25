@@ -3,7 +3,6 @@
 * Proprietary and confidential
 * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
 */
-@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
 
 * {
   margin: 0;
@@ -43,20 +42,45 @@ html {
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  width: 20rem;
+  width: 100%;
+  padding: 0rem 1rem;
 }
-
-.totalContainer {
-  background-color: rgba(128, 128, 128, 0.179);
+.add-book {
+  background-color: rgba(0, 0, 0, 0.048);
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  border-style: solid;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 40rem;
   margin: auto;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
-  margin-top: 2rem;
-  border-radius: 1rem;
+  border-radius: 0.3rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.add-book {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 1rem;
+}
+
+.totalContainer {
+  background-color: rgba(0, 0, 0, 0.048);
+  border-width: 0.1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  border-style: solid;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  border-radius: 0.3rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .innerTotalContainer {
   display: flex;
@@ -128,7 +152,6 @@ html {
   flex-direction: column;
   width: 50vw;
   margin: 0rem 0rem;
-  padding: 0.1rem 1rem;
 }
 
 .students {
@@ -168,13 +191,13 @@ html {
 
 .student {
   color: rgb(82, 82, 82);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 100;
   text-align: left;
   padding: 0rem 1rem;
   width: 17rem;
   margin-right: 5rem;
-  padding-left: 5rem;
+  padding-left: 0rem;
 }
 
 .student-number-disp {
@@ -201,6 +224,7 @@ html {
 .class-right-side {
   background-color: rgba(134, 58, 58, 0);
   padding: 1rem 2rem;
+  padding-top: 0;
   width: 50vw;
   border-left-style: solid;
   border-width: 0.1px;
@@ -272,7 +296,7 @@ html {
   width: 10px;
   height: 10px;
   padding: 0.4rem;
-  margin-left: 2rem;
+  margin-left: 1rem;
 }
 
 .student-button {
@@ -286,12 +310,12 @@ html {
   border-right-style: none;
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.096);
-  width: 23vw;
   margin-bottom: 3rem;
   background-color: rgba(0, 0, 0, 0.048);
-  font-family: "Roboto", sans-serif;
   border-style: solid;
   border-radius: 2rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   padding: 0.9rem 0.8rem;
 }
 .class-important-info h1 {
@@ -317,8 +341,8 @@ html {
 }
 .button-info-open {
   border-style: none;
-  color: rgb(117, 153, 200);
-  float: right;
+  color: rgb(65, 123, 199);
+  width: 100%;
 }
 .info-close {
   color: rgba(39, 39, 39, 0.911);
@@ -327,6 +351,8 @@ html {
 .all-books-container {
   text-align: center;
   display: flex;
+  color: rgb(0, 0, 0);
+  opacity: 90%;
   flex-wrap: nowrap;
   flex-direction: column;
   justify-content: left;
@@ -336,6 +362,7 @@ html {
   border-color: rgba(0, 0, 0, 0.096);
   border-width: 1px;
   margin-right: 5rem;
+  width: 98%;
 }
 
 .s-all-books {
@@ -400,7 +427,6 @@ html {
     height: 2rem;
   }
   .totalContainer {
-    background-color: rgba(128, 128, 128, 0.179);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -434,7 +460,6 @@ html {
   .class-left-side {
     width: 80vw;
     margin-right: 0rem;
-
   }
 
   .w-cont {

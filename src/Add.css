@@ -4,15 +4,12 @@
 * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
-
 .add-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   padding: 10vw;
-  font-family: "Roboto", sans-serif;
   cursor: default;
 }
 

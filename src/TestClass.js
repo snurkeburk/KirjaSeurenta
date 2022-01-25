@@ -25,7 +25,9 @@ import {
 } from "react-icons/ai";
 import { BiBookAdd, BiBookAlt } from "react-icons/bi";
 import CreateFakeUser from "./CreateFakeUser";
-import { FaUserEdit } from "react-icons/fa";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { FaUserEdit, FaBookMedical } from "react-icons/fa";
+import { MdAdd, MdOutlineAddTask } from "react-icons/md";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import Collapse from "@material-ui/core/Collapse";
@@ -61,6 +63,9 @@ function TestClass() {
   const [butter, setButter] = useState([]);
   const [statusChange, setStatusChange] = useState(false);
   const [displayBooks, setDisplayBooks] = useState(false);
+  const [addBookA, setAddBookA] = useState(false);
+  const [addBookB, setAddBookB] = useState(true);
+  const [addBookF, setAddBookF] = useState(false);
   let username = firebase.auth().currentUser.displayName;
 
   const containerVariants = {
@@ -410,12 +415,44 @@ function TestClass() {
       }
     }
   }
+
+  function AddBookUI(step) {
+    switch (step) {
+      case "one":
+        setButtonDisplay(true);
+        setAddBookA(true);
+        setAddBookB(false);
+        break;
+      case "checkbox":
+        setAddBookF(true);
+        break;
+      case "exit":
+        setButtonDisplay(false);
+        setAddBookB(true);
+        setClassListDisplay(false);
+        setAddBookA(false);
+        setAddBookF(false);
+        break;
+      case "final":
+        setClassListDisplay(true);
+        setAddBookF(false);
+    }
+  }
+
   function addBookID(title) {
     //setShowID("block");
     //setShowAllBooks("none");
     setSelBook(title);
     AddBookToStudent(title, "ID", id);
   }
+
+  const AddBookBtnStyle = {
+    borderRadius: "0.5rem",
+    margin: "0rem 1rem",
+    backgroundColor: "white",
+    fontSize: "2rem",
+  };
+
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
@@ -456,45 +493,48 @@ function TestClass() {
           </Alert>
         </Collapse>
 
-        <div className="totalContainer">
-          <h1 className="class-title">{id}</h1>
-          <h5 className="class-title-size">{students.length}</h5>
-          <div className="innerTotalContainer">
-            <div className="class-utdeladeContainer">
-              <p className="class-utdelade">{greenCounter}</p>
-              <p className="class-utdelade-desc">utdelade</p>
-            </div>
-            <div className="class-saknasContainer">
-              <p className="class-saknas">{redCounter}</p>
-              <p className="class-saknas-desc">saknas</p>
-            </div>
-          </div>
-          <Button
-            size={"small"}
-            onClick={() =>
-              RemoveClassFromTeacher(
-                firebase.auth().currentUser.displayName,
-                id
-              )
-            }
-          >
-            <AiFillDelete className="class-deleteClass" size={35} />
-          </Button>
-        </div>
-
         <div className="class-big-container">
           <div className="class-left-side">
-            <Collapse in={ReverseInfoDisplay}>
-              <motion.button
-                whileHover={{
-                  scale: 1.2,
-                  transition: { duration: 0.1 },
-                }}
-                onClick={() => funcInfoDisplay()}
-                className="button-info-open"
+            <div className="totalContainer">
+              <h1 className="class-title">{id}</h1>
+              <h5 className="class-title-size">{students.length}</h5>
+              <div className="innerTotalContainer">
+                <div className="class-utdeladeContainer">
+                  <p className="class-utdelade">{greenCounter}</p>
+                  <p className="class-utdelade-desc">utdelade</p>
+                </div>
+                <div className="class-saknasContainer">
+                  <p className="class-saknas">{redCounter}</p>
+                  <p className="class-saknas-desc">saknas</p>
+                </div>
+              </div>
+              <Button
+                size={"small"}
+                onClick={() =>
+                  RemoveClassFromTeacher(
+                    firebase.auth().currentUser.displayName,
+                    id
+                  )
+                }
               >
-                <AiFillInfoCircle size={40} className="info-open" />
-              </motion.button>
+                <AiFillDelete className="class-deleteClass" size={35} />
+              </Button>
+            </div>
+
+            <Collapse in={ReverseInfoDisplay}>
+              <Button
+                onClick={() => funcInfoDisplay()}
+                style={{
+                  width: "100%",
+                  color: "rgb(65, 123, 199)",
+                  backgroundColor: "rgba(65, 123, 199, 0.20)",
+                }}
+              >
+                <RiArrowDownSLine
+                  style={{ fontSize: "1.6rem", paddingRight: "0.5rem" }}
+                />
+                <p>info</p>
+              </Button>
             </Collapse>
             <Collapse in={infoDisplay}>
               <div className="class-important-info">
@@ -593,22 +633,50 @@ function TestClass() {
             </div>
           </div>
           <div className="class-right-side">
-            <Button variant="outlined" onClick={() => setButtonDisplay(true)}>
-              +
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => setClassListDisplay(true)}
-            >
-              KLAR
-            </Button>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: "lightgreen" }}
-              onClick={() => uploadBooksToStudent()}
-            >
-              SISTA
-            </Button>
+            <div className="add-book">
+              <div className="add-book-s-one">
+                <Collapse in={addBookB} className="collapse-add">
+                  <Button
+                    onClick={() => AddBookUI("one")}
+                    style={{
+                      width: "12rem",
+                      color: "rgb(65, 123, 199)",
+                    }}
+                  >
+                    <MdAdd style={{ fontSize: "1.6rem" }} />
+                    <p>Lägg till böcker</p>
+                  </Button>
+                </Collapse>
+                <Collapse in={addBookA}>
+                  <Button
+                    onClick={() => AddBookUI("exit")}
+                    style={{
+                      width: "7.5rem",
+                      color: "rgb(65, 123, 199)",
+                    }}
+                  >
+                    <CloseIcon style={{ fontSize: "1.6rem" }} />
+                    <p>Avbryt</p>
+                  </Button>
+                </Collapse>
+              </div>
+              <div className="add-book-s-one">
+                <Collapse in={addBookF}>
+                  <Button
+                    onClick={() => AddBookUI("final")}
+                    style={{
+                      width: "7.5rem",
+                      color: "rgb(65, 123, 199)",
+                    }}
+                  >
+                    <MdOutlineAddTask
+                      style={{ fontSize: "1.6rem", paddingRight: "0.5rem" }}
+                    />
+                    <p>välj</p>
+                  </Button>
+                </Collapse>
+              </div>
+            </div>
             <ul>
               <li>
                 <Collapse in={!classListDisplay}>
@@ -626,27 +694,13 @@ function TestClass() {
                               {post.name}
                             </p>
                             <Collapse in={buttonDisplay}>
-                              <Button
-                                onClick={() => console.log("click")}
-                                className="show-books"
-                                size="small"
-                                variant=""
-                                style={{
-                                  backgroundColor: "white",
-                                  borderRadius: "2rem",
-                                  fontSize: "1.1rem",
-                                  width: "20px",
-                                  padding: "0",
-                                  mariginRight: "2rem",
-                                }}
-                              >
-                                <Checkbox
-                                  label="checkbox"
-                                  value={post.key}
-                                  key={post.key}
-                                  onChange={() => saveCheckbox(post.name)}
-                                />
-                              </Button>
+                              <Checkbox
+                                label="checkbox"
+                                value={post.key}
+                                key={post.key}
+                                onClick={() => AddBookUI("checkbox")}
+                                onChange={() => saveCheckbox(post.name)}
+                              />
                             </Collapse>
                             <Button
                               onClick={() => showBooks(post.name)}

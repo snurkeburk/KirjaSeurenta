@@ -4,8 +4,6 @@
 * Written by Nils Blomberg <fred03.blomberg@gmail.com> and Isak Anderson <isak.anderson9@gmail.com>
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
-
 .home-container {
   display: flex;
   justify-content: space-around;
@@ -13,7 +11,6 @@
   position: absolute;
   width: 95vw;
   margin-top: 3rem;
-  font-family: "Roboto", sans-serif;
 }
 
 .loading {
@@ -119,10 +116,9 @@
 .klassEleverStatus-text {
   margin-top: 0.4rem;
   font-family: "Roboto", sans-serif;
-  color:rgba(17, 17, 17, 0.692);
+  color: rgba(17, 17, 17, 0.692);
   font-weight: 500;
 }
-
 
 .klassEleverStatus {
   display: flex;
@@ -137,7 +133,7 @@
   align-items: center;
   font-weight: 1000;
   font-size: 2.1rem;
-  color:rgba(20, 20, 20, 0.774)
+  color: rgba(20, 20, 20, 0.774);
 }
 
 .saknas,
@@ -183,7 +179,7 @@
   box-shadow: 0px 5px 0px 0px #f000ff, 0px 10px 0px 0px #a700b1,
     0px 15px 0px 0px #7e0086;
     */
-    z-index: 2;
+  z-index: 2;
 }
 
 .bokContainer {
@@ -260,7 +256,6 @@ link:hover {
   justify-content: space-evenly;
 }
 
-
 .status-container {
   text-align: center;
   padding: 5px 10px;
@@ -270,14 +265,11 @@ link:hover {
   border-bottom-right-radius: 10px;
 }
 
-
 .student-welcome-container {
-  
   text-align: center;
 }
 
 .student-welcome-msg {
-
 }
 
 @media screen and (max-width: 1250px) {
