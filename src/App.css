@@ -20,6 +20,10 @@ html {
   --faded-color: rgba(0, 0, 0, 0.342);
   --highlight-color: #ff7c7c;
   --second-highlight-color: rgb(91, 164, 182);
+  --text-color: rgb(82, 82, 82);
+  --saknas-color: rgb(180, 83, 83);
+  --utdelade-color: rgb(118, 175, 118);
+  
 }
 
 .small-welcome-container {

@@ -23,6 +23,7 @@ import {
   AiFillEye,
   AiOutlineEye,
 } from "react-icons/ai";
+import { ImUpload2 } from "react-icons/im";
 import { BiBookAdd, BiBookAlt } from "react-icons/bi";
 import CreateFakeUser from "./CreateFakeUser";
 import { RiArrowDownSLine } from "react-icons/ri";
@@ -63,9 +64,11 @@ function TestClass() {
   const [butter, setButter] = useState([]);
   const [statusChange, setStatusChange] = useState(false);
   const [displayBooks, setDisplayBooks] = useState(false);
-  const [addBookA, setAddBookA] = useState(false);
   const [addBookB, setAddBookB] = useState(true);
+  const [addBookA, setAddBookA] = useState(false);
   const [addBookF, setAddBookF] = useState(false);
+  const [addBookS, setAddBookS] = useState(false);
+  const [defaultChecked, setDefaultChecked] = useState("defaultChecked")
   let username = firebase.auth().currentUser.displayName;
 
   const containerVariants = {
@@ -152,8 +155,10 @@ function TestClass() {
               for (let k = 0; k < getBookFromFirebase.length; k++) {
                 if (getBookFromFirebase[k].status == "red") {
                   mark = true;
+                  console.log("MARKED")
                   k = getBookFromFirebase.length;
                 } else {
+                 
                 }
               }
 
@@ -199,6 +204,23 @@ function TestClass() {
       });
     }
   }
+
+  useEffect(()=>{
+    const sender = db.collection("users")
+    .doc("students")
+    .collection(id)
+    .where("marker", "==", "red")
+    .onSnapshot((snapshot) => {
+      setRedCounter(snapshot.size);
+  })
+  const _sender = db.collection("users")
+  .doc("students")
+  .collection(id)
+  .where("marker", "==", "green")
+  .onSnapshot((snapshot) => {
+    setGreenCounter(snapshot.size);
+  })
+  })
 
   useEffect(() => {
     const sender = db
@@ -271,6 +293,7 @@ function TestClass() {
           });
         });
         setBooks(getBooksFromFirebase);
+        console.log(getBooksFromFirebase);
       });
     const timer = setTimeout(() => {
       console.log("setdisplaybooks to true");
@@ -380,9 +403,14 @@ function TestClass() {
   }, []);
 
   function saveCheckbox(name) {
+    setAddBookF(true);
+    console.log(korv)
     for (let i = 0; i < korv.length; i++) {
       if (korv[i].name == name) {
         korv.splice(i, 1);
+        if (korv.length == 0){
+          setAddBookF(false);
+        }
         return name;
       }
     }
@@ -393,10 +421,15 @@ function TestClass() {
       },
     ]);
   }
+
   function saveBookCheckbox(title) {
+    setAddBookS(true);
     for (let i = 0; i < butter.length; i++) {
       if (butter[i].title == title) {
         butter.splice(i, 1);
+        if (butter.length == 0){
+          setAddBookS(false);
+        }
         return title;
       }
     }
@@ -406,6 +439,7 @@ function TestClass() {
         title: title,
       },
     ]);
+  
   }
 
   function uploadBooksToStudent() {
@@ -419,6 +453,9 @@ function TestClass() {
   function AddBookUI(step) {
     switch (step) {
       case "one":
+        if (korv.length > 0){
+          setAddBookF(true);
+        }
         setButtonDisplay(true);
         setAddBookA(true);
         setAddBookB(false);
@@ -432,10 +469,24 @@ function TestClass() {
         setClassListDisplay(false);
         setAddBookA(false);
         setAddBookF(false);
+        setAddBookS(false);
         break;
       case "final":
+        if (butter.length > 0){
+          setAddBookS(true);
+        }
         setClassListDisplay(true);
         setAddBookF(false);
+      break;
+      case "submit":
+        setClassListDisplay(false);
+        setAddBookA(false);
+        setAddBookF(false)
+        setAddBookB(true);
+        setButtonDisplay(false);
+        setAddBookS(false);
+        uploadBooksToStudent();
+      break;
     }
   }
 
@@ -590,6 +641,7 @@ function TestClass() {
                 </p>
               </div>
             </Collapse>
+            <h4 className="info-selected-user">{user}</h4>
             <div className="student-books-container" layout>
               <div className="info-bp-container">
                 <p className="info-bp">NR</p>
@@ -602,7 +654,7 @@ function TestClass() {
                     <motion.div className="books" key={index}>
                       <div className="s-name">
                         <div className="s-name-nr">{book.nr}</div>
-                        <div className="s-name-name">{book.name}</div>
+                        <div className="s-name-name">{book.name}<p style={{color: "gray", fontSize: "1rem"}}>{book.addedAt}</p></div>
                         <div>
                           <motion.button
                             whileHover={{
@@ -611,10 +663,11 @@ function TestClass() {
                             }}
                             onClick={() => setStatus(book.status, book.key)}
                             style={{
-                              backgroundColor: book.status,
+                              backgroundColor: book.status, // TODO: gör setStatusColor if(green) set(var(--utdelade-color)) fast rgba value
                             }}
                             className="student-status"
-                          ></motion.button>
+                            ></motion.button>
+
                         </div>
                       </div>
                     </motion.div>
@@ -675,6 +728,18 @@ function TestClass() {
                     <p>välj</p>
                   </Button>
                 </Collapse>
+                <Collapse in={addBookS}>
+                  <Button
+                    onClick={() => AddBookUI("submit")}
+                    style={{
+                      width: "12rem",
+                      color: "rgb(65, 123, 199)",
+                    }}
+                  >
+                    <ImUpload2 style={{ fontSize: "1.6rem" }} />
+                    <p>Lägg till</p>
+                  </Button>
+                </Collapse>
               </div>
             </div>
             <ul>
@@ -693,22 +758,22 @@ function TestClass() {
                             <p user={post.name} key={index} className="student">
                               {post.name}
                             </p>
+                              <div className="eye-status-container">
                             <Collapse in={buttonDisplay}>
                               <Checkbox
                                 label="checkbox"
                                 value={post.key}
                                 key={post.key}
+                                color="primary"
                                 onClick={() => AddBookUI("checkbox")}
                                 onChange={() => saveCheckbox(post.name)}
-                              />
+                             />
                             </Collapse>
                             <Button
                               onClick={() => showBooks(post.name)}
                               className="show-books"
                               size="small"
-                              variant=""
                               style={{
-                                backgroundColor: "rgba(128, 128, 128, 0.04)",
                                 borderRadius: "2rem",
                                 fontSize: "1.5em",
                                 width: "0",
@@ -723,6 +788,7 @@ function TestClass() {
                               }}
                               className="student-status-marker"
                             ></button>
+                            </div>
                           </motion.div>
                         </motion.div>
                       ))

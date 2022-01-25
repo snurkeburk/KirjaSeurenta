@@ -154,10 +154,10 @@
 }
 
 .utdelade {
-  background-color: rgb(118, 175, 118);
+  background-color: var(--utdelade-color);
 }
 .saknas {
-  background-color: rgb(180, 83, 83);
+  background-color: var(--saknas-color);
 }
 .klasser-container {
   display: grid;

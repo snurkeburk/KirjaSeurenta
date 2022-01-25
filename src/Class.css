@@ -7,10 +7,12 @@
 * {
   margin: 0;
   padding: 0;
+
 }
 
 body,
 html {
+  letter-spacing: 0.5px;
 }
 
 .class-title,
@@ -98,20 +100,20 @@ html {
 .class-utdelade,
 .class-totalt {
   border-radius: 50%;
-  margin: 0 0.2rem;
-  font-size: 1.3rem;
+  padding: 0.2rem;
+  width: 30px;
+  margin: 0 0.3rem;
+  font-size: 1.5rem;
   color: white;
-  width: 2rem;
   text-align: center;
-  height: 2rem;
 }
 
 .class-utdelade {
   /* background-color: rgb(52, 209, 52);*/
-  background-color: green;
+  background-color: var(--utdelade-color);
 }
 .class-saknas {
-  background-color: rgb(252, 72, 72);
+  background-color: var(--saknas-color);
 }
 
 .class-utdeladeContainer,
@@ -157,11 +159,11 @@ html {
 .students {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   border-width: 0.1px;
   border-color: rgba(0, 0, 0, 0.469);
   text-align: left;
-  padding: 0;
+  width: 100%;
   margin: 0;
 }
 
@@ -195,11 +197,15 @@ html {
   font-weight: 100;
   text-align: left;
   padding: 0rem 1rem;
-  width: 17rem;
+  width: 15rem;
   margin-right: 5rem;
-  padding-left: 0rem;
 }
 
+.eye-status-container {
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+}
 .student-number-disp {
   font-weight: 100;
   font-size: 1.34rem;
@@ -258,6 +264,22 @@ html {
   text-align: left;
   padding-left: 2rem;
   width: 100%;
+}
+
+.info-selected-user {
+  font-weight: 500;
+  text-align: center;
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+  color: var(--text-color);
+  border-top-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
+  border-radius: 1rem;
+  padding: 0.4rem 0rem;
+}
+.info-selected-userclass {
+  font-weight: 100;
 }
 
 .s-info {
