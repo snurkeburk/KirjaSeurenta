@@ -69,10 +69,12 @@ function Add() {
       setAlertTitleText("");
       setAlertResultText("Klassen har lagts till!");
     } else if (
-      !(formData.includes("TE") ||
-      formData.includes("ES") ||
-      formData.includes("EE"))
-      && formData.length == 5
+      !(
+        formData.includes("TE") ||
+        formData.includes("ES") ||
+        formData.includes("EE")
+      ) &&
+      formData.length == 5
     ) {
       console.log(formData.length);
       setAlertType("error");
@@ -82,10 +84,10 @@ function Add() {
       console.log("Invalid classname!");
     } else if (
       (formData.includes("TE") ||
-      formData.includes("ES") ||
-      formData.includes("EE") )&&
+        formData.includes("ES") ||
+        formData.includes("EE")) &&
       formData.length != 5
-    ){
+    ) {
       setAlertType("error");
       setAlertTitleText("Error");
       setAlertResultText("Klassnamn får endast innehålla 5 karaktärer!");

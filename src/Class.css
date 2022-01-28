@@ -7,7 +7,6 @@
 * {
   margin: 0;
   padding: 0;
-
 }
 
 body,
@@ -53,6 +52,7 @@ html {
   border-color: rgba(0, 0, 0, 0.096);
   border-style: solid;
   display: flex;
+  height: 3.7rem;
   justify-content: space-around;
   align-items: center;
   margin: auto;
@@ -137,7 +137,7 @@ html {
 .student-books-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
+  justify-content: center;
   margin-top: 0.6rem;
   padding: 0;
 }
@@ -223,7 +223,7 @@ html {
   margin-right: 2rem;
   padding-top: 0;
   border-color: rgba(0, 0, 0, 0.096);
-  width: 30vw;
+  width: 40vw;
   background-color: rgba(0, 0, 0, 0);
 }
 
@@ -248,7 +248,7 @@ html {
   text-align: left;
   display: flex;
   align-items: top;
-  width: 26vw;
+  width: 35vw;
   justify-content: space-between;
   font-weight: 100;
   font-size: 1.2rem;
@@ -417,8 +417,87 @@ html {
 
 .info-bp-container {
   display: flex;
-  width: 92%;
+  width: 33vw;
   justify-content: space-between;
+}
+
+.edit-book-container {
+  padding: 1rem 2rem;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.096);
+  font-weight: bolder;
+  border-width: 0.1px;
+}
+
+.edit-book-header {
+  text-align: center;
+}
+
+.edit-book-header h2 {
+  font-size: 1.2rem;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.432);
+}
+
+.edit-book-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.edit-book-input {
+  width: inherit;
+  padding-left: 2rem;
+  margin: 1rem 0.32rem;
+  border-style: solid;
+  border-width: 0.1px;
+  border-radius: 0.3rem;
+  border-color: rgba(0, 0, 0, 0.096);
+  background-color: rgb(241, 241, 241);
+  font-size: 1.05rem;
+}
+
+.edit-book-input-container {
+  width: 40vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-book-input-container p {
+  width: 16rem;
+  color: black;
+  font-size: 1.05rem;
+}
+
+#final-edit-field {
+  border-bottom-style: solid;
+  border-color: rgba(0, 0, 0, 0.096);
+  border-width: 0.1px;
+}
+.edit-book-s {
+  margin: 1rem 0rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.edit-book-s div {
+  display: flex;
+  flex-direction: row;
+}
+.edit-book-s div div {
+  display: block;
+}
+.edit-book-s div {
+  margin-bottom: -1rem;
+}
+.edit-select-status-lower {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.397);
 }
 
 @media screen and (max-width: 1000px) {

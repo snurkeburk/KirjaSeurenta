@@ -22,6 +22,7 @@ import {
   AiFillInfoCircle,
   AiFillEye,
   AiOutlineEye,
+  AiOutlineEdit,
 } from "react-icons/ai";
 import { ImUpload2 } from "react-icons/im";
 import { BiBookAdd, BiBookAlt } from "react-icons/bi";
@@ -61,6 +62,7 @@ function TestClass() {
   const [redCounter, setRedCounter] = useState([]);
   const [buttonDisplay, setButtonDisplay] = useState(false);
   const [classListDisplay, setClassListDisplay] = useState(false);
+  const [realClassListDisplay, setRealClassListDisplay] = useState(true);
   const [butter, setButter] = useState([]);
   const [statusChange, setStatusChange] = useState(false);
   const [displayBooks, setDisplayBooks] = useState(false);
@@ -68,7 +70,18 @@ function TestClass() {
   const [addBookA, setAddBookA] = useState(false);
   const [addBookF, setAddBookF] = useState(false);
   const [addBookS, setAddBookS] = useState(false);
-  const [defaultChecked, setDefaultChecked] = useState("defaultChecked")
+  const [selectedTitle, setSelectedTitle] = useState([]);
+  const [selectedId, setSelectedId] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  const [selectedTurnInDate, setSelectedTurnInDate] = useState([]);
+  const [editBookA, setEditBookA] = useState(false);
+  const [editBookF, setEditBookF] = useState(false);
+  const [editBookKey, setEditBookKey] = useState([]);
+  const [titleReset, setTitleReset] = useState("");
+  const [idReset, setIdReset] = useState("");
+  const [turnindateReset, setTurnindateReset] = useState("");
+  const [EditStudentBookDisplay, setEditStudentBookDisplay] = useState(false);
+  const [editChecked, setEditChecked] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
   const containerVariants = {
@@ -155,10 +168,9 @@ function TestClass() {
               for (let k = 0; k < getBookFromFirebase.length; k++) {
                 if (getBookFromFirebase[k].status == "red") {
                   mark = true;
-                  console.log("MARKED")
+                  console.log("MARKED");
                   k = getBookFromFirebase.length;
                 } else {
-                 
                 }
               }
 
@@ -205,22 +217,24 @@ function TestClass() {
     }
   }
 
-  useEffect(()=>{
-    const sender = db.collection("users")
-    .doc("students")
-    .collection(id)
-    .where("marker", "==", "red")
-    .onSnapshot((snapshot) => {
-      setRedCounter(snapshot.size);
-  })
-  const _sender = db.collection("users")
-  .doc("students")
-  .collection(id)
-  .where("marker", "==", "green")
-  .onSnapshot((snapshot) => {
-    setGreenCounter(snapshot.size);
-  })
-  })
+  useEffect(() => {
+    const sender = db
+      .collection("users")
+      .doc("students")
+      .collection(id)
+      .where("marker", "==", "red")
+      .onSnapshot((snapshot) => {
+        setRedCounter(snapshot.size);
+      });
+    const _sender = db
+      .collection("users")
+      .doc("students")
+      .collection(id)
+      .where("marker", "==", "green")
+      .onSnapshot((snapshot) => {
+        setGreenCounter(snapshot.size);
+      });
+  });
 
   useEffect(() => {
     const sender = db
@@ -404,11 +418,11 @@ function TestClass() {
 
   function saveCheckbox(name) {
     setAddBookF(true);
-    console.log(korv)
+    console.log(korv);
     for (let i = 0; i < korv.length; i++) {
       if (korv[i].name == name) {
         korv.splice(i, 1);
-        if (korv.length == 0){
+        if (korv.length == 0) {
           setAddBookF(false);
         }
         return name;
@@ -427,7 +441,7 @@ function TestClass() {
     for (let i = 0; i < butter.length; i++) {
       if (butter[i].title == title) {
         butter.splice(i, 1);
-        if (butter.length == 0){
+        if (butter.length == 0) {
           setAddBookS(false);
         }
         return title;
@@ -439,7 +453,6 @@ function TestClass() {
         title: title,
       },
     ]);
-  
   }
 
   function uploadBooksToStudent() {
@@ -453,7 +466,7 @@ function TestClass() {
   function AddBookUI(step) {
     switch (step) {
       case "one":
-        if (korv.length > 0){
+        if (korv.length > 0) {
           setAddBookF(true);
         }
         setButtonDisplay(true);
@@ -467,26 +480,40 @@ function TestClass() {
         setButtonDisplay(false);
         setAddBookB(true);
         setClassListDisplay(false);
+        setRealClassListDisplay(true);
         setAddBookA(false);
         setAddBookF(false);
         setAddBookS(false);
+        //* FÖR EDIT BOOK //
+        setEditBookA(false);
+        setEditStudentBookDisplay(false);
         break;
       case "final":
-        if (butter.length > 0){
+        if (butter.length > 0) {
           setAddBookS(true);
         }
         setClassListDisplay(true);
+        setRealClassListDisplay(false);
         setAddBookF(false);
-      break;
+        break;
       case "submit":
         setClassListDisplay(false);
+        setRealClassListDisplay(true);
         setAddBookA(false);
-        setAddBookF(false)
+        setAddBookF(false);
         setAddBookB(true);
         setButtonDisplay(false);
         setAddBookS(false);
         uploadBooksToStudent();
-      break;
+        //* FÖR EDIT BOOK //
+        setEditBookA(false);
+        setEditStudentBookDisplay(false);
+        setDisplayBooks(false);
+        const timer = setTimeout(() => {
+          console.log("setdisplaybooks to true");
+          showBooks(user);
+        }, 500);
+        break;
     }
   }
 
@@ -497,11 +524,100 @@ function TestClass() {
     AddBookToStudent(title, "ID", id);
   }
 
+  function EditStudentBook(title, currentid, currentStatus, key, turnindate) {
+    console.log(currentStatus);
+    if (currentStatus == "green") {
+      setEditChecked(false);
+    } else {
+      setEditChecked(true);
+    }
+    setEditStudentBookDisplay(true);
+    setRealClassListDisplay(false);
+    setEditBookA(true);
+    setAddBookA(true);
+    setAddBookS(true);
+    setAddBookB(false);
+    setSelectedTitle(title);
+    setSelectedId(currentid);
+    setSelectedTurnInDate(turnindate);
+    console.log(currentStatus);
+    if (currentStatus == "green") {
+      setSelectedStatus(false);
+    } else if (currentStatus == "red") {
+      setSelectedStatus(true);
+    }
+    setEditBookKey(key);
+  }
+
   const AddBookBtnStyle = {
     borderRadius: "0.5rem",
     margin: "0rem 1rem",
     backgroundColor: "white",
     fontSize: "2rem",
+  };
+  //* Laddar upp redigerad bok till firebase och uppdaterar informationen
+  async function uploadEditedBook(title, nr, status, turnInDate) {
+    console.log("STATES: " + selectedTitle + " " + selectedId);
+    console.log(title + " " + nr + " " + turnInDate);
+    let _datum = new Date().toString();
+    let _split_datum = _datum.split(" ");
+    let s1_datum = _split_datum[1];
+    let s2_datum = _split_datum[2];
+    let s3_datum = _split_datum[3];
+    let s4_datum = _split_datum[4];
+    let _split_time = s4_datum.split(":");
+    let s1_s4_time = _split_time[0];
+    let s2_s4_time = _split_time[1];
+    let s4_fin_time = s1_s4_time + ":" + s2_s4_time;
+    let datum_fin =
+      s1_datum + " " + s2_datum + " " + s3_datum + " " + s4_fin_time;
+    // Kemi 1
+    console.log(datum_fin);
+    console.log(editBookKey);
+
+    const res = await db
+      .collection("users")
+      .doc("students")
+      .collection(id)
+      .doc(user)
+      .collection("items")
+      .doc(editBookKey)
+      .update({
+        nr: nr,
+        name: title,
+        status: "green",
+        lastEdit: datum_fin,
+        turnInDate: turnInDate,
+      });
+  }
+  //* Tar formData från redigera bok sidan och skickar till funktionen ovan
+  const sparaBok = (event) => {
+    console.log("selected title: " + selectedTitle);
+    event.preventDefault();
+    const elementsArray = [...event.target.elements];
+    const formData = elementsArray.reduce((accumulator, currentValue) => {
+      console.log(
+        "currentid: " + currentValue.id + " - " + currentValue.value.length
+      );
+      console.log(currentValue.placeholder);
+      if (currentValue.id && currentValue.value.length > 0) {
+        accumulator[currentValue.id] = currentValue.value;
+      } else {
+        accumulator[currentValue.id] = currentValue.placeholder;
+      }
+      return accumulator;
+    }, {});
+
+    let username = firebase.auth().currentUser.displayName;
+
+    let formDataTitle = formData.title;
+    let formDataId = formData.id;
+    let formDataTurnInDate = formData.turnInDate;
+    setTitleReset("");
+    setTurnindateReset("");
+    setIdReset("");
+    console.log(formDataTitle + " " + formDataId + " " + formDataTurnInDate);
+    uploadEditedBook(formDataTitle, formDataId, "green", formDataTurnInDate);
   };
 
   if (loadingStudents) {
@@ -643,19 +759,107 @@ function TestClass() {
             </Collapse>
             <h4 className="info-selected-user">{user}</h4>
             <div className="student-books-container" layout>
-              <div className="info-bp-container">
+              {/* <div className="info-bp-container" >
                 <p className="info-bp">NR</p>
                 <p className="info-bp">BOK</p>
                 <p className="info-bp">STATUS</p>
-              </div>
+              </div>*/}
               <Collapse in={displayBooks}>
                 {books.length > 0 ? (
                   books.map((book, index) => (
                     <motion.div className="books" key={index}>
-                      <div className="s-name">
-                        <div className="s-name-nr">{book.nr}</div>
-                        <div className="s-name-name">{book.name}<p style={{color: "gray", fontSize: "1rem"}}>{book.addedAt}</p></div>
+                      <div className="s-name" style={{ fontWeight: "300" }}>
+                        <div
+                          className="s-name-nr"
+                          style={{ marginRight: "0rem" }}
+                        >
+                          {book.nr}
+                        </div>
+                        <div className="s-name-name">{book.name}</div>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            width: "20vw",
+                          }}
+                        >
+                          {book.status == "green" ? (
+                            <div>
+                              <p
+                                style={{
+                                  backgroundColor: "rgb(118, 175, 118)",
+                                  borderRadius: "0.3rem",
+                                  textAlign: "center",
+                                  padding: "0 0.7rem",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                utdelad
+                              </p>
+                              <p style={{ color: "gray", fontSize: "1rem" }}>
+                                {book.addedAt}
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p
+                                style={{
+                                  backgroundColor: "rgb(180, 83, 83)",
+                                  borderRadius: "0.3rem",
+                                  textAlign: "center",
+                                  padding: "0 0.7rem",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                saknas
+                              </p>
+                              <p style={{ color: "gray", fontSize: "1rem" }}>
+                                {book.addedAt}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            width: "20rem",
+                            display: "flex",
+                            flexDirection: "column",
+                            marginTop: "-1rem",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Button
+                            onClick={() =>
+                              EditStudentBook(
+                                book.name,
+                                book.nr,
+                                book.status,
+                                book.key,
+                                book.turnInDate
+                              )
+                            }
+                            style={{
+                              width: "15rem",
+                              color: "rgb(65, 123, 199)",
+                              marginRight: "0rem",
+                            }}
+                          >
+                            <AiOutlineEdit
+                              style={{
+                                fontSize: "1.6rem",
+                                paddingRight: "0.5rem",
+                              }}
+                            />
+                            <p>redigera</p>
+                          </Button>
+                          <p style={{ color: "gray", fontSize: "0.7rem" }}>
+                            senast redigerad: {book.lastEdit}
+                          </p>
+                        </div>
+                        {/*
                         <div>
+                        
                           <motion.button
                             whileHover={{
                               scale: 1.1,
@@ -667,24 +871,27 @@ function TestClass() {
                             }}
                             className="student-status"
                             ></motion.button>
-
                         </div>
+                          */}
                       </div>
+                      <div></div>
                     </motion.div>
                   ))
-                ) : user.length == 0 ?(
+                ) : user.length == 0 ? (
                   <div className="not-found">
                     <h4>Ingen elev har valts</h4>
                     <p>Tryck på elev från klasslistan</p>
-                    <p className="e-book-nf" style={{color: "gray"}}>
+                    <p className="e-book-nf" style={{ color: "gray" }}>
                       (Detta kan även bero på att eleven inte har någon bok för
                       tillfället)
                     </p>
                   </div>
-                ):(
+                ) : (
                   <div className="not-found">
-                  <p style={{color: "rgba(0,0,0,0.7)"}}>Eleven har inte blivit tillldelad några böcker!</p>
-                </div>
+                    <p style={{ color: "rgba(0,0,0,0.7)" }}>
+                      Eleven har inte blivit tillldelad några böcker!
+                    </p>
+                  </div>
                 )}
               </Collapse>
             </div>
@@ -734,21 +941,27 @@ function TestClass() {
                 </Collapse>
                 <Collapse in={addBookS}>
                   <Button
+                    form="edit-form"
+                    type="submit"
                     onClick={() => AddBookUI("submit")}
                     style={{
                       width: "12rem",
                       color: "rgb(65, 123, 199)",
                     }}
                   >
-                    <ImUpload2 style={{ fontSize: "1.6rem", paddingRight: "0.5rem" }} />
-                    <p>Lägg till</p>
+                    <ImUpload2
+                      style={{ fontSize: "1.6rem", paddingRight: "0.5rem" }}
+                    />
+                    {EditStudentBookDisplay ? <p>klar</p> : <p>lägg till</p>}
                   </Button>
                 </Collapse>
+
+                {/* EDIT STUDENT BOOK VIEW */}
               </div>
             </div>
             <ul>
               <li>
-                <Collapse in={!classListDisplay}>
+                <Collapse in={realClassListDisplay}>
                   <motion.div
                     className="cont"
                     initial="hidden"
@@ -762,36 +975,36 @@ function TestClass() {
                             <p user={post.name} key={index} className="student">
                               {post.name}
                             </p>
-                              <div className="eye-status-container">
-                            <Collapse in={buttonDisplay}>
-                              <Checkbox
-                                label="checkbox"
-                                value={post.key}
-                                key={post.key}
-                                color="primary"
-                                onClick={() => AddBookUI("checkbox")}
-                                onChange={() => saveCheckbox(post.name)}
-                             />
-                            </Collapse>
-                            <Button
-                              onClick={() => showBooks(post.name)}
-                              className="show-books"
-                              size="small"
-                              style={{
-                                borderRadius: "2rem",
-                                fontSize: "1.5em",
-                                width: "0",
-                                padding: "0.1px",
-                              }}
-                            >
-                              <AiOutlineEye />
-                            </Button>
-                            <button
-                              style={{
-                                backgroundColor: post.marker,
-                              }}
-                              className="student-status-marker"
-                            ></button>
+                            <div className="eye-status-container">
+                              <Collapse in={buttonDisplay}>
+                                <Checkbox
+                                  label="checkbox"
+                                  value={post.key}
+                                  key={post.key}
+                                  color="primary"
+                                  onClick={() => AddBookUI("checkbox")}
+                                  onChange={() => saveCheckbox(post.name)}
+                                />
+                              </Collapse>
+                              <Button
+                                onClick={() => showBooks(post.name)}
+                                className="show-books"
+                                size="small"
+                                style={{
+                                  borderRadius: "2rem",
+                                  fontSize: "1.5em",
+                                  width: "0",
+                                  padding: "0.1px",
+                                }}
+                              >
+                                <AiOutlineEye />
+                              </Button>
+                              <button
+                                style={{
+                                  backgroundColor: post.marker,
+                                }}
+                                className="student-status-marker"
+                              ></button>
                             </div>
                           </motion.div>
                         </motion.div>
@@ -848,6 +1061,92 @@ function TestClass() {
                         </form>
                       </div>
                     </motion.div>
+                  </div>
+                </Collapse>
+                <Collapse in={editBookA}>
+                  <div className="edit-book-container">
+                    <div className="edit-book-header">
+                      <h1>
+                        {selectedTitle} ({selectedId})
+                      </h1>
+                      <h2>Ägs av {user}</h2>
+                    </div>
+                    <form
+                      className="edit-book-form"
+                      id="edit-form"
+                      onSubmit={sparaBok}
+                      autocomplete="off"
+                      style={{ display: "flex", flexDirection: "column" }}
+                    >
+                      <div className="edit-book-input-container">
+                        <p>Bok Titel</p>
+                        <input
+                          className="edit-book-input"
+                          type="text"
+                          id="title"
+                          placeholder={selectedTitle}
+                          value={titleReset}
+                          onChange={(e) => setTitleReset(e.target.value)}
+                        ></input>
+                      </div>
+                      <div className="edit-book-input-container">
+                        <p>Bok Nummer</p>
+                        <input
+                          className="edit-book-input"
+                          type="text"
+                          id="id"
+                          placeholder={selectedId}
+                          value={idReset}
+                          onChange={(e) => setIdReset(e.target.value)}
+                        ></input>
+                      </div>
+                      <div
+                        className="edit-book-input-container"
+                        id="final-edit-field"
+                      >
+                        <p>Inlämningsdatum</p>
+                        <input
+                          className="edit-book-input"
+                          type="text"
+                          id="turnInDate"
+                          placeholder={selectedTurnInDate}
+                          value={turnindateReset}
+                          onChange={(e) => setTurnindateReset(e.target.value)}
+                        ></input>
+                      </div>
+                    </form>
+                    <div className="edit-book-s">
+                      <div>
+                        <Checkbox
+                          label="checkbox"
+                          color="primary"
+                          key={selectedTitle}
+                          defaultChecked={editChecked}
+                          onChange={() => console.log("")}
+                        />
+                        <div>
+                          <p>Markera boken som saknad</p>
+                          <p className="edit-select-status-lower">
+                            Detta kommer att röd-markera boken & eleven.
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <Checkbox
+                          label="checkbox"
+                          color="primary"
+                          key={selectedTitle}
+                          onChange={() => console.log("")}
+                          disabled
+                        />
+                        <div>
+                          <p>Markera boken som inlämnad</p>
+                          <p className="edit-select-status-lower">
+                            Detta kommer att gul-markera boken & eleven.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Collapse>
               </li>
