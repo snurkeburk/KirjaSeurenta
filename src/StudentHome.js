@@ -79,7 +79,7 @@ function Home() {
         .collection("users")
         .doc("students")
         .collection("TE19D")
-        .doc("Nils Blomberg")
+        .doc("Olof Öhrn")
         .collection("items");
 
       const snapshot = await readCollection.get();
@@ -124,9 +124,9 @@ function Home() {
           data: doc.data(),
         });
       });
-
       arr.forEach((element) => {
         allBooksArray.forEach((bookElement) => {
+          console.log("ID: " + bookElement.id + " element: " + element);
           if (element == bookElement.id) {
             bookTitleArray.push(bookElement.data.title);
             bookImageArray.push("url(" + bookElement.data.cover + ")");
@@ -192,45 +192,57 @@ function Home() {
   return (
     <div className="student-home-container">
       <SidebarStudent />
-      <motion.div 
-          initial={{opacity:0}}
-         animate={{ opacity: 1 }}
-         transition={{ ease: "easeOut", duration: 2, delay: 0.2}}
-      className="student-welcome-container">
-      <h1 className="student-welcome-msg">Välkommen {username}</h1>
-        <h3>
-          Du har <important>{books.length}</important> böcker
-        </h3>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ ease: "easeOut", duration: 2, delay: 0.2 }}
+        className="student-welcome-container"
+      >
+        <h1 className="student-welcome-msg">Välkommen {username}</h1>
+        {books.length > 1 ? (
+          <h3>
+            Du har <important>{books.length}</important> böcker
+          </h3>
+        ) : books.length == 1 ? (
+          <h3>
+            Du har <important>{books.length}</important> bok
+          </h3>
+        ) : (
+          <h3>Du har inga böcker.</h3>
+        )}
       </motion.div>
       <div className="student-s-container">
         <motion.div className="student-left-side">
-          <motion.div className="böcker-container" layout
-            initial={{opacity:0}}
-            animate={{opacity:1}}
-            transition={{ease:"easeOut", duration: 1, delay: 1}}
+          <motion.div
+            className="böcker-container"
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ease: "easeOut", duration: 1, delay: 1 }}
           >
             {books.length > 0 ? (
               books.map((post, index) => (
                 <motion.div className="bokContainer">
-                  <motion.div   whileHover={{
+                  <motion.div
+                    whileHover={{
                       scale: 1.03,
                       transition: { duration: 0.1 },
-                    }}>
-                  <motion.div
-                    className="böcker"
-                    style={{ backgroundImage: bookImages[index] }}
-                    style={{
-                      backgroundImage: bookImages[index],
-                      backgroundSize: "cover",
-                      /*backgroundSize: 'cover' */
                     }}
-                    key={post.key}                  
                   >
-                  </motion.div>
-                  <div className="bokId">
-                    <p>{post}</p>
-                    <p>{bookIds[index]} </p>
-                  </div>
+                    <motion.div
+                      className="böcker"
+                      style={{ backgroundImage: bookImages[index] }}
+                      style={{
+                        backgroundImage: bookImages[index],
+                        backgroundSize: "cover",
+                        /*backgroundSize: 'cover' */
+                      }}
+                      key={post.key}
+                    ></motion.div>
+                    <div className="bokId">
+                      <p>{post}</p>
+                      <p>{bookIds[index]} </p>
+                    </div>
                   </motion.div>
                 </motion.div>
               ))
