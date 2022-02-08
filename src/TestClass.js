@@ -41,6 +41,8 @@ import { useCookies, getCookie } from "react-cookie";
 import { collection, query, where, getDocs } from "firebase";
 import { RemoveClassFromTeacher } from "./DeleteClass";
 import StudentBooks from "./StudentBooks";
+import PageNotFound from "./PageNotFound";
+import XssDetected from "./XssDetected";
 function TestClass() {
   const [open, setOpen] = useState(false);
   const { id } = useParams(); // id = klassnamnet
@@ -82,6 +84,7 @@ function TestClass() {
   const [turnindateReset, setTurnindateReset] = useState("");
   const [EditStudentBookDisplay, setEditStudentBookDisplay] = useState(false);
   const [editChecked, setEditChecked] = useState([]);
+  const [userSelectedEdit, setUserSelectedEdit] = useState(false);
   let username = firebase.auth().currentUser.displayName;
 
   const containerVariants = {
@@ -307,7 +310,6 @@ function TestClass() {
           });
         });
         setBooks(getBooksFromFirebase);
-        console.log(getBooksFromFirebase);
       });
     const timer = setTimeout(() => {
       console.log("setdisplaybooks to true");
@@ -466,6 +468,7 @@ function TestClass() {
   function AddBookUI(step) {
     switch (step) {
       case "one":
+        setUserSelectedEdit(false);
         if (korv.length > 0) {
           setAddBookF(true);
         }
@@ -504,11 +507,14 @@ function TestClass() {
         setAddBookB(true);
         setButtonDisplay(false);
         setAddBookS(false);
-        uploadBooksToStudent();
-        //* FÖR EDIT BOOK //
-        setEditBookA(false);
-        setEditStudentBookDisplay(false);
-        setDisplayBooks(false);
+        if (!userSelectedEdit) {
+          uploadBooksToStudent();
+        } else {
+          //* FÖR EDIT BOOK //
+          setEditBookA(false);
+          setEditStudentBookDisplay(false);
+          setDisplayBooks(false);
+        }
         const timer = setTimeout(() => {
           console.log("setdisplaybooks to true");
           showBooks(user);
@@ -526,6 +532,7 @@ function TestClass() {
 
   function EditStudentBook(title, currentid, currentStatus, key, turnindate) {
     console.log(currentStatus);
+    setUserSelectedEdit(true);
     if (currentStatus == "green") {
       setEditChecked(false);
     } else {
@@ -556,39 +563,42 @@ function TestClass() {
     fontSize: "2rem",
   };
   //* Laddar upp redigerad bok till firebase och uppdaterar informationen
-  async function uploadEditedBook(title, nr, status, turnInDate) {
-    console.log("STATES: " + selectedTitle + " " + selectedId);
-    console.log(title + " " + nr + " " + turnInDate);
-    let _datum = new Date().toString();
-    let _split_datum = _datum.split(" ");
-    let s1_datum = _split_datum[1];
-    let s2_datum = _split_datum[2];
-    let s3_datum = _split_datum[3];
-    let s4_datum = _split_datum[4];
-    let _split_time = s4_datum.split(":");
-    let s1_s4_time = _split_time[0];
-    let s2_s4_time = _split_time[1];
-    let s4_fin_time = s1_s4_time + ":" + s2_s4_time;
-    let datum_fin =
-      s1_datum + " " + s2_datum + " " + s3_datum + " " + s4_fin_time;
-    // Kemi 1
-    console.log(datum_fin);
-    console.log(editBookKey);
 
-    const res = await db
-      .collection("users")
-      .doc("students")
-      .collection(id)
-      .doc(user)
-      .collection("items")
-      .doc(editBookKey)
-      .update({
-        nr: nr,
-        name: title,
-        status: "green",
-        lastEdit: datum_fin,
-        turnInDate: turnInDate,
-      });
+  async function uploadEditedBook(title, nr, status, turnInDate) {
+    if (userSelectedEdit) {
+      console.log("STATES: " + selectedTitle + " " + selectedId);
+      console.log(title + " " + nr + " " + turnInDate);
+      let _datum = new Date().toString();
+      let _split_datum = _datum.split(" ");
+      let s1_datum = _split_datum[1];
+      let s2_datum = _split_datum[2];
+      let s3_datum = _split_datum[3];
+      let s4_datum = _split_datum[4];
+      let _split_time = s4_datum.split(":");
+      let s1_s4_time = _split_time[0];
+      let s2_s4_time = _split_time[1];
+      let s4_fin_time = s1_s4_time + ":" + s2_s4_time;
+      let datum_fin =
+        s1_datum + " " + s2_datum + " " + s3_datum + " " + s4_fin_time;
+      // Kemi 1
+      console.log(datum_fin);
+      console.log(editBookKey);
+
+      const res = await db
+        .collection("users")
+        .doc("students")
+        .collection(id)
+        .doc(user)
+        .collection("items")
+        .doc(editBookKey)
+        .update({
+          nr: nr,
+          name: title,
+          status: "green",
+          lastEdit: datum_fin,
+          turnInDate: turnInDate,
+        });
+    }
   }
   //* Tar formData från redigera bok sidan och skickar till funktionen ovan
   const sparaBok = (event) => {
@@ -623,7 +633,33 @@ function TestClass() {
   if (loadingStudents) {
     <Sidebar />;
     return <CircularProgress />;
-  } else {
+  } else if (
+    //* ======================= Anti XSS och felaktiga URL's =======================
+    id.includes(
+      "<",
+      ">",
+      "{",
+      "}",
+      "/",
+      "%",
+      "$",
+      "[",
+      "]",
+      "#",
+      "@",
+      "?",
+      "-",
+      "'"
+    )
+  ) {
+    return <XssDetected />;
+  } else if (id.length != 5) {
+    return <PageNotFound />;
+  } else if (
+    (id.length == 5 && id.includes("TE")) ||
+    (id.length == 5 && id.includes("ES")) ||
+    (id.length == 5 && id.includes("EE"))
+  ) {
     return (
       <motion.div initial={{ opacity: "0%" }} animate={{ opacity: "100%" }}>
         <Sidebar />

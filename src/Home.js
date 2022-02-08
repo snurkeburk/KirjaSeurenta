@@ -34,7 +34,8 @@ import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
 import { AddBookToStudent } from "./AddBook";
 import "reactjs-popup/dist/index.css";
-
+import { useDetectAdBlock } from "adblock-detect-react";
+import { AiFillWarning } from "react-icons/ai";
 function Home() {
   console.log("loading home...");
   console.log(userObject.status);
@@ -56,6 +57,7 @@ function Home() {
   const [bookIds, setIds] = useState([]);
   const [cookies, setCookie] = useCookies(["user"]);
   const [showCookies, setShowCookies] = useState(false);
+  const [showAdblock, setShowAdblock] = useState(false);
   const [cookieStyle, setCookieStyle] = useState([]);
   const [apple, setApple] = useState([]);
   const [orange, setOrange] = useState([]);
@@ -66,10 +68,12 @@ function Home() {
   let username = firebase.auth().currentUser.displayName;
   const [size, setSize] = useState([]);
 
-
+  const adBlockDetected = useDetectAdBlock();
 
   useEffect(() => {
-    console.log(cookies.user);
+    if (adBlockDetected) {
+      setShowAdblock(true);
+    }
   });
   function handleCookie() {
     setCookie("user", username + "%" + "notseeninfo", {
@@ -137,71 +141,61 @@ function Home() {
       let classes = res.classes;
       let _red = 0;
       let counter = 0;
-      classes.forEach((dox) => {
-        counter++;
-        db.collection("users")
-          .doc("students")
-          .collection(dox)
-          .onSnapshot((querySnapshot) => {
-            console.log(querySnapshot.size)
-             apple.push(
-              [
-               querySnapshot.size,
-              ])
-              console.log()
-              console.log(apple.length + " " + counter)
-              if (apple.length == counter){
+      classes.forEach(
+        (dox) => {
+          counter++;
+          db.collection("users")
+            .doc("students")
+            .collection(dox)
+            .onSnapshot((querySnapshot) => {
+              console.log(querySnapshot.size);
+              apple.push([querySnapshot.size]);
+              console.log();
+              console.log(apple.length + " " + counter);
+              if (apple.length == counter) {
                 setLoadingTotalSize(false);
               }
-          });
+            });
           // för "saknade" användare
           db.collection("users")
-          .doc("students")
-          .collection(dox)
-          .where("marker", "==", "red")
-          .onSnapshot((querySnapshot) => {
-            orange.push(
-              [
-                querySnapshot.size,
-              ]
-            )
-            if (orange.length == counter){
-              setLoadingMissingSize(false);
-            }
-          });
+            .doc("students")
+            .collection(dox)
+            .where("marker", "==", "red")
+            .onSnapshot((querySnapshot) => {
+              orange.push([querySnapshot.size]);
+              if (orange.length == counter) {
+                setLoadingMissingSize(false);
+              }
+            });
           db.collection("users")
-          .doc("students")
-          .collection(dox)
-          .where("marker", "==", "green")
-          .onSnapshot((querySnapshot) => {
-            banana.push(
-              [
-                querySnapshot.size,
-              ]
-            )
-            if (banana.length == counter){
-              setLoadingSize(false);
-            }
-            console.log(banana + " " + banana.length + " " + counter)
+            .doc("students")
+            .collection(dox)
+            .where("marker", "==", "green")
+            .onSnapshot((querySnapshot) => {
+              banana.push([querySnapshot.size]);
+              if (banana.length == counter) {
+                setLoadingSize(false);
+              }
+              console.log(banana + " " + banana.length + " " + counter);
+            });
+        },
+        [loadingTotalSize]
+      );
 
-          })
-      },[loadingTotalSize]);
-   
-      console.log(apple)
+      console.log(apple);
       setClassCount(apple);
       setPosts(classes);
       setLoadingBooks(false);
       setLoadingStudents(false);
       //AddBookToStudent("matte50004", 12345, "TE19D", "Nils Blomberg")
     });
-    
+
     // return cleanup function
     //return () => sender();
   }, [loadingStudents]);
 
   const [kiwi, setKiwi] = useState([]);
- 
-    
+
   useEffect(() => {
     console.log(apple);
     async function sender() {
@@ -372,6 +366,52 @@ function Home() {
           </CookiesProvider>
         </motion.div>
       </Collapse>
+
+      <Collapse in={showAdblock}>
+        <motion.div
+          className="adblock-container"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ ease: "easeOut", duration: 1, delay: 1 }}
+        >
+          <motion.div
+            className="modal-adblock"
+            initial={{ y: 0 }}
+            animate={{ y: 0 }}
+            transition={{ ease: "easeOut", duration: 1, delay: 1 }}
+          >
+            <div className="content">
+              <AiFillWarning className="adblock-warningicon" size={50} />
+              <div className="header">
+                <important>Adblock</important> upptäcktes!
+              </div>{" "}
+              <p>
+                {" "}
+                Kirja Seurenta använder tjänster som hjälper oss att skydda &
+                förbättra hemsidan och användares upplevelse. Tyvärr så
+                blockeras dessa tjänster av tillägg som är till för att blockera
+                reklam.
+              </p>
+              <p>
+                {" "}
+                För att hemsidan ska fungera felfritt så ber vi dig att stänga
+                av adblock när du besöker Kirja Seurenta.
+              </p>
+              <br />
+              <important>
+                Kirja Seurenta kommer aldrig att visa reklam eller använda
+                informationen till tredje-parts tjänster. Läs mer om våran
+                policy
+              </important>
+            </div>
+            <div
+              className="actions"
+              style={{ display: "flex", justifyContent: "space-evenly" }}
+            ></div>
+          </motion.div>
+        </motion.div>
+      </Collapse>
+
       <Sidebar />
 
       <div className="upper-container">
@@ -397,7 +437,7 @@ function Home() {
             layout
           >
             {posts.length > 0 ? (
-              posts.map((post,index) => (
+              posts.map((post, index) => (
                 <motion.div
                   variants={childVariants}
                   className="klasser"
@@ -414,31 +454,30 @@ function Home() {
                   <div className="klassEleverContainer">
                     <div className="klassEleverStatus">
                       {loadingSize ? (
-                          <p className="utdelade"></p>
-                      ):(
+                        <p className="utdelade"></p>
+                      ) : (
                         <div>
                           <p className="utdelade">{banana[index]}</p>
                           <p className="klassEleverStatus-text">utdelade</p>
                         </div>
                       )}
-                     {loadingMissingSize ? (
-                      <p className="saknas"></p>
-                     ):(
-                       <div>
-                        <p className="saknas">{orange[index]}</p>
-                        <p className="klassEleverStatus-text">saknas</p>
-                      </div>
-                     )}
+                      {loadingMissingSize ? (
+                        <p className="saknas"></p>
+                      ) : (
+                        <div>
+                          <p className="saknas">{orange[index]}</p>
+                          <p className="klassEleverStatus-text">saknas</p>
+                        </div>
+                      )}
                     </div>
                     {loadingTotalSize ? (
-                    <div className="klassEleverAntal"></div>
-                    ):(
+                      <div className="klassEleverAntal"></div>
+                    ) : (
                       <div>
                         <div className="klassEleverAntal">{apple[index]}</div>
                         <p className="klassEleverStatus-text">totalt</p>
                       </div>
                     )}
-                  
                   </div>
                 </motion.div>
               ))

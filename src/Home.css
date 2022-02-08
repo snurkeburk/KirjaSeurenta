@@ -94,6 +94,50 @@
   background: rgba(51, 51, 51, 0.7);
   z-index: 1000;
 }
+
+.adblock-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(36, 36, 36, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-adblock {
+  height: max-content;
+  color: var(--text-color);
+  background-color: rgba(255, 255, 255, 0.863);
+  padding: 3rem 2rem;
+  padding-top: 1rem;
+  border-radius: 2rem;
+}
+.modal-adblock .content .header {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.modal-adblock .content .header important {
+  color: var(--saknas-color);
+  font-size: 2.5rem;
+}
+.modal-adblock .content {
+  width: 40vw;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.modal-adblock .content p {
+  margin-bottom: 1rem;
+}
+.modal-adblock .content important {
+  font-size: 0.9rem;
+}
+
+.adblock-warningicon {
+  color: var(--saknas-color);
+}
 .klass {
   text-decoration: none;
   color: white;

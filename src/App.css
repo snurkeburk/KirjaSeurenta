@@ -23,7 +23,7 @@ html {
   --text-color: rgb(82, 82, 82);
   --saknas-color: rgb(180, 83, 83);
   --utdelade-color: rgb(118, 175, 118);
-  
+  --blue-color: rgb(65, 123, 199);
 }
 
 .small-welcome-container {
@@ -33,30 +33,28 @@ html {
   background-position-y: 90px; */
   display: flex;
   flex-direction: column;
-  -webkit-box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71); 
-  box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71);
+  -webkit-box-shadow: 13px 12px 15px -4px rgba(0, 0, 0, 0.71);
+  box-shadow: 13px 12px 15px -4px rgba(0, 0, 0, 0.71);
 }
 
 .left {
-  background: #D10BE9;
-background: -moz-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
-background: -webkit-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
-background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
+  background: #d10be9;
+  background: -moz-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+  background: -webkit-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+  background: linear-gradient(135deg, #d10be9 0%, #2b1b39 100%);
   border-top-right-radius: 2rem;
   border-top-left-radius: 2rem;
   padding: 5rem 2rem;
   width: 80vw;
-  
 }
 .right {
- border-style: solid;
- border-top-style: none;
+  border-style: solid;
+  border-top-style: none;
   border-bottom-left-radius: 2rem;
   border-bottom-right-radius: 2rem;
   padding-top: 1rem;
   border-width: 0.1px;
-  border-color:rgba(0, 0, 0, 0.213);
-
+  border-color: rgba(0, 0, 0, 0.213);
 }
 
 .welcome-container {
@@ -72,7 +70,7 @@ background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
   padding-top: 50px;
 }
 
-.welcome-container:hover{
+.welcome-container:hover {
   cursor: default;
 }
 
@@ -85,7 +83,7 @@ background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
 }
 .welcomeMessege,
 .welcomeUnder,
-.welcomeName{
+.welcomeName {
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   color: rgb(255, 255, 255);
@@ -117,11 +115,10 @@ background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
   color: #50067e;
 }
 .welcomeUnder {
-  font-size:20px;
+  font-size: 20px;
   margin-top: 0rem;
   padding: 2rem 0rem;
   color: rgb(255, 255, 255);
-
 }
 
 .firebaseui-card-content {
@@ -142,15 +139,15 @@ background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
     background-position-y: 90px; */
     display: flex;
     flex-direction: row;
-    -webkit-box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71); 
-    box-shadow: 13px 12px 15px -4px rgba(0,0,0,0.71);
+    -webkit-box-shadow: 13px 12px 15px -4px rgba(0, 0, 0, 0.71);
+    box-shadow: 13px 12px 15px -4px rgba(0, 0, 0, 0.71);
   }
-  
+
   .left {
-    background: #D10BE9;
-    background: -moz-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
-    background: -webkit-linear-gradient(-45deg, #D10BE9 0%, #2B1B39 100%);
-    background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
+    background: #d10be9;
+    background: -moz-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+    background: -webkit-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+    background: linear-gradient(135deg, #d10be9 0%, #2b1b39 100%);
     border-top-left-radius: 2rem;
     border-bottom-left-radius: 2rem;
     border-top-right-radius: 0;
@@ -161,7 +158,6 @@ background: linear-gradient(135deg, #D10BE9 0%, #2B1B39 100%);
     justify-self: center;
     justify-content: center;
     width: 50rem;
-    
   }
   .right {
     border-style: none;

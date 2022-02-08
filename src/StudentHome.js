@@ -29,6 +29,7 @@ import { ar } from "date-fns/locale";
 import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
+import XssDetected from "./XssDetected";
 
 function Home() {
   console.log("loading student home...");
@@ -188,7 +189,6 @@ function Home() {
       </div>
     );
   }
-
   return (
     <div className="student-home-container">
       <SidebarStudent />
