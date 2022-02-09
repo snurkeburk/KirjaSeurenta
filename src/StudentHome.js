@@ -30,6 +30,7 @@ import SmallAdd from "./SmallAdd";
 import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
 import XssDetected from "./XssDetected";
+import Collapse from "@material-ui/core/Collapse";
 
 function Home() {
   console.log("loading student home...");
@@ -43,7 +44,11 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [bookImages, setImages] = useState([]);
   const [bookIds, setIds] = useState([]);
-
+  const [bookStatus, setStatus] = useState([]);
+  const [addedAt, setAddedAt] = useState([]);
+  const [turnIn, setTurnIn] = useState([]);
+  const [collapse, setCollapse] = useState(false);
+  const [antiCollapse, setAntiCollapse] = useState(true);
   let username = firebase.auth().currentUser.displayName;
   const containerVariants = {
     hidden: {
@@ -80,7 +85,7 @@ function Home() {
         .collection("users")
         .doc("students")
         .collection("TE19D")
-        .doc("Olof Öhrn")
+        .doc(username)
         .collection("items");
 
       const snapshot = await readCollection.get();
@@ -113,6 +118,7 @@ function Home() {
       }
       */
     }
+
     async function returnBookTitle(arr) {
       let bookTitleArray = [];
       let allBooksArray = [];
@@ -145,10 +151,17 @@ function Home() {
           //const booksArray = Object.keys(res.books);
           let booksArray = [];
           let idsArray = [];
-
+          let statusArray = [];
+          let addedAtArray = [];
+          let turnInArray = [];
+          // TODO  let addedByArray = [];
           res.forEach((book) => {
-            booksArray.push(book.name);
+            booksArray.push(book.bid);
             idsArray.push(book.nr);
+            statusArray.push(book.status);
+            addedAtArray.push(book.addedAt);
+            turnInArray.push(book.turnInDate);
+            // TODO addedBy.push(book.addedBy);
           });
 
           //const idsArray = Object.values(res.books);
@@ -156,6 +169,7 @@ function Home() {
 
           console.log(booksArray);
           console.log(idsArray);
+          console.log(statusArray);
 
           let bookTitleArray = [];
           let bookImageArray = [];
@@ -169,7 +183,9 @@ function Home() {
 
             setImages(bookImageArray);
           });
-
+          setStatus(statusArray);
+          setTurnIn(turnInArray);
+          setAddedAt(addedAtArray);
           setIds(idsArray);
           setLoading(false);
         } else {
@@ -180,7 +196,16 @@ function Home() {
       setLoading(false);
     }
   }, [loading]);
-
+  function coll(key) {
+    console.log(key);
+    if (antiCollapse) {
+      setAntiCollapse(false);
+      setCollapse(true);
+    } else {
+      setAntiCollapse(true);
+      setCollapse(false);
+    }
+  }
   if (loading) {
     return (
       <div>
@@ -220,6 +245,7 @@ function Home() {
             animate={{ opacity: 1 }}
             transition={{ ease: "easeOut", duration: 1, delay: 1 }}
           >
+            <Button variant="contained" onClick={() => coll()}></Button>
             {books.length > 0 ? (
               books.map((post, index) => (
                 <motion.div className="bokContainer">
@@ -229,20 +255,65 @@ function Home() {
                       transition: { duration: 0.1 },
                     }}
                   >
-                    <motion.div
-                      className="böcker"
-                      style={{ backgroundImage: bookImages[index] }}
-                      style={{
-                        backgroundImage: bookImages[index],
-                        backgroundSize: "cover",
-                        /*backgroundSize: 'cover' */
-                      }}
-                      key={post.key}
-                    ></motion.div>
-                    <div className="bokId">
-                      <p>{post}</p>
-                      <p>{bookIds[index]} </p>
-                    </div>
+                    <Collapse in={antiCollapse}>
+                      <motion.div
+                        className="böcker"
+                        style={{ backgroundImage: bookImages[index] }}
+                        style={{
+                          backgroundImage: bookImages[index],
+                          backgroundSize: "cover",
+                          borderStyle: "outset",
+                          borderWidth: "2px",
+                          borderBottomStyle: "none",
+                          borderColor: bookStatus[index],
+                          /*backgroundSize: 'cover' */
+                        }}
+                        key={post.key}
+                      >
+                        {bookStatus[index] == "red" ? (
+                          <div
+                            style={{
+                              backgroundColor: "rgb(180, 83, 83)",
+                              borderTopRightRadius: "0.8rem",
+                              borderTopLeftRadius: "0.8rem",
+                              color: "white",
+                            }}
+                          >
+                            saknas!
+                          </div>
+                        ) : (
+                          <div></div>
+                        )}
+                      </motion.div>
+
+                      <div
+                        className="bokId"
+                        style={{
+                          borderStyle: "outset",
+                          borderColor: bookStatus[index],
+                          borderTopStyle: "none",
+                          borderWidth: "2px",
+
+                          /*backgroundSize: 'cover' */
+                        }}
+                      >
+                        <p>{post}</p>
+                        <p>{bookIds[index]} </p>
+                      </div>
+                    </Collapse>
+                    <Collapse in={collapse}>
+                      <div className="böcker">
+                        <p>{post}</p>
+                        <p>{bookIds[index]} </p>
+                        {bookStatus[index] == "red" ? (
+                          <p>saknas</p>
+                        ) : (
+                          <p>utdelad</p>
+                        )}
+                        <p>{addedAt[index]} </p>
+                        <p>{turnIn[index]} </p>
+                      </div>
+                    </Collapse>
                   </motion.div>
                 </motion.div>
               ))

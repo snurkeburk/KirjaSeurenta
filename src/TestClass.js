@@ -517,7 +517,6 @@ function TestClass() {
         }
         const timer = setTimeout(() => {
           console.log("setdisplaybooks to true");
-          showBooks(user);
         }, 500);
         break;
     }

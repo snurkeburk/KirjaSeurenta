@@ -14,7 +14,8 @@ export async function AddBookToStudent(book, id, className, student, datum) {
   let s4_fin_time = s1_s4_time + ":" + s2_s4_time;
   let edit_datum_fin =
     s1_datum + " " + s2_datum + " " + s3_datum + " " + s4_fin_time;
-
+  let _book = book.replaceAll(" ", "");
+  let fin_book = _book.toLowerCase();
   console.log(
     book +
       " " +
@@ -28,6 +29,7 @@ export async function AddBookToStudent(book, id, className, student, datum) {
       " " +
       edit_datum_fin
   );
+
   /*  -----------------  */
   const res = await db
     .collection("users")
@@ -38,6 +40,7 @@ export async function AddBookToStudent(book, id, className, student, datum) {
     .add({
       nr: id,
       name: book,
+      bid: fin_book,
       status: "green",
       type: "book",
       addedAt: datum_fin,
