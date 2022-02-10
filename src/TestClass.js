@@ -1153,7 +1153,7 @@ function TestClass() {
                     >
                       <div className="inner-input">
                         <div className="edit-book-input-container">
-                          <p className="edit-book-header-s">Bok Titel</p>
+                          <p className="edit-book-header-s">Boktitel</p>
                           <input
                             className="edit-book-input"
                             type="text"
@@ -1164,7 +1164,7 @@ function TestClass() {
                           ></input>
                         </div>
                         <div className="edit-book-input-container">
-                          <p className="edit-book-header-s">Bok Nummer</p>
+                          <p className="edit-book-header-s">Boknummer</p>
                           <input
                             className="edit-book-input"
                             type="text"
