@@ -46,10 +46,14 @@ function Home() {
   const [bookIds, setIds] = useState([]);
   const [bookStatus, setStatus] = useState([]);
   const [addedAt, setAddedAt] = useState([]);
+  const [addedBy, setAddedBy] = useState([]);
   const [turnIn, setTurnIn] = useState([]);
   const [collapse, setCollapse] = useState(false);
   const [antiCollapse, setAntiCollapse] = useState(true);
-  let username = firebase.auth().currentUser.displayName;
+  let _username = firebase.auth().currentUser.displayName;
+  let _firstname = _username.split(" ")[0];
+  let _lastname = _username.split(" ")[1];
+  let username = _lastname + " " + _firstname;
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -154,6 +158,7 @@ function Home() {
           let statusArray = [];
           let addedAtArray = [];
           let turnInArray = [];
+          let addedByArray = [];
           // TODO  let addedByArray = [];
           res.forEach((book) => {
             booksArray.push(book.bid);
@@ -161,15 +166,12 @@ function Home() {
             statusArray.push(book.status);
             addedAtArray.push(book.addedAt);
             turnInArray.push(book.turnInDate);
+            addedByArray.push(book.addedBy);
             // TODO addedBy.push(book.addedBy);
           });
 
           //const idsArray = Object.values(res.books);
           //const idsArray  = res.nr;
-
-          console.log(booksArray);
-          console.log(idsArray);
-          console.log(statusArray);
 
           let bookTitleArray = [];
           let bookImageArray = [];
@@ -186,6 +188,7 @@ function Home() {
           setStatus(statusArray);
           setTurnIn(turnInArray);
           setAddedAt(addedAtArray);
+          setAddedBy(addedByArray);
           setIds(idsArray);
           setLoading(false);
         } else {
@@ -223,7 +226,7 @@ function Home() {
         transition={{ ease: "easeOut", duration: 2, delay: 0.2 }}
         className="student-welcome-container"
       >
-        <h1 className="student-welcome-msg">Välkommen {username}</h1>
+        <h1 className="student-welcome-msg">Välkommen {_firstname}</h1>
         {books.length > 1 ? (
           <h3>
             Du har <important>{books.length}</important> böcker
@@ -255,6 +258,74 @@ function Home() {
                       transition: { duration: 0.1 },
                     }}
                   >
+                    {" "}
+                    <Collapse in={collapse}>
+                      <div
+                        className="böcker"
+                        style={{
+                          backgroundSize: "cover",
+                          borderStyle: "outset",
+                          borderWidth: "2px",
+                          borderBottomStyle: "none",
+                          borderColor: bookStatus[index],
+                          backgroundColor: "rgb(26, 16, 41)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            paddingLeft: "0.6rem",
+                            paddingRight: "0rem",
+                            paddingTop: "1rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          {bookStatus[index] == "red" ? (
+                            <p
+                              style={{
+                                paddingTop: "1rem",
+                                fontSize: "1.5rem",
+                                color: bookStatus[index],
+                              }}
+                            >
+                              status: saknas!
+                            </p>
+                          ) : (
+                            <p
+                              style={{
+                                paddingTop: "1rem",
+                                color: bookStatus[index],
+                                fontSize: "1.5rem",
+                              }}
+                            >
+                              status: utdelad
+                            </p>
+                          )}
+                          <p
+                            style={{
+                              color: "rgb(212, 211, 211)",
+                              paddingTop: "1rem",
+                            }}
+                          >
+                            utdelad: {addedAt[index]}{" "}
+                          </p>
+                          <p
+                            style={{
+                              color: "rgb(212, 211, 211)",
+                            }}
+                          >
+                            inlämnas: {turnIn[index]}{" "}
+                          </p>
+                          <p
+                            style={{
+                              color: "rgb(212, 211, 211)",
+                              paddingTop: "1rem",
+                            }}
+                          >
+                            utlånad av: {addedBy[index]}
+                          </p>
+                        </div>
+                      </div>
+                    </Collapse>
                     <Collapse in={antiCollapse}>
                       <motion.div
                         className="böcker"
@@ -285,35 +356,21 @@ function Home() {
                           <div></div>
                         )}
                       </motion.div>
-
-                      <div
-                        className="bokId"
-                        style={{
-                          borderStyle: "outset",
-                          borderColor: bookStatus[index],
-                          borderTopStyle: "none",
-                          borderWidth: "2px",
-
-                          /*backgroundSize: 'cover' */
-                        }}
-                      >
-                        <p>{post}</p>
-                        <p>{bookIds[index]} </p>
-                      </div>
                     </Collapse>
-                    <Collapse in={collapse}>
-                      <div className="böcker">
-                        <p>{post}</p>
-                        <p>{bookIds[index]} </p>
-                        {bookStatus[index] == "red" ? (
-                          <p>saknas</p>
-                        ) : (
-                          <p>utdelad</p>
-                        )}
-                        <p>{addedAt[index]} </p>
-                        <p>{turnIn[index]} </p>
-                      </div>
-                    </Collapse>
+                    <div
+                      className="bokId"
+                      style={{
+                        borderStyle: "outset",
+                        borderColor: bookStatus[index],
+                        borderTopStyle: "none",
+                        borderWidth: "2px",
+
+                        /*backgroundSize: 'cover' */
+                      }}
+                    >
+                      <p>{post}</p>
+                      <p>{bookIds[index]} </p>
+                    </div>
                   </motion.div>
                 </motion.div>
               ))

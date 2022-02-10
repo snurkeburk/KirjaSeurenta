@@ -259,6 +259,20 @@ html {
 }
 .s-name-nr {
   width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  color: white;
+  text-shadow: horizontal-offset vertical-offset blur color;
+  text-shadow: 2px 3px 2px rgba(0, 0, 0, 0.158);
+  background-color: var(--blue-color);
+  padding: 0.5rem;
+  border-radius: 50%;
+  min-width: 2rem;
+  min-height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
 }
 .s-name-name {
   text-align: left;
@@ -446,6 +460,9 @@ html {
   flex-direction: column;
   align-items: flex-start;
 }
+.edit-book-header-s {
+  color: var(--text-color);
+}
 
 .edit-book-input {
   width: inherit;
@@ -463,19 +480,30 @@ html {
   width: 40vw;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  flex-direction: row;
+}
+.edit-book-container .inner-input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 .edit-book-input-container p {
   width: 16rem;
-  color: black;
   font-size: 1.05rem;
 }
-
-#final-edit-field {
+.inner-input-text {
   border-bottom-style: solid;
   border-color: rgba(0, 0, 0, 0.096);
   border-width: 0.1px;
+  color: gray;
+  font-size: 0.7rem;
+  margin-top: -1.8rem;
+  padding-bottom: 1rem;
+}
+#final-edit-field {
 }
 .edit-book-s {
   margin: 1rem 0rem;

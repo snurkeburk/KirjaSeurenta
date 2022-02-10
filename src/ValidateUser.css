@@ -9,11 +9,11 @@
   padding: 0;
 }
 
-body,
-html {
+body {
   height: 100vh;
   width: auto;
   background-color: rgb(225, 237, 245);
+  color: var(--text-color);
 }
 
 :root {
@@ -24,19 +24,23 @@ html {
 
 .valUser {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 3rem;
+  flex-wrap: nowrap;
+  margin-top: 5rem;
 }
 
 .validate-promt {
   font-weight: 100;
+  text-align: center;
   font-size: 3rem;
+  padding-top: 2rem;
 }
 .validate-question {
   font-size: 1.5rem;
   font-weight: 100;
+  text-align: center;
 }
 
 .home-container {
@@ -55,11 +59,11 @@ html {
 }
 
 .validate-klasser {
-  border-bottom-style: groove;
-  border-color: rgb(134, 43, 219);
-  border-width: 10px;
-  border-radius: 10px;
-  padding: 10px 0px;
+  border-bottom-style: solid;
+  border-color: rgb(0, 0, 0);
+  border-width: 1px;
+  border-radius: 0.2rem;
+  padding: 0px 0px;
   margin: 1rem;
   background-size: contain;
 }
@@ -68,21 +72,33 @@ html {
   text-decoration: none;
   color: rgb(0, 0, 0);
   font-weight: 100;
-  font-size: 50px;
-  width: 175px;
+  font-size: 25px;
+  width: 100px;
   text-align: center;
-  padding: 0px 10px;
+  padding: 0px 0px;
   border-style: none;
 }
 .validate-klasser-container {
+  border-style: solid;
+  border-radius: 2rem;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.096);
   display: flex;
-  width: 54vw;
+  width: max-content;
   margin-top: 5rem;
   flex-wrap: wrap;
-  padding: 2rem 5rem;
+  width: 30rem;
+  flex-direction: row;
+  padding: 0.2rem 0.5rem;
+  margin: 3vw;
+  background-color: rgba(61, 63, 65, 0.151);
   justify-content: center;
 }
-
+.validate-header {
+  text-align: center;
+  font-weight: 100;
+  font-size: 2rem;
+}
 .authoritarian-div {
   text-align: center;
   margin-top: 30vh;
@@ -98,6 +114,27 @@ html {
   justify-content: space-between;
   margin-top: -0rem;
 }
+
+@media only screen and (max-width: 1565px) {
+  .valUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .validate-klasser-container {
+    display: flex;
+    width: max-content;
+    margin-top: 5rem;
+    flex-wrap: wrap;
+    max-width: 30rem;
+    flex-direction: row;
+    padding: 1rem 2rem;
+    justify-content: center;
+  }
+}
+
 @media only screen and (max-width: 700px) {
   .validate-klasser-container {
     min-width: 2rem;

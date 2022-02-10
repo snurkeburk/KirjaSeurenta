@@ -90,14 +90,14 @@ function Sidebar() {
             <Link className="Link" to="/">
               Hem
             </Link>
-            <Link className="Link" to="/böcker">
-              Böcker
-            </Link>
-            <Link className="Link" to="/sök">
-              Sök{" "}
-            </Link>
             <Link className="Link" to="/add">
               Lägg till{" "}
+            </Link>
+            <Link style={{ color: "lightgray" }} className="Link">
+              Böcker
+            </Link>
+            <Link style={{ color: "lightgray" }} className="Link">
+              Sök{" "}
             </Link>
           </div>
           <div className="sidebar__right">

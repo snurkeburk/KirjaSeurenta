@@ -25,6 +25,7 @@ import {
   AiOutlineEdit,
 } from "react-icons/ai";
 import { ImUpload2 } from "react-icons/im";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { BiBookAdd, BiBookAlt } from "react-icons/bi";
 import CreateFakeUser from "./CreateFakeUser";
 import { RiArrowDownSLine } from "react-icons/ri";
@@ -84,6 +85,7 @@ function TestClass() {
   const [turnindateReset, setTurnindateReset] = useState("");
   const [EditStudentBookDisplay, setEditStudentBookDisplay] = useState(false);
   const [editChecked, setEditChecked] = useState([]);
+  const [editCheckedPrev, setEditCheckedPrev] = useState();
   const [userSelectedEdit, setUserSelectedEdit] = useState(false);
   let username = firebase.auth().currentUser.displayName;
 
@@ -130,12 +132,6 @@ function TestClass() {
         setReverseInfoDisplay(true);
         set_c(true);
       }
-    }
-  });
-  useEffect(() => {
-    if (cookies.user == username) {
-    } else {
-      console.log("Cookie does not exist");
     }
   });
 
@@ -460,7 +456,7 @@ function TestClass() {
   function uploadBooksToStudent() {
     for (let i = 0; i < korv.length; i++) {
       for (let k = 0; k < butter.length; k++) {
-        AddBookToStudent(butter[k].title, "ID", id, korv[i].name, new Date());
+        AddBookToStudent(butter[k].title, "?", id, korv[i].name, new Date());
       }
     }
   }
@@ -490,6 +486,7 @@ function TestClass() {
         //* FÖR EDIT BOOK //
         setEditBookA(false);
         setEditStudentBookDisplay(false);
+        setEditChecked(editCheckedPrev);
         break;
       case "final":
         if (butter.length > 0) {
@@ -517,6 +514,9 @@ function TestClass() {
         }
         const timer = setTimeout(() => {
           console.log("setdisplaybooks to true");
+          if (user.length > 0) {
+            showBooks(user);
+          }
         }, 500);
         break;
     }
@@ -562,6 +562,15 @@ function TestClass() {
     fontSize: "2rem",
   };
   //* Laddar upp redigerad bok till firebase och uppdaterar informationen
+  function checkboxMarkUser(currentStatus) {
+    setEditCheckedPrev(currentStatus);
+    if (currentStatus) {
+      setEditChecked(false);
+    } else {
+      setEditChecked(true);
+    }
+    console.log(editChecked);
+  }
 
   async function uploadEditedBook(title, nr, status, turnInDate) {
     if (userSelectedEdit) {
@@ -582,7 +591,12 @@ function TestClass() {
       // Kemi 1
       console.log(datum_fin);
       console.log(editBookKey);
-
+      let status = "";
+      if (editChecked) {
+        status = "red";
+      } else {
+        status = "green";
+      }
       const res = await db
         .collection("users")
         .doc("students")
@@ -593,7 +607,7 @@ function TestClass() {
         .update({
           nr: nr,
           name: title,
-          status: "green",
+          status: status,
           lastEdit: datum_fin,
           turnInDate: turnInDate,
         });
@@ -810,7 +824,22 @@ function TestClass() {
                         >
                           {book.nr}
                         </div>
-                        <div className="s-name-name">{book.name}</div>
+                        <div className="s-name-name">
+                          {book.name}{" "}
+                          <p style={{ color: "gray", fontSize: "1rem" }}>
+                            {book.addedAt} <HiOutlineArrowNarrowRight />{" "}
+                            {book.turnInDate}
+                          </p>
+                          <p
+                            style={{
+                              color: "gray",
+                              fontSize: "1rem",
+                              padding: "0",
+                            }}
+                          >
+                            {book.addedBy}
+                          </p>
+                        </div>
 
                         <div
                           style={{
@@ -832,9 +861,6 @@ function TestClass() {
                               >
                                 utdelad
                               </p>
-                              <p style={{ color: "gray", fontSize: "1rem" }}>
-                                {book.addedAt}
-                              </p>
                             </div>
                           ) : (
                             <div>
@@ -855,6 +881,7 @@ function TestClass() {
                             </div>
                           )}
                         </div>
+
                         <div
                           style={{
                             width: "20rem",
@@ -1101,8 +1128,19 @@ function TestClass() {
                 <Collapse in={editBookA}>
                   <div className="edit-book-container">
                     <div className="edit-book-header">
-                      <h1>
-                        {selectedTitle} ({selectedId})
+                      <h1
+                        style={{
+                          display: "flex",
+                          justifySelf: "center",
+                          textAlign: "center",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {selectedTitle}{" "}
+                        <p className="s-name-nr" style={{ marginLeft: "2rem" }}>
+                          {selectedId}
+                        </p>
                       </h1>
                       <h2>Ägs av {user}</h2>
                     </div>
@@ -1113,41 +1151,61 @@ function TestClass() {
                       autocomplete="off"
                       style={{ display: "flex", flexDirection: "column" }}
                     >
-                      <div className="edit-book-input-container">
-                        <p>Bok Titel</p>
-                        <input
-                          className="edit-book-input"
-                          type="text"
-                          id="title"
-                          placeholder={selectedTitle}
-                          value={titleReset}
-                          onChange={(e) => setTitleReset(e.target.value)}
-                        ></input>
-                      </div>
-                      <div className="edit-book-input-container">
-                        <p>Bok Nummer</p>
-                        <input
-                          className="edit-book-input"
-                          type="text"
-                          id="id"
-                          placeholder={selectedId}
-                          value={idReset}
-                          onChange={(e) => setIdReset(e.target.value)}
-                        ></input>
-                      </div>
-                      <div
-                        className="edit-book-input-container"
-                        id="final-edit-field"
-                      >
-                        <p>Inlämningsdatum</p>
-                        <input
-                          className="edit-book-input"
-                          type="text"
-                          id="turnInDate"
-                          placeholder={selectedTurnInDate}
-                          value={turnindateReset}
-                          onChange={(e) => setTurnindateReset(e.target.value)}
-                        ></input>
+                      <div className="inner-input">
+                        <div className="edit-book-input-container">
+                          <p className="edit-book-header-s">Bok Titel</p>
+                          <input
+                            className="edit-book-input"
+                            type="text"
+                            id="title"
+                            placeholder={selectedTitle}
+                            value={titleReset}
+                            onChange={(e) => setTitleReset(e.target.value)}
+                          ></input>
+                        </div>
+                        <div className="edit-book-input-container">
+                          <p className="edit-book-header-s">Bok Nummer</p>
+                          <input
+                            className="edit-book-input"
+                            type="text"
+                            id="id"
+                            placeholder={selectedId}
+                            value={idReset}
+                            onChange={(e) => setIdReset(e.target.value)}
+                          ></input>
+                        </div>
+                        <div
+                          className="edit-book-input-container"
+                          id="final-edit-field"
+                        >
+                          <p className="edit-book-header-s">Inlämningsdatum</p>
+                          {selectedTurnInDate == "?" ? (
+                            <input
+                              className="edit-book-input"
+                              type="text"
+                              id="turnInDate"
+                              placeholder="?"
+                              value={turnindateReset}
+                              onChange={(e) =>
+                                setTurnindateReset(e.target.value)
+                              }
+                            ></input>
+                          ) : (
+                            <input
+                              className="edit-book-input"
+                              type="text"
+                              id="turnInDate"
+                              placeholder={selectedTurnInDate}
+                              value={turnindateReset}
+                              onChange={(e) =>
+                                setTurnindateReset(e.target.value)
+                              }
+                            ></input>
+                          )}
+                        </div>
+                        <div className="inner-input-text">
+                          <p>format: xxx zz yyyy</p>
+                        </div>
                       </div>
                     </form>
                     <div className="edit-book-s">
@@ -1157,7 +1215,7 @@ function TestClass() {
                           color="primary"
                           key={selectedTitle}
                           defaultChecked={editChecked}
-                          onChange={() => console.log("")}
+                          onChange={() => checkboxMarkUser(editChecked)}
                         />
                         <div>
                           <p>Markera boken som saknad</p>

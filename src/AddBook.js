@@ -1,4 +1,6 @@
 import { db } from "./App";
+import firebase from "firebase";
+
 export async function AddBookToStudent(book, id, className, student, datum) {
   console.log(book, id, className, student);
   // tar datum och gör om till en string & delar upp viktigaste infon
@@ -16,6 +18,8 @@ export async function AddBookToStudent(book, id, className, student, datum) {
     s1_datum + " " + s2_datum + " " + s3_datum + " " + s4_fin_time;
   let _book = book.replaceAll(" ", "");
   let fin_book = _book.toLowerCase();
+  let username = firebase.auth().currentUser.displayName;
+
   console.log(
     book +
       " " +
@@ -44,7 +48,7 @@ export async function AddBookToStudent(book, id, className, student, datum) {
       status: "green",
       type: "book",
       addedAt: datum_fin,
-      lastEdit: edit_datum_fin,
-      turnInDate: "",
+      turnInDate: "?",
+      addedBy: username,
     });
 }

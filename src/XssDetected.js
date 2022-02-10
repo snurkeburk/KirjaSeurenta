@@ -117,7 +117,7 @@ function XssDetected() {
       <h1>
         <important>XSS</important> Varning
       </h1>
-      <p>IP: {ip}</p>
+      <p>{ip}</p>
       <p>{name}</p>
       <p>{datum}</p>
       <p>"{id}"</p>

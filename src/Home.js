@@ -120,7 +120,6 @@ function Home() {
         .doc(firebase.auth().currentUser.uid);
 
       const doc = await collection.get();
-      console.log(doc.data().classes);
       if (!doc.exists) {
         console.log("Error!");
         const getPostsFromFirebase = [];
@@ -367,7 +366,7 @@ function Home() {
         </motion.div>
       </Collapse>
 
-      <Collapse in={showAdblock}>
+      {/*<Collapse in={showAdblock}>
         <motion.div
           className="adblock-container"
           initial={{ opacity: 0 }}
@@ -410,7 +409,7 @@ function Home() {
             ></div>
           </motion.div>
         </motion.div>
-      </Collapse>
+                </Collapse>*/}
 
       <Sidebar />
 
@@ -418,7 +417,6 @@ function Home() {
         <div className="total">
           <p>Totalt:</p>
         </div>
-        <SmallAdd />
       </div>
       <motion.div
         className="home-container"
@@ -454,7 +452,9 @@ function Home() {
                   <div className="klassEleverContainer">
                     <div className="klassEleverStatus">
                       {loadingSize ? (
-                        <p className="utdelade"></p>
+                        <p className="utdelade">
+                          <CircularProgress />
+                        </p>
                       ) : (
                         <div>
                           <p className="utdelade">{banana[index]}</p>
@@ -462,7 +462,9 @@ function Home() {
                         </div>
                       )}
                       {loadingMissingSize ? (
-                        <p className="saknas"></p>
+                        <p className="saknas">
+                          <CircularProgress />
+                        </p>
                       ) : (
                         <div>
                           <p className="saknas">{orange[index]}</p>
@@ -471,7 +473,9 @@ function Home() {
                       )}
                     </div>
                     {loadingTotalSize ? (
-                      <div className="klassEleverAntal"></div>
+                      <div className="klassEleverAntal">
+                        <CircularProgress />
+                      </div>
                     ) : (
                       <div>
                         <div className="klassEleverAntal">{apple[index]}</div>
