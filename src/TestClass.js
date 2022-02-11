@@ -818,107 +818,109 @@ function TestClass() {
                   books.map((book, index) => (
                     <motion.div className="books" key={index}>
                       <div className="s-name" style={{ fontWeight: "300" }}>
-                        <div
-                          className="s-name-nr"
-                          style={{ marginRight: "0rem" }}
-                        >
-                          {book.nr}
-                        </div>
-                        <div className="s-name-name">
-                          {book.name}{" "}
-                          <p style={{ color: "gray", fontSize: "1rem" }}>
-                            {book.addedAt} <HiOutlineArrowNarrowRight />{" "}
-                            {book.turnInDate}
-                          </p>
-                          <p
+                        <div className="s-o-name">
+                          <div
+                            className="s-name-nr"
+                            style={{ marginRight: "0rem" }}
+                          >
+                            {book.nr}
+                          </div>
+                          <div className="s-name-name">{book.name} </div>
+                          <div
                             style={{
-                              color: "gray",
-                              fontSize: "1rem",
-                              padding: "0",
+                              display: "flex",
+                              flexDirection: "row",
+                              width: "20vw",
                             }}
                           >
-                            {book.addedBy}
-                          </p>
-                        </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            width: "20vw",
-                          }}
-                        >
-                          {book.status == "green" ? (
-                            <div>
-                              <p
-                                style={{
-                                  backgroundColor: "rgb(118, 175, 118)",
-                                  borderRadius: "0.3rem",
-                                  textAlign: "center",
-                                  padding: "0 0.7rem",
-                                  marginBottom: "0.5rem",
-                                }}
-                              >
-                                utdelad
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p
-                                style={{
-                                  backgroundColor: "rgb(180, 83, 83)",
-                                  borderRadius: "0.3rem",
-                                  textAlign: "center",
-                                  padding: "0 0.7rem",
-                                  marginBottom: "0.5rem",
-                                }}
-                              >
-                                saknas
-                              </p>
-                              <p style={{ color: "gray", fontSize: "1rem" }}>
-                                {book.addedAt}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-
-                        <div
-                          style={{
-                            width: "20rem",
-                            display: "flex",
-                            flexDirection: "column",
-                            marginTop: "-1rem",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Button
-                            onClick={() =>
-                              EditStudentBook(
-                                book.name,
-                                book.nr,
-                                book.status,
-                                book.key,
-                                book.turnInDate
-                              )
-                            }
+                            {book.status == "green" ? (
+                              <div>
+                                <p
+                                  style={{
+                                    backgroundColor: "rgb(118, 175, 118)",
+                                    borderRadius: "0.3rem",
+                                    textAlign: "center",
+                                    padding: "0 0.7rem",
+                                    marginBottom: "0.5rem",
+                                  }}
+                                >
+                                  utdelad
+                                </p>
+                              </div>
+                            ) : (
+                              <div>
+                                <p
+                                  style={{
+                                    backgroundColor: "rgb(180, 83, 83)",
+                                    borderRadius: "0.3rem",
+                                    textAlign: "center",
+                                    padding: "0 0.7rem",
+                                    marginBottom: "0.5rem",
+                                  }}
+                                >
+                                  saknas
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          <div
                             style={{
-                              width: "15rem",
-                              color: "rgb(65, 123, 199)",
-                              marginRight: "0rem",
+                              width: "20rem",
+                              display: "flex",
+                              flexDirection: "column",
+                              marginTop: "-1rem",
+                              alignItems: "center",
                             }}
                           >
-                            <AiOutlineEdit
+                            <Button
+                              onClick={() =>
+                                EditStudentBook(
+                                  book.name,
+                                  book.nr,
+                                  book.status,
+                                  book.key,
+                                  book.turnInDate
+                                )
+                              }
                               style={{
-                                fontSize: "1.6rem",
-                                paddingRight: "0.5rem",
+                                width: "10rem",
+                                color: "rgb(65, 123, 199)",
+                                marginRight: "0rem",
                               }}
-                            />
-                            <p>redigera</p>
-                          </Button>
+                            >
+                              <AiOutlineEdit
+                                style={{
+                                  fontSize: "1.6rem",
+                                  paddingRight: "0.5rem",
+                                }}
+                              />
+                              <p>redigera</p>
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="s-u-name">
+                          <div className="s-u-name-inner">
+                            <p style={{ color: "gray", fontSize: "0.7rem" }}>
+                              {book.addedAt} <HiOutlineArrowNarrowRight />{" "}
+                              {book.turnInDate}
+                            </p>
+                            <p
+                              style={{
+                                color: "gray",
+                                fontSize: "0.7rem",
+                                padding: "0",
+                              }}
+                            >
+                              {book.addedBy}
+                            </p>
+                          </div>
+
                           <p style={{ color: "gray", fontSize: "0.7rem" }}>
                             senast redigerad: {book.lastEdit}
                           </p>
                         </div>
+
                         {/*
                         <div>
                         

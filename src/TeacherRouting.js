@@ -17,8 +17,8 @@ import TestClass from "./TestClass";
 import GetClassSize from "./GetClassSize";
 class TeacherRouting extends Component {
   render() {
-    console.log("loading teacherrouter")
-  
+    console.log("loading teacherrouter");
+
     //firebase.auth().signOut();
     //const auth = userObject.status;
     //console.log("THANK YOU LORD JESUS CHECK CONFIRMED")
@@ -42,9 +42,8 @@ class TeacherRouting extends Component {
       console.log("TEACHERROUTING - User (student) does not exist!");
     }
 
-    
     if (collection.id.length == 0) {
-      console.log("Loading teacher router...")
+      console.log("Loading teacher router...");
       return (
         <Router>
           <span>
@@ -71,7 +70,7 @@ class TeacherRouting extends Component {
                 <TestClass />
               </Route>
               <Route path="/:id">
-                <TestClass /> 
+                <TestClass />
               </Route>
               <Route component={() => <div>404 Not found </div>} />
             </Switch>
@@ -94,7 +93,7 @@ class TeacherRouting extends Component {
           </span>
         </Router>
       );
-    } else if (collection.id.length > 0){
+    } else if (collection.id.length > 0) {
       return (
         <Router>
           <span>
@@ -109,7 +108,8 @@ class TeacherRouting extends Component {
             </Switch>
           </span>
         </Router>
-      )}
+      );
+    }
   }
 }
 
