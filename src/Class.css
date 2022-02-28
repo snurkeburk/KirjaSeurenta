@@ -247,15 +247,27 @@ html {
   height: auto;
   text-align: left;
   display: flex;
+  flex-direction: column;
   align-items: top;
-  width: 35vw;
+  width: 40vw;
   justify-content: space-between;
   font-weight: 100;
   font-size: 1.2rem;
   border-bottom-style: solid;
   border-color: lightgray;
   border-bottom-left-radius: 2rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
+}
+.s-o-name {
+  display: flex;
+  width: 40vw;
+  justify-content: space-between;
+  align-items: center;
+}
+.s-u-name {
+  display: flex;
+  width: 40vw;
+  justify-content: space-between;
 }
 .s-name-nr {
   width: 50px;
@@ -276,8 +288,8 @@ html {
 }
 .s-name-name {
   text-align: left;
-  padding-left: 2rem;
   width: 100%;
+  padding-left: 0.5rem;
 }
 
 .info-selected-user {
