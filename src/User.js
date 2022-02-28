@@ -158,7 +158,7 @@ export class User {
       this.name,
       {
         //'test': 'user.js l43'
-        id: this.id + "&" + this.status,
+        id: this.id + "&" + this.status + "&" + this.className,
         //'matte50004': 'User.js'
 
         email: this.email,
@@ -170,7 +170,7 @@ export class User {
         /*books: this.books,*/
       },
       {}
-    ).then(() => window.location.reload(true), ClassCountIncr(this.className));
+    ).then(() => window.location.reload(true), console.log("AADDED USER"));
 
     add(
       "users",
@@ -195,12 +195,17 @@ export class User {
     const read = await readOne("users", "ids");
     console.log("ID:s : ", read.ids);
     console.log("Current user id: " + this.id);
-
-    if (
-      /*read.ids === undefined ||*/ !read.ids.includes(
-        this.id + "&" + this.status
-      )
-    ) {
+    let _id = this.id;
+    let user_exists = false;
+    // loopa igenom read och sök id match
+    console.log(read.ids.length);
+    for (let i = 0; i < read.ids.length; i++) {
+      if (read.ids[i].includes(_id)) {
+        console.log("ID FOUND");
+        user_exists = true;
+      }
+    }
+    if (!user_exists) {
       console.log("User does not exist yet");
       this.allIds = read.ids;
       this.allIds.push(this.id);
@@ -215,7 +220,6 @@ export class User {
       //this.addUser();
     } else {
       console.log("User does exist");
-
       this.firstLogin = false;
       //console.log("Firstlogin in class: " + this.firstLogin);
     }

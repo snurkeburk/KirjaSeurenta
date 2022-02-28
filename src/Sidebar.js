@@ -82,9 +82,7 @@ function Sidebar() {
       <div className="sidebar">
         <div className="sidebar-upper-960px-container">
           <div className="sidebar__left">
-            <h2 class="name">
-              <h2>K</h2>irja<h2>S</h2>eurenta
-            </h2>
+            <h2 class="name">Kirjan Seurenta</h2>
           </div>
           <div className="sidebar__mid">
             <Link className="Link" to="/">

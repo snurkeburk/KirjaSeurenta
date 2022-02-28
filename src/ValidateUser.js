@@ -20,6 +20,8 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import TestRouter from "./TestRouter";
 import Home from "./Home";
+import { CookiesProvider } from "react-cookie";
+import { useCookies, getCookie } from "react-cookie";
 import Sidebar from "./Sidebar";
 function ValidateUser() {
   let username = firebase.auth().currentUser.displayName;
@@ -32,6 +34,7 @@ function ValidateUser() {
   const [roleChosen, setRoleChosen] = useState(false);
   const [count, setCount] = useState([]);
   const [redirect, setRedirect] = useState(false);
+  const [cookies, setCookie] = useCookies(["cid"]);
 
   async function GetActiveUserStatus() {
     let _id_teacher = userObject.id + "&teacher";
@@ -82,11 +85,11 @@ function ValidateUser() {
       }
     }
 
-    // return cleanup function
-
+    setCookie("cid", className, {
+      path: "/",
+    });
     userObject.className = className;
     setClassChosen(true);
-
     //! Adds defaiult books to user
     //userObject.addBookToUser("matte50004", "123abc");
     //userObject.addBookToUser("ergofysik2", "abcdefg");
@@ -184,6 +187,7 @@ function ValidateUser() {
         ids: FieldValue.arrayUnion(userObject.id + "&" + _status),
       })
       .then(() => window.location.reload(true));
+    console.log("Updated ID for " + userObject.name);
   }
 
   //* AUTO GENERERAR KLASSNAMN TILL FIREBASE *//
@@ -250,7 +254,7 @@ function ValidateUser() {
       >
         <h1 className="validate-promt">Välkommen {username}</h1>
         <p className="validate-question">Skapa konto som</p>
-        <div className="validate-klasser-container" layout>
+        <div className="validate-auth-container" layout>
           <Button
             onClick={() => AddAuthoritarian("teachers")}
             variant="contained"
@@ -275,7 +279,11 @@ function ValidateUser() {
     );
   }
 
-  if (classChosen == false && userObject.status == "student") {
+  if (
+    classChosen == false &&
+    userObject.status == "student" &&
+    userObject.firstLogin
+  ) {
     console.log(classChosen);
     return (
       <div className="val-body">
@@ -365,11 +373,32 @@ function ValidateUser() {
       </div>
     );
   }
-  if (classChosen == true) {
-    return <CircularProgress />;
+  if (classChosen == true || !userObject.firstLogin) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+        <Redirect to="/"></Redirect>
+      </div>
+    );
   }
   if (roleChosen == true) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 }
 

@@ -5,7 +5,7 @@
  */
 
 import { Button, createGenerateClassName } from "@material-ui/core";
-import { db, username } from "./App";
+import { db, username, FieldValue } from "./App";
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import SidebarStudent from "./SidebarStudent";
@@ -31,6 +31,8 @@ import AbortController from "abort-controller";
 import GetClassSize from "./GetClassSize";
 import XssDetected from "./XssDetected";
 import Collapse from "@material-ui/core/Collapse";
+import { Cookies, CookiesProvider } from "react-cookie";
+import { useCookies, getCookie } from "react-cookie";
 
 function Home() {
   console.log("loading student home...");
@@ -50,6 +52,8 @@ function Home() {
   const [turnIn, setTurnIn] = useState([]);
   const [collapse, setCollapse] = useState(false);
   const [antiCollapse, setAntiCollapse] = useState(true);
+  const [cookies, setCookie, removeCookie] = useCookies(["cid"]);
+
   let _username = firebase.auth().currentUser.displayName;
   let _firstname = _username.split(" ")[0];
   let _lastname = _username.split(" ")[1];
@@ -123,6 +127,48 @@ function Home() {
       */
     }
 
+    /*
+     * lite skum kod för att ändra status och lägga till klassnamn i status 
+        setCookkie(className), ta cookie och implementera i ID, cookie spelar nt ngn roll efter det
+    */
+
+    async function getCookieCID() {
+      console.log(cookies.cid);
+      console.log(userObject.name + " | " + username);
+      const collection = db
+        .collection("users")
+        .doc("students")
+        .collection(cookies.cid)
+        .doc(userObject.name);
+      const doc = await collection.get();
+      console.log(doc.data().id);
+      let new_id = doc.data().id;
+      const ids = db.collection("users").doc("ids");
+      const iddoc = await ids.get();
+      let data = iddoc.data().ids;
+      for (let i = 0; i < data.length; i++) {
+        if (new_id.includes(data[i]) && !data[i].includes(cookies.cid)) {
+          console.log("found: " + data[i] + " in: " + new_id);
+          /* db.collection("users")
+            .doc("ids")
+            .update({
+              ids: FieldValue.arrayUnion(new_id),
+            });*/
+          const removeRes = await ids
+            .update({
+              ids: firebase.firestore.FieldValue.arrayRemove(data[i]),
+            })
+            .then(() => console.log("removed old id"));
+          const updateRes = await ids.update({
+            ids: firebase.firestore.FieldValue.arrayUnion(new_id),
+          });
+        }
+        for (const id of data) {
+          // sätter in nya ID't som innehåller klassnamnet!
+        }
+      }
+    }
+    getCookieCID();
     async function returnBookTitle(arr) {
       let bookTitleArray = [];
       let allBooksArray = [];

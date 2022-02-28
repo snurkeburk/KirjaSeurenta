@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, Component, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./Search";
 import Books from "./Books";
@@ -28,30 +28,29 @@ const TestRouter = () => {
   console.log("router");
   routerAuth();
   async function routerAuth() {
-    const read = await readOne("users", "ids");
+    const ids = db.collection("users").doc("ids");
+    const iddoc = await ids.get();
     let _id = userObject.id + "&" + userObject.status;
     let id = userObject.id;
-    console.log(_id, id);
-    if (read.ids.includes(_id)) {
-      console.log("user exists(router)");
-      // check if student or teacher / mentor
-      if (userObject.status == "student") {
-        console.log("student exists");
-        setAuthed(true);
-      }
-    } else if (read.ids.includes(id)) {
-      console.log("user exists with wrong id");
-      console.log(id);
-      console.log(_id);
-      updateId(id, _id);
-    } else {
-      let split_id = _id.split("&")[0];
-      console.log("split: " + split_id);
-      if (
-        read.ids.includes(split_id + "&mentor") ||
-        read.ids.includes(split_id + "&teacher")
-      ) {
-        setAuthedTeacher(true);
+    let data = iddoc.data().ids;
+    for (let i = 0; i < data.length; i++) {
+      console.log("comparing: " + data[i] + " to: " + userObject.id);
+      if (data[i].includes(userObject.id)) {
+        console.log("found: " + data[i] + " in: " + userObject.id);
+        console.log("user exists(router)");
+        // check if student or teacher / mentor
+
+        if (data[i].includes("student")) {
+          console.log("student exists");
+          setAuthed(true);
+          i = data.length;
+        } else if (data[i].includes("teacher") || data[i].includes("mentor")) {
+          console.log("teacher/mentor exists");
+          setAuthedTeacher(true);
+          i = data.length;
+        } else {
+          updateId(id, _id);
+        }
       }
     }
   }
@@ -75,6 +74,13 @@ const TestRouter = () => {
       window.location.reload(true);
     }, 1000);*/
   }
+
+  useEffect(() => {
+    console.log(userObject.firstLogin);
+
+    return () => {};
+  }, []);
+
   return (
     <Router>
       <span>

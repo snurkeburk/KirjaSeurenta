@@ -28,7 +28,6 @@
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   font-size: 20px;
-
 }
 
 .sidebar__right {
@@ -43,7 +42,6 @@
   justify-content: flex-start;
   align-items: center;
   min-width: 10vw;
-  font-family: "Cinzel Decorative", cursive;
   border-bottom-style: solid;
   border-width: 1px;
   border-color: #230625;
@@ -56,13 +54,9 @@
   flex-direction: row;
   align-items: flex-end;
   letter-spacing: 3px;
-  color: var(--second-highlight-color);
-  color: #230625;
-}
-
-.name > h2 {
-  color: var(--highlight-color);
-  color: #a13fa8;
+  background: -webkit-linear-gradient(60deg, #472990, #fa486d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .profilePic {

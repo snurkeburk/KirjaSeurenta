@@ -10,7 +10,7 @@ import TestRouter from "./TestRouter";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./App.css";
 import Sidebar from "./Sidebar";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import Search from "./Search";
 import Books from "./Books";
 import Login from "./Login";
@@ -75,6 +75,7 @@ class App extends Component {
       this.setState({ isSignedIn: !!user });
       if (user !== null) {
         console.log("adding user");
+
         //adds user to database if logged in
         userObject = new User(
           user.displayName,
@@ -105,7 +106,7 @@ class App extends Component {
               <motion.div className="left">
                 <h2 className="welcomeMessege">Välkommen till</h2>
                 <h2 class="welcomeName">
-                  <h2>K</h2>irjan<h2>S</h2>eurenta
+                  <h2>Kirjan Seurenta</h2>
                 </h2>
 
                 <p className="welcomeUnder">

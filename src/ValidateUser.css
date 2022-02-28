@@ -60,7 +60,7 @@ body {
 
 .validate-klasser {
   border-bottom-style: solid;
-  border-color: rgb(0, 0, 0);
+  border-color: rgb(195, 184, 219);
   border-width: 1px;
   border-radius: 0.2rem;
   padding: 0px 0px;
@@ -71,6 +71,9 @@ body {
 .validate-klasser button {
   text-decoration: none;
   color: rgb(0, 0, 0);
+  background: -webkit-linear-gradient(60deg, #472990, #fa486d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 100;
   font-size: 25px;
   width: 100px;
@@ -91,7 +94,7 @@ body {
   flex-direction: row;
   padding: 0.2rem 0.5rem;
   margin: 3vw;
-  background-color: rgba(61, 63, 65, 0.151);
+  background-color: rgba(133, 133, 133, 0.151);
   justify-content: center;
 }
 .validate-header {
@@ -105,6 +108,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.validate-auth-container {
+  border-style: solid;
+  border-radius: 2rem;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.096);
+  display: flex;
+  width: max-content;
+  margin-top: 5rem;
+  flex-wrap: wrap;
+  width: 20em;
+  flex-direction: row;
+  padding: 0.2rem 0.5rem;
+  margin: 3vw;
+  background-color: rgba(133, 133, 133, 0.151);
+  justify-content: space-evenly;
 }
 .authoritarian-div p {
   margin-top: 2rem;

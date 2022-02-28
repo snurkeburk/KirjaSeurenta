@@ -101,12 +101,12 @@ html {
   align-items: flex-end;
   font-weight: 100;
   letter-spacing: 1px;
-  color: var(--second-highlight-color);
-  font-family: "Cinzel Decorative", cursive;
+  background: -webkit-linear-gradient(60deg, #472990, #fa486d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 8vw;
-  color: #ebebeb;
   border-bottom-left-radius: 2rem;
-  border-color: rgb(255, 255, 255);
+  border-color: -webkit-linear-gradient(60deg, #472990, #fa486d);
   border-bottom-style: solid;
   padding: 0.3rem 0.5rem;
 }
@@ -147,7 +147,7 @@ html {
     background: #d10be9;
     background: -moz-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
     background: -webkit-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
-    background: linear-gradient(135deg, #d10be9 0%, #2b1b39 100%);
+    background: linear-gradient(135deg, #010225 0%, #2b1b39 100%);
     border-top-left-radius: 2rem;
     border-bottom-left-radius: 2rem;
     border-top-right-radius: 0;
