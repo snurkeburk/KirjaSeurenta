@@ -323,14 +323,10 @@ function Home() {
               animate={{ y: 0 }}
               transition={{ ease: "easeOut", duration: 1, delay: 1 }}
             >
-              <div className="header">Cookies</div>
               <div className="content">
                 {" "}
-                Kirjan Seuranta använder cookies för att förbättra din
-                upplevelse på vår webbplats och för att visa dig relevant
-                information.
+                Kirjan Seuranta använder cookies
                 <br />
-                För att veta mer, läs om cookies [här] och [här]
               </div>
               <div
                 className="actions"
@@ -349,16 +345,6 @@ function Home() {
                   }}
                 >
                   Godkänn
-                </Button>
-                <Button
-                  className="button"
-                  variant="contained"
-                  onClick={() => {
-                    console.log("modal closed ");
-                    closeCookies();
-                  }}
-                >
-                  Stäng
                 </Button>
               </div>
             </motion.div>

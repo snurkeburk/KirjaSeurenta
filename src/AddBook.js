@@ -48,7 +48,7 @@ export async function AddBookToStudent(book, id, className, student, datum) {
       status: "green",
       type: "book",
       addedAt: datum_fin,
-      turnInDate: "?",
+      turnInDate: "ej vald",
       addedBy: username,
     });
 }

@@ -18,6 +18,8 @@ import { add, update, remove, read, readOne } from "./Crud";
 import { Dock, SettingsInputCompositeTwoTone } from "@material-ui/icons";
 import { AnimateSharedLayout } from "framer-motion";
 import { CircularProgress } from "@material-ui/core";
+import { MdAdd, MdOutlineAddTask } from "react-icons/md";
+
 import Add from "./Add";
 import { userExists } from "./User";
 import randomColor from "randomcolor";
@@ -53,7 +55,9 @@ function Home() {
   const [collapse, setCollapse] = useState(false);
   const [antiCollapse, setAntiCollapse] = useState(true);
   const [cookies, setCookie, removeCookie] = useCookies(["cid"]);
-
+  const [cid, setCid] = useState([]);
+  const [loadingCookie, setLoadingCookie] = useState(true);
+  const [ready, setReady] = useState(false);
   let _username = firebase.auth().currentUser.displayName;
   let _firstname = _username.split(" ")[0];
   let _lastname = _username.split(" ")[1];
@@ -87,33 +91,67 @@ function Home() {
       opacity: 1,
     },
   };
+
   useEffect(() => {
+    if (cookies.cid) {
+      console.log("coookiie exists");
+    }
     async function sender() {
-      const readCollection = db
-        .collection("users")
-        .doc("students")
-        .collection("TE19D")
-        .doc(username)
-        .collection("items");
-
-      const snapshot = await readCollection.get();
-
-      if (snapshot.empty) {
-        console.log("wallah det här borde inte vara så här");
-        return;
+      const ids = db.collection("users").doc("ids");
+      const iddoc = await ids.get();
+      let _id = userObject.id + "&" + userObject.status;
+      let id = userObject.id;
+      let data = iddoc.data().ids;
+      for (let i = 0; i < data.length; i++) {
+        console.log("comparing: " + data[i] + " to: " + userObject.id);
+        if (data[i].includes(userObject.id)) {
+          console.log("found: " + data[i] + " in: " + userObject.id);
+          console.log("user exists(studenthome)");
+          // sets cid as classname for readCollection below
+          if (cookies.cid) {
+            if (cookies.cid == data[i].split("&")[2]) {
+              console.log("everything is fine (using cookie for items)");
+            } else {
+              console.log("cookie and ID are not a match, recreating cookie..");
+            }
+          } else {
+            //TODO: DO all thhis before checking for books tto prevent reloads etc
+            console.log("create cookie here");
+            setCookie("cid", data[i].split("&")[2], {
+              path: "/",
+            });
+            setLoading(false);
+            setLoadingCookie(false);
+          }
+          i = data.length;
+        }
       }
+      if (cookies.cid) {
+        const readCollection = db
+          .collection("users")
+          .doc("students")
+          .collection(cookies.cid)
+          .doc(username)
+          .collection("items");
 
-      let bookArray = [];
+        const snapshot = await readCollection.get();
 
-      snapshot.forEach((doc) => {
-        console.log(doc.id, "=>", doc.data());
-        bookArray.push(doc.data());
-      });
+        if (snapshot.empty) {
+          console.log("wallah det här borde inte vara så här");
+          return;
+        }
 
-      return bookArray;
+        let bookArray = [];
 
-      const getStudentsFromFirebase = [];
+        snapshot.forEach((doc) => {
+          console.log(doc.id, "=>", doc.data());
+          bookArray.push(doc.data());
+        });
+        setLoadingCookie(false);
+        return bookArray;
 
+        const getStudentsFromFirebase = [];
+      }
       /*
       console.log(doc);
 
@@ -133,38 +171,40 @@ function Home() {
     */
 
     async function getCookieCID() {
-      console.log(cookies.cid);
-      console.log(userObject.name + " | " + username);
-      const collection = db
-        .collection("users")
-        .doc("students")
-        .collection(cookies.cid)
-        .doc(userObject.name);
-      const doc = await collection.get();
-      console.log(doc.data().id);
-      let new_id = doc.data().id;
-      const ids = db.collection("users").doc("ids");
-      const iddoc = await ids.get();
-      let data = iddoc.data().ids;
-      for (let i = 0; i < data.length; i++) {
-        if (new_id.includes(data[i]) && !data[i].includes(cookies.cid)) {
-          console.log("found: " + data[i] + " in: " + new_id);
-          /* db.collection("users")
+      if (cookies.cid) {
+        console.log(cookies.cid);
+        console.log(userObject.name + " | " + username);
+        const collection = db
+          .collection("users")
+          .doc("students")
+          .collection(cookies.cid)
+          .doc(userObject.name);
+        const doc = await collection.get();
+        console.log(doc.data().id);
+        let new_id = doc.data().id;
+        const ids = db.collection("users").doc("ids");
+        const iddoc = await ids.get();
+        let data = iddoc.data().ids;
+        for (let i = 0; i < data.length; i++) {
+          if (new_id.includes(data[i]) && !data[i].includes(cookies.cid)) {
+            console.log("found: " + data[i] + " in: " + new_id);
+            /* db.collection("users")
             .doc("ids")
             .update({
               ids: FieldValue.arrayUnion(new_id),
             });*/
-          const removeRes = await ids
-            .update({
-              ids: firebase.firestore.FieldValue.arrayRemove(data[i]),
-            })
-            .then(() => console.log("removed old id"));
-          const updateRes = await ids.update({
-            ids: firebase.firestore.FieldValue.arrayUnion(new_id),
-          });
-        }
-        for (const id of data) {
-          // sätter in nya ID't som innehåller klassnamnet!
+            const removeRes = await ids
+              .update({
+                ids: firebase.firestore.FieldValue.arrayRemove(data[i]),
+              })
+              .then(() => console.log("removed old id"));
+            const updateRes = await ids.update({
+              ids: firebase.firestore.FieldValue.arrayUnion(new_id),
+            });
+          }
+          for (const id of data) {
+            // sätter in nya ID't som innehåller klassnamnet!
+          }
         }
       }
     }
@@ -255,7 +295,17 @@ function Home() {
       setCollapse(false);
     }
   }
-  if (loading) {
+  /*
+  useEffect(() => {
+    while (loading) {
+      console.log("loading");
+    }
+    while (loadingCookie) {
+      console.log("loading cookie");
+    }
+  });
+*/
+  if (loading || loadingCookie) {
     return (
       <div>
         <SidebarStudent />
@@ -274,12 +324,34 @@ function Home() {
       >
         <h1 className="student-welcome-msg">Välkommen {_firstname}</h1>
         {books.length > 1 ? (
-          <h3>
-            Du har <important>{books.length}</important> böcker
-          </h3>
+          <div>
+            <h3>
+              Du har <important>{books.length}</important> böcker
+            </h3>
+            <Button
+              onClick={() => coll()}
+              style={{
+                width: "7.5rem",
+                height: "2.5rem",
+                color: "rgb(65, 123, 199)",
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                marginTop: "1rem",
+              }}
+            >
+              <MdAdd style={{ fontSize: "1.6rem" }} />
+              <p>se info</p>
+            </Button>
+          </div>
         ) : books.length == 1 ? (
           <h3>
-            Du har <important>{books.length}</important> bok
+            <div>
+              <h3>
+                Du har <important>{books.length}</important> bok
+              </h3>
+              <Button variant="outlined" onClick={() => coll()}>
+                se mer info
+              </Button>
+            </div>
           </h3>
         ) : (
           <h3>Du har inga böcker.</h3>
@@ -294,16 +366,10 @@ function Home() {
             animate={{ opacity: 1 }}
             transition={{ ease: "easeOut", duration: 1, delay: 1 }}
           >
-            <Button variant="contained" onClick={() => coll()}></Button>
             {books.length > 0 ? (
               books.map((post, index) => (
                 <motion.div className="bokContainer">
-                  <motion.div
-                    whileHover={{
-                      scale: 1.03,
-                      transition: { duration: 0.1 },
-                    }}
-                  >
+                  <motion.div>
                     {" "}
                     <Collapse in={collapse}>
                       <div
@@ -312,23 +378,21 @@ function Home() {
                           backgroundSize: "cover",
                           borderStyle: "outset",
                           borderWidth: "2px",
-                          borderBottomStyle: "none",
+                          borderBottomStyle: "outset",
                           borderColor: bookStatus[index],
-                          backgroundColor: "rgb(26, 16, 41)",
+                          backgroundColor: "rgba(128, 128, 128, 0.15)",
                         }}
                       >
                         <div
                           style={{
-                            paddingLeft: "0.6rem",
                             paddingRight: "0rem",
-                            paddingTop: "1rem",
-                            textAlign: "left",
+                            paddingTop: ".5rem",
+                            textAlign: "center",
                           }}
                         >
                           {bookStatus[index] == "red" ? (
                             <p
                               style={{
-                                paddingTop: "1rem",
                                 fontSize: "1.5rem",
                                 color: bookStatus[index],
                               }}
@@ -338,7 +402,6 @@ function Home() {
                           ) : (
                             <p
                               style={{
-                                paddingTop: "1rem",
                                 color: bookStatus[index],
                                 fontSize: "1.5rem",
                               }}
@@ -346,42 +409,61 @@ function Home() {
                               status: utdelad
                             </p>
                           )}
-                          <p
-                            style={{
-                              color: "rgb(212, 211, 211)",
-                              paddingTop: "1rem",
-                            }}
+                          <div
+                            className="book-innerinfo"
+                            style={{ marginTop: "1rem" }}
                           >
-                            utdelad: {addedAt[index]}{" "}
-                          </p>
-                          <p
-                            style={{
-                              color: "rgb(212, 211, 211)",
-                            }}
-                          >
-                            inlämnas: {turnIn[index]}{" "}
-                          </p>
-                          <p
-                            style={{
-                              color: "rgb(212, 211, 211)",
-                              paddingTop: "1rem",
-                            }}
-                          >
-                            utlånad av: {addedBy[index]}
-                          </p>
+                            <div style={{ textAlign: "left" }}>
+                              <p>bok:</p>
+                            </div>
+                            <div style={{ textAlign: "left", width: "7rem" }}>
+                              <p>{post}</p>
+                            </div>
+                          </div>
+                          <div className="book-innerinfo">
+                            <div style={{ textAlign: "left" }}>
+                              <p>nummer:</p>
+                            </div>
+                            <div style={{ textAlign: "left", width: "7rem" }}>
+                              <p>{bookIds[index]} </p>
+                            </div>
+                          </div>
+                          <div className="book-innerinfo">
+                            <div style={{ textAlign: "left" }}>
+                              <p>utdelad:</p>
+                            </div>
+                            <div style={{ textAlign: "left", width: "7rem" }}>
+                              <p>{addedAt[index]}</p>
+                            </div>
+                          </div>
+                          <div className="book-innerinfo">
+                            <div style={{ textAlign: "left" }}>
+                              <p>inlämnas:</p>
+                            </div>
+                            <div style={{ textAlign: "left", width: "7rem" }}>
+                              <p>{turnIn[index]}</p>
+                            </div>
+                          </div>
+                          <div className="book-innerinfo">
+                            <div style={{ textAlign: "left" }}>
+                              <p>utgivare:</p>
+                            </div>
+                            <div style={{ textAlign: "left", width: "7rem" }}>
+                              <p>{addedBy[index]}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </Collapse>
                     <Collapse in={antiCollapse}>
                       <motion.div
                         className="böcker"
-                        style={{ backgroundImage: bookImages[index] }}
                         style={{
                           backgroundImage: bookImages[index],
                           backgroundSize: "cover",
                           borderStyle: "outset",
                           borderWidth: "2px",
-                          borderBottomStyle: "none",
+                          borderBottomStyle: "outset",
                           borderColor: bookStatus[index],
                           /*backgroundSize: 'cover' */
                         }}
@@ -391,8 +473,6 @@ function Home() {
                           <div
                             style={{
                               backgroundColor: "rgb(180, 83, 83)",
-                              borderTopRightRadius: "0.8rem",
-                              borderTopLeftRadius: "0.8rem",
                               color: "white",
                             }}
                           >
@@ -402,21 +482,21 @@ function Home() {
                           <div></div>
                         )}
                       </motion.div>
-                    </Collapse>
-                    <div
-                      className="bokId"
-                      style={{
-                        borderStyle: "outset",
-                        borderColor: bookStatus[index],
-                        borderTopStyle: "none",
-                        borderWidth: "2px",
+                      <div
+                        className="bokId"
+                        style={{
+                          borderStyle: "outset",
+                          borderColor: bookStatus[index],
+                          borderTopStyle: "none",
+                          borderWidth: "2px",
 
-                        /*backgroundSize: 'cover' */
-                      }}
-                    >
-                      <p>{post}</p>
-                      <p>{bookIds[index]} </p>
-                    </div>
+                          /*backgroundSize: 'cover' */
+                        }}
+                      >
+                        <p>{post}</p>
+                        <p>{bookIds[index]} </p>
+                      </div>
+                    </Collapse>
                   </motion.div>
                 </motion.div>
               ))

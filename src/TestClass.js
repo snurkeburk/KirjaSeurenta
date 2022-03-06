@@ -456,7 +456,13 @@ function TestClass() {
   function uploadBooksToStudent() {
     for (let i = 0; i < korv.length; i++) {
       for (let k = 0; k < butter.length; k++) {
-        AddBookToStudent(butter[k].title, "?", id, korv[i].name, new Date());
+        AddBookToStudent(
+          butter[k].title,
+          "ej vald",
+          id,
+          korv[i].name,
+          new Date()
+        );
       }
     }
   }
@@ -1040,7 +1046,10 @@ function TestClass() {
                               {post.name}
                             </p>
                             <div className="eye-status-container">
-                              <Collapse in={buttonDisplay}>
+                              <Collapse
+                                orientation="horizontal"
+                                in={buttonDisplay}
+                              >
                                 <Checkbox
                                   label="checkbox"
                                   value={post.key}

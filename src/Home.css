@@ -78,12 +78,21 @@
 }
 
 .modal {
-  background-color: white;
+  background: -moz-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+  background: -webkit-linear-gradient(-45deg, #d10be9 0%, #2b1b39 100%);
+  background: linear-gradient(135deg, #010225 0%, #2b1b39 100%);
   z-index: 4000;
   width: 100%;
   padding: 1rem 3rem;
   position: absolute;
   bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.modal .content {
+  color: rgb(221, 221, 221);
 }
 .cookies-container {
   position: fixed;
@@ -211,10 +220,10 @@
 .böcker {
   text-align: center;
   border-width: 0.1px;
-  /* box-shadow: rgba(0, 0, 0, 0.12) 3px 0px 0px, rgba(0, 0, 0, 0.24) 3px 0px 2px;*/
+  box-shadow: rgba(0, 0, 0, 0.12) 3px 0px 0px, rgba(0, 0, 0, 0.24) 3px 0px 2px;
   margin: 1rem;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-top-left-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
 
   height: 15rem;
   width: 14rem;
@@ -226,6 +235,18 @@
   z-index: 2;
   color: white;
   font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+}
+
+.böcker:hover {
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
+}
+.bokId:hover p {
+  pointer-events: none;
+  user-select: none;
+  cursor: default;
 }
 
 .bokContainer {
@@ -233,7 +254,6 @@
   flex-direction: column;
   margin: 1rem;
 }
-
 .bokId {
   display: flex;
   flex-direction: column;
@@ -244,12 +264,13 @@
   background-position-x: -80px;
   background-position-y: 0px;
   padding-bottom: 0.2rem;
+  font-family: "Roboto", sans-serif;
   padding-top: 0.2rem;
   margin-top: -1.15rem;
   z-index: 1;
-  /*box-shadow: rgba(0, 0, 0, 0.12) 3px 4px 3px, rgba(0, 0, 0, 0.24) 3px 3px 2px;*/
-  border-bottom-right-radius: 1rem;
-  border-bottom-left-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.12) 3px 4px 3px, rgba(0, 0, 0, 0.24) 3px 3px 2px;
+  border-bottom-right-radius: 0.2rem;
+  border-bottom-left-radius: 0.2rem;
   color: white;
 }
 
@@ -293,6 +314,16 @@
   font-size: 20px;
 }
 
+.book-innerinfo {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+  border-top-style: solid;
+}
+
 link:hover {
   cursor: pointer;
 }
@@ -314,6 +345,7 @@ link:hover {
 
 .student-welcome-container {
   text-align: center;
+  margin-top: 2rem;
 }
 
 .student-welcome-msg {
