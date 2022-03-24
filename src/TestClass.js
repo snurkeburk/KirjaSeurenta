@@ -87,6 +87,7 @@ function TestClass() {
   const [editChecked, setEditChecked] = useState([]);
   const [editCheckedPrev, setEditCheckedPrev] = useState();
   const [userSelectedEdit, setUserSelectedEdit] = useState(false);
+  const [selectedAddedBy, setSelectedAddedBy] = useState([]);
   let username = firebase.auth().currentUser.displayName;
 
   const containerVariants = {
@@ -535,7 +536,14 @@ function TestClass() {
     AddBookToStudent(title, "ID", id);
   }
 
-  function EditStudentBook(title, currentid, currentStatus, key, turnindate) {
+  function EditStudentBook(
+    title,
+    currentid,
+    currentStatus,
+    key,
+    turnindate,
+    addedBy
+  ) {
     console.log(currentStatus);
     setUserSelectedEdit(true);
     if (currentStatus == "green") {
@@ -550,6 +558,7 @@ function TestClass() {
     setAddBookS(true);
     setAddBookB(false);
     setSelectedTitle(title);
+    setSelectedAddedBy(addedBy);
     setSelectedId(currentid);
     setSelectedTurnInDate(turnindate);
     console.log(currentStatus);
@@ -885,7 +894,8 @@ function TestClass() {
                                   book.nr,
                                   book.status,
                                   book.key,
-                                  book.turnInDate
+                                  book.turnInDate,
+                                  book.addedBy
                                 )
                               }
                               style={{
@@ -1153,7 +1163,10 @@ function TestClass() {
                           {selectedId}
                         </p>
                       </h1>
-                      <h2>Ägs av {user}</h2>
+                      <h2>Lånas av {user}</h2>
+                      <h2 style={{ fontSize: "1rem", marginTop: "-2.8rem" }}>
+                        Utdelad av {selectedAddedBy}
+                      </h2>
                     </div>
                     <form
                       className="edit-book-form"

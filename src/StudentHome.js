@@ -380,7 +380,6 @@ function Home() {
                           borderWidth: "2px",
                           borderBottomStyle: "outset",
                           borderColor: bookStatus[index],
-                          backgroundColor: "rgba(128, 128, 128, 0.15)",
                         }}
                       >
                         <div
@@ -397,7 +396,7 @@ function Home() {
                                 color: bookStatus[index],
                               }}
                             >
-                              status: saknas!
+                              saknas!
                             </p>
                           ) : (
                             <p
@@ -406,12 +405,12 @@ function Home() {
                                 fontSize: "1.5rem",
                               }}
                             >
-                              status: utdelad
+                              utdelad
                             </p>
                           )}
                           <div
                             className="book-innerinfo"
-                            style={{ marginTop: "1rem" }}
+                            style={{ marginTop: "0rem" }}
                           >
                             <div style={{ textAlign: "left" }}>
                               <p>bok:</p>
