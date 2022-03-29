@@ -9,7 +9,7 @@ import React from "react";
 function Footer() {
   return (
     <div>
-      <p>&copy; copyright 2021 - Kirjan Seuranta</p>
+      <p>&copy; copyright 2022 - Kirjan Seuranta</p>
     </div>
   );
 }

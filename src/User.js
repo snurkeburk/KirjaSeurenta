@@ -76,7 +76,7 @@ export class User {
       //this.status = "teacher";
     } else if (
       splitEmail.includes("ntig.se") ||
-      splitEmail.includes("gmail.com")
+      splitEmail.includes("gmail.com") //! TA BORT DETTA
     ) {
       //teacher
       this.status = "teacher-mentor";
